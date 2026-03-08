@@ -1,0 +1,23 @@
+# Site settings
+title: Rough Drafts
+description: "Personal blog by Nithin."
+baseurl: ""
+url: "https://aalavandhan.github.io"
+github_username: aalavandhan
+twitter_username: aalavandhan84
+
+# Build settings
+markdown: kramdown
+permalink: pretty
+
+highlighter: rouge
+kramdown:
+  input: GFM
+  auto_ids: true
+  syntax_highlighter: rouge
+
+plugins:
+  - jekyll-feed
+
+exclude:
+  - Makefile
