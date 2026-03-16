@@ -15,5 +15,61 @@
 
     {% include footer.html %}
 
+    <script>
+    (function() {
+      var overlay, zoomedImg, scale;
+
+      function open(src) {
+        overlay = document.createElement('div');
+        overlay.className = 'img-zoom-overlay';
+        zoomedImg = document.createElement('img');
+        zoomedImg.src = src;
+        scale = 1;
+        overlay.appendChild(zoomedImg);
+        document.body.appendChild(overlay);
+        requestAnimationFrame(function() { overlay.classList.add('active'); });
+        overlay.addEventListener('click', close);
+        overlay.addEventListener('wheel', onWheel, { passive: false });
+        document.addEventListener('keydown', onKey);
+      }
+
+      function close() {
+        if (!overlay) return;
+        overlay.classList.remove('active');
+        setTimeout(function() {
+          if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+          overlay = null;
+          zoomedImg = null;
+        }, 200);
+        document.removeEventListener('keydown', onKey);
+      }
+
+      function onWheel(e) {
+        e.preventDefault();
+        scale += e.deltaY * -0.002;
+        scale = Math.min(Math.max(0.5, scale), 5);
+        zoomedImg.style.transform = 'scale(' + scale + ')';
+      }
+
+      function onKey(e) {
+        if (e.key === 'Escape') close();
+      }
+
+      document.addEventListener('click', function(e) {
+        if (e.target.matches('.post-content img') && !e.target.closest('.img-zoom-overlay')) {
+          open(e.target.src);
+        }
+      });
+    })();
+
+    // Open all external links in new tab
+    document.querySelectorAll('.post-content a').forEach(function(a) {
+      if (a.hostname && a.hostname !== location.hostname) {
+        a.setAttribute('target', '_blank');
+        a.setAttribute('rel', 'noopener');
+      }
+    });
+    </script>
+
     </body>
 </html>

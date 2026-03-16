@@ -1,6 +1,6 @@
 # Site settings
 title: Rough Drafts
-description: "Personal blog by Nithin."
+description: "Nithin's blog"
 baseurl: ""
 url: "https://aalavandhan.github.io"
 github_username: aalavandhan
@@ -21,3 +21,4 @@ plugins:
 
 exclude:
   - Makefile
+  - threads
