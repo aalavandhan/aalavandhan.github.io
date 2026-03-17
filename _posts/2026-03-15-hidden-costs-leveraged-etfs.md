@@ -5,21 +5,21 @@ date: 2026-03-15
 categories: finance research
 ---
 
+Most leveraged ETFs underperform their own underlying. Not because leverage is bad, but because it costs more than anyone tells you.
+
 [Leveraged ETFs](https://www.investopedia.com/terms/l/leveraged-etf.asp) (LETFs) have exploded in popularity among retail. If you want 2x Tesla, 3x QQQ, or levered bitcoin, there is now a fund for it. Because they trade like ordinary ETFs, buyers evaluate them the same way: look at the chart and the expense ratio.
 
-[We analyzed 109 long-only LETFs](https://frg-public-data.s3.amazonaws.com/durable-leverage/viz/letf_explorer.html) covering more than $100 billion in assets. The average expense ratio is just 90 bps. However, that number understates what holders actually pay.
+The standard explanation for this underperformance is [volatility drag](https://www.investopedia.com/articles/financial-advisors/082515/why-leveraged-etfs-are-not-longterm-bet.asp): daily resets lose ground in choppy markets. That is real, but it is only half the story. The other half is [financing drag](https://www.etf.com/sections/features/leveraged-etfs-hidden-costs-eat-your-returns-0). It does not appear in the expense ratio. Nor is it disclosed in any standardized way.
 
-Most underperformed — simply holding the underlying would have done better. Leverage actively destroyed value. The standard explanation is [volatility drag](https://www.investopedia.com/articles/financial-advisors/082515/why-leveraged-etfs-are-not-longterm-bet.asp): daily resets lose ground in choppy markets. That is real, but it is only half the story.
-
-The other half is [financing drag](https://www.etf.com/sections/features/leveraged-etfs-hidden-costs-eat-your-returns-0). It does not appear in the expense ratio. Nor is it disclosed in any standardized way.
+[We analyzed 109 long-only LETFs](https://frg-public-data.s3.amazonaws.com/durable-leverage/viz/letf_explorer.html) covering over $125 billion in assets to measure this hidden cost.
 
 ![The Leverage Expansion Pack](/assets/images/hidden-costs-leveraged-etfs/fig_letf_sims.jpg)
 
-Firstly, how do these funds get leverage?
+So how do these funds get leverage?
 
 A 3x fund that has $100 of investor capital needs $300 of exposure. It gets the extra $200 through [total return swap agreements](https://www.investopedia.com/terms/t/totalreturnswap.asp) with swap dealers. The dealer provides the leverage in exchange for a financing rate. What's actually paid only shows up in the price chart.
 
-We measured it. For each fund we compared the actual return against what a version borrowing at the risk-free rate would have delivered, net of the stated expense ratio. The residual is the [financing premium](https://drive.google.com/file/d/14E0phxNhliy_Qc-kBPPbRAkaedBxe3ma/view): the hidden cost of leverage paid entirely by ETF holders.
+For each fund we compared the actual return against what a version borrowing at the risk-free rate would have delivered, net of the stated expense ratio. The residual is the [financing premium](https://drive.google.com/file/d/14E0phxNhliy_Qc-kBPPbRAkaedBxe3ma/view): the hidden cost of leverage paid entirely by ETF holders.
 
 The premia vary enormously. And they do not track the underlying's volatility.
 
@@ -43,8 +43,6 @@ Single-stock and crypto funds are where costs climb. The dealer hedges in thinne
 Take [TSLL](https://finance.yahoo.com/quote/TSLL/) (2x Tesla) and [MSTU](https://finance.yahoo.com/quote/MSTU/) (2x MicroStrategy). Both single-stock LETFs. Comparable volatility. But TSLL's premium is 1.30% and MSTU's is 37%. Nearly 30x higher.
 
 Tesla has one of the deepest single-stock derivatives markets in the world — liquid options, deep borrow market, plenty of ways to hedge at scale. MicroStrategy has a thinner options book and harder-to-source hedges. The dealer passes the costs through.
-
-The drag on LETF returns comes from both the stated expense ratio and the hidden financing premium. Together they compound over long durations, eating into performance and in some cases destroying value and making leverage counterproductive.
 
 <img src="/assets/images/hidden-costs-leveraged-etfs/fig_letf_aum_map.png" alt="LETF AUM Map" style="max-width: 380px; margin: 40px auto; display: block;">
 *Size = AUM. Green beats the underlying, pink lags it.*
