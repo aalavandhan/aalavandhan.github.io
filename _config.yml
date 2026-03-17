@@ -16,6 +16,10 @@ kramdown:
   auto_ids: true
   syntax_highlighter: rouge
 
+header_pages:
+  - research.markdown
+  - about.markdown
+
 plugins:
   - jekyll-feed
 
