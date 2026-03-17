@@ -4,7 +4,7 @@ title: Research
 permalink: /research/
 ---
 
-- Durable Leverage: Volatility Segmentation for Buy-and-Hold Leverage ([PDF](https://drive.google.com/file/d/14E0phxNhliy_Qc-kBPPbRAkaedBxe3ma/view)). *Fragments Research*, 2026.
+- Durable Leverage: Volatility Segmentation for Buy-and-Hold Leverage ([PDF](https://drive.google.com/file/d/14E0phxNhliy_Qc-kBPPbRAkaedBxe3ma/view), [supplementary](https://drive.google.com/file/d/1VPu2SOqdjIAz22j7rs_k-D0upghCBoWm/view)). *Fragments Research*, 2026.
 - SPOT: An Inflation Resistant Store of Value ([PDF](https://drive.google.com/file/d/1MTp3vGLBtCp4Pte7ohHfnRfeKgFPaWQd/view)). *Fragments Research*, 2022.
 - [Protecting against inference attacks on co-location data](https://ieeexplore.ieee.org/document/8847050) ([PDF](https://drive.google.com/file/d/1tCRpYkBWKx-4-16sHtWXSQbpbtNvCuLq/view?usp=drivesdk)). *IEEE Transactions on Knowledge and Data Engineering*, 2019.
 - [IRMA: Intelligent Referral Matching Assistant for Social Good](https://www.researchgate.net/profile/Srinidhi-Nandakumar/publication/366673387_IRMA_Intelligent_Referral_Matching_Assistant_for_Social_Good/links/63adf84da03100368a39d147/IRMA-Intelligent-Referral-Matching-Assistant-for-Social-Good.pdf?origin=scientificContributions) ([PDF](https://drive.google.com/file/d/1LKusNlIJlhoTdAkgf4NJMfB5wEZHwtvt/view?usp=drivesdk)). *Grace Hopper Celebration (GHC)*, 2018.
