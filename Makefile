@@ -4,7 +4,7 @@ export PATH := /usr/local/opt/ruby/bin:/usr/local/lib/ruby/gems/4.0.0/bin:$(PATH
 export CXX := /usr/local/opt/llvm/bin/clang++
 export CC := /usr/local/opt/llvm/bin/clang
 
-.PHONY: install serve build clean new deploy status
+.PHONY: install serve build clean new deploy status lint
 
 ## install: Install Ruby dependencies
 install:
@@ -35,6 +35,10 @@ new:
 	echo "---" >> "$$file"; \
 	echo "" >> "$$file"; \
 	echo "Created $$file"
+
+## lint: Lint markdown files in _posts/
+lint:
+	. $$NVM_DIR/nvm.sh && nvm exec 22 npx --yes markdownlint-cli _posts/
 
 ## deploy: Commit and push to GitHub Pages
 deploy:
