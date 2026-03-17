@@ -5,13 +5,13 @@ date: 2017-11-29
 categories: privacy research
 ---
 
-Most people understand the implications of virtual meetings through emails and phone calls. Some of us are even aware that they are being constantly tracked. However, we assume that our physical meetings remain private. It is extremely unlikely that a bad actor will follow around everyone on earth all the time. Thus we seem to care less, if not at all, about the privacy of our physical meetings.
+Most people understand the implications of virtual meetings through emails and phone calls. Some of us are even aware that they are being constantly tracked. However, we assume that our physical meetings remain private. It is extremely unlikely that someone would follow everyone around all the time. Thus we seem to care less, if not at all, about the privacy of our physical meetings.
 
-Multiple systems are already recording your location. Government agencies, telecom and tech companies use technologies to track user mobility with surprising precision, often without users realizing it. Back in 2014, [The Post revealed](https://www.washingtonpost.com/apps/g/page/world/how-the-nsa-is-tracking-people-right-now/634/) that the NSA was collecting location data of people living in the US through hidden back-doors into mobile phone companies.
+Multiple systems collect location data at scale. Telecom, tech companies, and [governments](https://www.washingtonpost.com/news/the-switch/wp/2013/12/10/new-documents-show-how-the-nsa-infers-relationships-based-on-mobile-location-data/) log user location with more precision than most people expect.
 
 ![Tracking technologies: Cellular location identification, GPS systems, Wi-Fi Localization](/assets/images/who-meets-whom/tracking_technologies.webp)
 
-Google recently [admitted to secretly tracking](https://www.theverge.com/2017/11/21/16684818/google-location-tracking-cell-tower-data-android-os-firebase-privacy) location data from android devices, even when the GPS was explicitly turned off, potentially affecting over two billion monthly active android users worldwide.
+Google [was found to be collecting](https://www.theverge.com/2017/11/21/16684818/google-location-tracking-cell-tower-data-android-os-firebase-privacy) location data from Android devices even when GPS was explicitly turned off, potentially affecting over two billion monthly active users worldwide.
 
 You'd think this volume of data, spanning zettabytes, is too much to make any sense out of. Making sense is equivalent to finding needles in a hay stack. There has also been research into [location privacy](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/42852.pdf) and customer pushback has led to adoption of recent privacy techniques into how some companies collect data.
 
@@ -19,11 +19,11 @@ But scale and algorithms are good at exactly this kind of problem. Patterns that
 
 [Recent research](https://arxiv.org/pdf/1708.08221.pdf) has pointed out that we can infer sensitive information about people and who they meet, just from location data.
 
-At a population scale, location tracking can reveal who you know, where you go, and when you meet, without anyone physically following anyone.
+At a population scale, location data alone is enough to piece together who you know, where you go, and when you meet.
 
 ![NSA Co-Traveller Program](/assets/images/who-meets-whom/nsa_co_traveller.gif)
 
-With this much location data available, organizations can track nearly everyone's physical meetings. The Post revelations document the [NSA co-traveller program](https://www.washingtonpost.com/apps/g/page/world/how-the-nsa-is-tracking-people-right-now/634/) which looks out for physical meetings between a known perpetrator to identify potential co-conspirators, at a global level.
+With this much location data available, it's possible to piece together who meets whom across large populations.
 
 A couple who meet frequently are likely to be socially connected — friends, relatives, co-workers, partners. Using this intuition, researchers show that one can [accurately infer users' social connections](https://infolab.usc.edu/DocsDemos/sigra619.pdf) from location data of a significant population. Where and when people meet can also reveal the nature of relationship between the pair. For example, frequent meetings at a coffee shop near an office might indicate colleagues, while a weekly visit to a hospital might indicate a health situation.
 

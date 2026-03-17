@@ -4,9 +4,11 @@ title: About
 permalink: /about/
 ---
 
-Hi!
+<img src="/assets/images/about/dp.jpg" alt="Nithin Krishna" style="float: left; max-width: 200px; border-radius: 8px; margin: 4px 24px 16px -4px;">
 
-I like to write code. 
+<span style="display: inline-block; padding-top: 15px;">Hi!</span>
+
+I like to write code.
 
 I also design and build DeFi protocols.
 
