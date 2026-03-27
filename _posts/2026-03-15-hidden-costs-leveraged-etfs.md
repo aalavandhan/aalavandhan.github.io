@@ -66,6 +66,5 @@ The full per-fund breakdown is in the paper and interactive dashboard below. Hat
 Additional reading:
 
 - [Durable Leverage](https://drive.google.com/file/d/14E0phxNhliy_Qc-kBPPbRAkaedBxe3ma/view)
-- [Simulation results](https://drive.google.com/file/d/1VPu2SOqdjIAz22j7rs_k-D0upghCBoWm/view)
 - [Interactive dashboard](https://frg-public-data.s3.amazonaws.com/durable-leverage/viz/letf_explorer.html)
 - [Roy's original article](https://www.etf.com/sections/features/leveraged-etfs-hidden-costs-eat-your-returns-0)
