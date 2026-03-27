@@ -1,0 +1,402 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{microtype}
+\usepackage{parskip}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=black,
+  citecolor=black,
+}
+
+\title{Ampleforth Network Durability}
+\author{Fragments Research}
+\date{October 2021}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Since its launch in 2009, Bitcoin has proved to be a resilient, censorship-resistant asset.
+Like gold and many other physical commodities, Bitcoin does not rely on underlying collateral
+or any central authority to maintain its state of distribution. However, also like gold, Bitcoin
+experiences unit-price volatility and deflation, which undermines its use as a unit of account.
+One solution is to separate an asset's float volatility, which can be fat-tailed and unbounded,
+from that asset's unit price volatility, which can be mean-reverting. Launched in 2019, the
+Ampleforth protocol has shown that this is possible and sustainable through extreme market
+conditions.
+
+\bigskip
+AMPL is a fully-algorithmic unit of account developed on the Ethereum blockchain. Its
+protocol transfers the volatility of demand from price per token to the number of tokens in
+user wallets by automatically adjusting supply in response to its volume-weighted-average
+price exchange rate. Holders of AMPL experience the high float volatility that characterizes
+all digital assets. Between July 2020 and October 2021 the market cap of AMPL expanded by
+a maximum of 84,736\% from trough to peak and contracted by a maximum of 93\%. However,
+contracts denominated in AMPL have remained relatively stable in value through both secular
+increases and decreases in demand over the same period. The price of AMPL has oscillated
+around \$1.00, and remains within 20\% of that target 70\% of the time.
+
+\bigskip
+AMPL has additional dependencies which make it less resilient than BTC. Specifically, the
+Ampleforth protocol requires the existence of well-functioning exchange markets between AMPL
+and other assets. While the existence of these markets in 2017 and 2018 was not assured, it is
+clear today that these markets are here to stay. By separating its stock volatility from its unit
+volatility, AMPL allows the denomination of long-term on-chain contracts and the creation of
+fully-decentralized crypto-backed derivatives.
+\end{abstract}
+
+\section{Rebasing Policy}
+
+The Ampleforth Protocol targets the CPI adjusted 2019 US dollar and automatically expands
+or contracts the quantity of tokens in user wallets based on price. When the
+\texttt{price\_exchange\_rate} of AMPL $>$ \texttt{1 2019 USD} the quantity of tokens in user
+wallets proportionally increases. When the \texttt{price\_exchange\_rate} of AMPL is $<$
+\texttt{1 2019 USD} the quantity of tokens in user wallets proportionally decreases.
+
+\begin{itemize}
+  \item Supply adjustments, termed ``rebases'', are applied by updating a global scalar
+    coefficient of expansion every day at \texttt{2AM UTC}. This adjustment is applied
+    universally to all addresses and doesn't require any transaction between peers.
+  \item Rebases only adjust supply if the price of AMPL deviates from its target by $>$ the
+    \texttt{deviation\_threshold}. This threshold is set by an adjustable hyper-parameter and
+    is currently set at 5\%.
+  \item Rebases are smoothed by a \texttt{reaction\_lag} parameter. If the price of AMPL is
+    $X\%$ above the target, the policy adjusts supply by
+    $\left(\frac{X\%}{\text{reaction\_lag}}\right)$. This parameter is currently set to 10.
+  \item The Ampleforth protocol's supply changes are proportional and non-dilutive. If a user
+    owns $Y\%$ of the network before a rebase, the user will always own $Y\%$ of the network
+    unless the user buys or sells more AMPL.
+\end{itemize}
+
+\section{Separating Price and Stock Volatility}
+
+Price and stock volatility are often conflated, and for good reason. Most assets have an
+inelastic number of units in their float. As a result, changes in their unit value produces
+exactly proportional changes in their float value. Looking at Facebook's stock as an example,
+if the stock price of a Facebook share were to increase by 10\% its market cap would
+correspondingly increase by 10\%. The same is generally true of currencies. Ampleforth's
+elastic supply policy, however, deliberately counteracts this. Recall that when the
+volume-weighted-average unit price of AMPL trades above the protocol's price target, the stock
+of AMPL increases proportionally \emph{until} price is restored to its equilibrium band and
+vice-versa. Below, we show that the Ampleforth rebasing policy produces a unit price
+distribution that is structurally different from the network's stock distribution. Notably,
+AMPL's price volatility distribution reverts to its mean target price, while AMPL's stock
+volatility remains fat-tailed.
+
+\subsection{Price Volatility Distribution}
+
+Here, we present the distribution of time spent across AMPL price deviations from its target
+from December 2019 to October 2021. Although there is no theoretical upper bound to price,
+the pattern demonstrates a clear average around the Ampleforth protocol's price target.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{figures/price_deviation_dist.pdf}
+  \caption{Distribution of AMPL price deviations from target (December 2019--October 2021).}
+  \label{fig:price-deviation}
+\end{figure}
+
+\subsection{Stock Volatility Distribution}
+
+Here we present AMPL's supply series over the same period (December 2019 to October 2021).
+It can be seen below that, like a typical floating price token, AMPL's supply series (blue)
+shows no clear long-run average, while its price series (red) hovers around a target price.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{figures/price_supply_overlay.pdf}
+  \caption{AMPL price (red) and supply (blue) over time. The supply series exhibits fat-tailed
+    behavior typical of floating-price tokens, while price reverts to its target.}
+  \label{fig:price-supply}
+\end{figure}
+
+Finally we present the distribution of AMPL's supply changes over time. The distribution
+takes as its inputs, rolling relative monthly supply changes. Below, it can be seen that the
+distribution is asymmetric and fat-tailed, as is common for equities and floating price
+cryptocurrencies.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{figures/log_supply_change_dist.pdf}
+  \caption{Distribution of AMPL rolling monthly supply changes showing asymmetric,
+    fat-tailed behavior.}
+  \label{fig:supply-dist}
+\end{figure}
+
+\subsection{General Comments}
+
+The Ampleforth protocol's supply adjustments serve as an outflow for extreme swings in demand,
+allowing AMPL's unit price to remain stable in the long-run. For this reason, contracts
+denominated in AMPL remain similarly stable, even in the face of extreme market conditions
+where other approaches are likely to require discretionary intervention or fail outright.
+
+\section{Alternative Approaches}
+
+The inevitable regulation of centralized stablecoins---and the rapid growth of decentralized
+finance platforms that rely on them---has underscored the need for a decentralized unit of
+account. To that end, many attempts have been made to produce decentralized stablecoins.
+However few efforts, outside of AMPL, have elected to isolate this goal of creating a durable
+unit-of-account from broader attempts to store near-term value. The key to AMPL's durability
+is that it returns to a stable price by transferring the volatility of demand to supply,
+rather than attempting to eliminate volatility. Systems that have attempted to remove
+volatility altogether have thus far materialized as solutions that are either highly censorable
+or highly unreliable.
+
+The vast majority of alternatives fall under: coupon-based, crypto-collateralized, and
+fractionally-collateralized approaches. Although exhaustive commentary on alternative systems
+is beyond the scope of this document, we cover these three major categories below.
+
+\subsection{Coupon Based ``Bond Token'' Approaches}
+
+``Coupon coins'' peg their exchange rates by minting coins when their price is above the peg
+and issuing interest-bearing coupons. Although these coupons are often referred to in project
+whitepapers as ``bonds,'' they more closely resemble binary options that are paid off---if and
+when a network needs to expand beyond its former all-time-high market cap in the future---or
+not at all. Examples of this approach include Basis, BasisCash, Elastic Set Dollar, and
+FEI---all of which have suffered major collapses.
+
+Although these approaches, like AMPL, are fully algorithmic and do not rely on centralized
+collateral; unlike AMPL they cannot survive secular decreases in demand. The key issue here
+is that these systems cannot force a permanent reduction in supply. Once demand growth
+flatlines after a correction the protocols create and magnify instability.
+
+\subsection{``Crypto-Collateralized'' Approaches}
+
+Although more promising than coupon-coins in theory, crypto-collateralized systems are
+vulnerable to the volatility of underlying collateral. Most famously, DAI suffered a massive
+collapse on Black Thursday when cryptocurrencies like ETH suffered rapid price declines. In
+an emergency governance response, the protocol added USDC as collateral which now represents
+$\sim$60\% of their collateral pool.
+
+A key problem here is the use and reliance on fixed collateralization ratios. When such
+collateralization ratios are held constant, the risk of liquidation is pushed off to market
+participants in a manner that cannot be priced. So long as the network is over-collateralized,
+stablecoins like DAI can maintain their price, but as a result it becomes the role of outside
+markets to take on the black-swan risk of a price collapse in the underlying collateral assets,
+and this type of risk is impossible to price. Many of these problems go away if the underlying
+collateral asset is stable, as is the case with USDC, but introducing traditional assets
+trades market risks for custodial and regulatory risks.
+
+An alternative method of risk stratification has been developed by prl.one that transparently
+re-segments the risk of underlying cryptocurrencies into tranches on-chain. Such derivatives
+can eventually be used to produce on-chain safe-assets that serve as an alternative collateral
+to USDC; and could therefore be used to salvage crypto-collateralized systems. But efforts on
+this front are still in the early stages of development.
+
+\subsection{``Fractionally-Collateralized'' Approaches}
+
+Fractionally collateralized systems promise less than 100\% collateralization, noting that in
+traditional finance we typically use capital more efficiently. All else being equal, this
+provides less buffer for collateral collapse than over-collateralized systems, placing more
+reliance on centralized collateral like USDC. Innovations in on-chain safe-asset collateral
+are necessary for advancing these approaches.
+
+\section{Applications Now and Looking Forward}
+
+The decentralized finance movement aims to create an alternative financial ecosystem that is
+open-source, borderless, and resistant to political tampering. AMPL enables the denomination
+of stable on-chain contracts without any reliance on centralized custodians or buyers of last
+resort. This capability propagates into a number of use cases including on-chain lending,
+on-chain borrowing, and the creation of on-chain derivatives.
+
+\subsection{Decentralized Debt Denomination}
+
+The simplest AMPL use case is decentralized debt denomination. Typically when a person
+borrows money they intend to put that money to work immediately and then pay it back later
+with interest. However, when a loan contract is denominated with a floating price currency
+like ETH, the borrower has to factor in the price volatility of ETH. To illustrate we can
+follow a simple example:
+
+\paragraph{ETH Denominated Loan Example.}
+Imagine Alice borrows \texttt{1 ETH}, valued at \texttt{\$1000/ETH}, to be paid back at a
+later date. If Alice sells the ETH to put \$1000 to work and the price of ETH increases to
+\texttt{\$3000/ETH}, she will need to spend \$3000 to acquire the ETH in order to pay back
+her loan.
+
+Because loans denominated in price-volatile currencies are so risky, the majority of
+borrowing activity on decentralized lending platforms is unfortunately denominated with
+centralized stablecoins. AMPL eliminates this dependency and enables sustainable lending and
+borrowing on decentralized lending platforms.
+
+\paragraph{AMPL Denominated Loan Example.}
+Imagine Bob borrows \texttt{1000 AMPL} to be paid back at a later date. If Bob sells the AMPL
+to put \$1000 to work, he can be reasonably certain that the cost of re-purchasing the AMPL to
+pay back his loan will be reasonably stable in the long-run due to AMPL's mean-reverting
+price, even if the AMPL network profoundly increases or decreases in size.
+
+Although AMPL holders experience the same kind of fat-tailed stock volatility expected of
+floating-price tokens like ETH, contracts denominated in AMPL remain long-run stable, as is
+the case with Bob's loan example above. AMPL is currently available as a lend and borrow
+asset on AAVE.
+
+\subsection{Decentralized Derivatives}
+
+Derivatives are a special type of financial contract whose value depends on an underlying
+asset. Such contracts require a unit of account for denomination and AMPL similarly enables
+the creation of on-chain derivatives. To help illustrate this, let's explore a simple example:
+
+\paragraph{AMPL Derivative Example.}
+Imagine Bob wants to split the stock-volatility of AMPL into two derivative tranches, a
+senior (low-risk) tranche and a junior (high-risk) tranche. Bob can author a simple smart
+contract that accepts a redeemable AMPL deposit, and attributes $\frac{1}{10}$ of all future
+supply changes to the senior tranche token while attributing $\frac{9}{10}$ of all future
+supply changes to the junior tranche token. At the time of maturity senior tranches are first
+in line to redeem followed by junior tranches second.
+
+Bob will have created a senior derivative token that is considerably less volatile than the
+underlying AMPL and a junior derivative token that is considerably more volatile, without any
+added oracle risk.
+
+\subsection{Decentralized ``Safe-Asset'' Collateral}
+
+Following from the concept of on-chain derivatives above, correctly configured safe-asset
+(senior) tranches can be used as transparent and robust collateral by the issuer of a
+crypto-collateralized stablecoin. Because the tranche ratios of the respective derivatives
+are pre-defined and redeemable, the volatility tolerance of a senior tranche token can be
+clearly defined (i.e.: it can be initialized such that the safe-asset derivative can tolerate
+an $X\%$ fall in demand). This sort of redeemable on-chain derivative does not require
+liquidation markets and introduces no additional oracle risk. A breakthrough in safe-asset
+collateral would allow crypto-collateralized stablecoins to reduce their reliance on tokens
+backed by traditional assets (like USDC) as collateral, making them more decentralized.
+
+\section{Oracle Risks}
+
+To execute its automatic supply policy, the Ampleforth protocol accepts a
+volume-weighted-average price exchange-rate through a network of Oracles. Although attacks on
+this Oracle network can temporarily corrupt the inputs to Ampleforth's supply policy, in
+theory, great care has been taken to negate the impact of Oracle Attacks. Most importantly,
+because AMPL is non-custodial and the policy is proportional, no funds can be stolen or
+redistributed by an Oracle Attack. To help illustrate this, let's walk through a simple
+example.
+
+\subsection{Stable Transfer Application Example}
+
+Let's imagine a simple application that allows its users to send a dollar denominated amount
+of money from one wallet to another, we'll call it Stable Transfer.
+
+When Alice wants to transfer \$100 to Bob, the Stable Transfer contract queries an oracle for
+the price-exchange rate of ETH to US dollars, and then it transfers an automatically
+calculated quantity of ETH to Bob.
+
+Since each transfer queries an oracle to calculate an ETH amount before transferring to its
+receivers, oracle requests are $O(n)$ with the number of transfers. Each of these oracle
+requests presents an exploit opportunity and incurs an added cost. Finally, if an attacker
+exploits the exchange-rate oracle, or if there's a bug in the oracle, senders can transfer
+the wrong amount of money resulting in a loss of funds.
+
+\subsection{AMPL Example}
+
+Alternatively, the AMPL equivalent of the Stable Transfer application, isn't really an
+application at all. Alice would simply transfer 100 AMPL to Bob and there would be no oracle
+query at the time of transfer. In the case of AMPL, rebases occur once daily and oracle
+requests are $O(1)$ per day. More importantly, because the protocol's supply policy is
+proportional and non-dilutive, oracle attacks cannot result in the theft or redistribution of
+assets.
+
+\section{Conclusion}
+
+As mentioned above, floating price tokens like Bitcoin experience unit-price volatility and
+deflation, which undermines their use as a unit of account. The Ampleforth solution transfers
+the volatility of demand from price to supply using a simple, transparent, and non-custodial
+policy. We've shown here that this policy separates AMPL's price volatility from its stock
+volatility, allowing AMPL's price to revert to its target through both secular increases and
+decreases in demand, without requiring centralized custodians, collateral, or buyers of last
+resort.
+
+\appendix
+\section*{Appendix: Extended Analysis (March 2026)}
+\addcontentsline{toc}{section}{Appendix: Extended Analysis (March 2026)}
+
+Since the original publication of this report in October 2021, the Ampleforth protocol has
+continued to operate uninterrupted through an additional four and a half years of market
+activity. This period encompassed the collapse of multiple major centralized and algorithmic
+stablecoin systems, a prolonged bear market in digital assets, and a subsequent recovery. The
+extended dataset now spans December 2019 to March 2026, comprising 2,282 daily observations
+compared to the 687 available at the time of the original analysis.
+
+Over this extended period, the core finding of this report holds: AMPL's rebasing policy
+continues to produce a mean-reverting unit price distribution that is structurally distinct
+from its fat-tailed stock distribution. In fact, the price stability metrics have improved
+with additional data. The price of AMPL now remains within 20\% of its target 83\% of the
+time, up from 69\% over the original observation window. Similarly, the proportion of days
+spent within 5\% of the target has increased from 25\% to 34\%, and within 10\% from 41\% to
+57\%.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{figures/appendix_price_deviation_dist.pdf}
+  \caption{Distribution of AMPL price deviations from target (December 2019--March 2026).
+    The distribution remains clearly centered around the target, with a tighter concentration
+    than the original observation period.}
+  \label{fig:appendix-price-deviation}
+\end{figure}
+
+The improvement in price stability is attributable to two governance-approved upgrades to the
+protocol's rebase function. In 2022, the original linear rebase curve was replaced with a
+sigmoid (S-shaped) curve, introducing asymptotic bounds that cap maximum supply adjustments
+and limit exposure to oracle errors \cite{sigmoid-upgrade}. In 2024, the sigmoid curve was
+further steepened and the deviation threshold was tightened from 5\% to 2.5\%, producing
+faster mean-reversion by allowing the protocol to begin correcting at smaller price
+deviations \cite{steepen-curve}. Together, these
+upgrades have reduced the magnitude and duration of price deviations from the target,
+producing a narrower distribution and a lower standard deviation (0.23 vs 0.35 over the
+original period).
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{figures/appendix_price_supply_overlay.pdf}
+  \caption{AMPL price (red) and supply (blue) from December 2019 to March 2026. The supply
+    series continues to exhibit fat-tailed behavior while price reverts to its target through
+    multiple market cycles.}
+  \label{fig:appendix-price-supply}
+\end{figure}
+
+The supply series continues to display the fat-tailed, asymmetric characteristics observed in
+the original analysis. Over the full period, the market cap of AMPL expanded by a maximum of
+30,668\% from trough to peak and contracted by a maximum of 99.7\%. Despite these extreme
+movements in network value, the rebasing policy continued to absorb demand shocks and restore
+the unit price to its equilibrium band without any discretionary intervention.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{figures/appendix_log_supply_change_dist.pdf}
+  \caption{Distribution of rolling monthly log supply changes (December 2019--March 2026).
+    The distribution remains asymmetric and fat-tailed.}
+  \label{fig:appendix-supply-dist}
+\end{figure}
+
+During this extended observation period, the protocol's supply expanded on 29\% of days,
+contracted on 40\% of days, and remained unchanged on 31\% of days. The high proportion of
+days with no supply change reflects periods where the price remained within the 5\% deviation
+threshold, requiring no corrective action from the protocol.
+
+These results reinforce the central thesis of this report: that a simple, transparent, and
+non-custodial supply policy can produce a durable unit of account by transferring the
+volatility of demand from price to supply. The Ampleforth protocol has now demonstrated this
+property over more than six years of continuous operation, through multiple complete market
+cycles.
+
+\begin{thebibliography}{9}
+
+\bibitem{sigmoid-upgrade}
+Ampleforth Governance Forum,
+``Rebase Curve Upgrade Proposal,'' 2022.
+\url{https://forum.ampleforth.org/t/rebase-curve-upgrade-proposal/327}
+
+\bibitem{steepen-curve}
+Ampleforth Governance Forum,
+``Steepen Rebase Curve to Tighten Price Distribution,'' 2024.
+\url{https://forum.ampleforth.org/t/steepen-rebase-curve-to-tighten-price-distribution/772}
+
+\end{thebibliography}
+
+\end{document}
