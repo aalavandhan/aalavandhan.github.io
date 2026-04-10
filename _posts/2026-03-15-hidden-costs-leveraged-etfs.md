@@ -5,7 +5,7 @@ date: 2026-03-15
 categories: finance research
 ---
 
-Most leveraged ETFs underperform their own underlying. Not because leverage is bad, but because it costs more than anyone tells you.
+Most leveraged ETFs underperform their own underlying. Not because leverage is inherently bad, but because it costs more than anyone tells you.
 
 [Leveraged ETFs](https://www.investopedia.com/terms/l/leveraged-etf.asp) (LETFs) have exploded in popularity among retail. If you want 2x Tesla, 3x QQQ, or levered bitcoin, there is now a fund for it. Because they trade like ordinary ETFs, buyers evaluate them the same way: look at the chart and the expense ratio.
 
