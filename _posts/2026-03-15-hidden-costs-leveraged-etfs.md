@@ -5,13 +5,13 @@ date: 2026-03-15
 categories: finance research
 ---
 
-Most leveraged ETFs underperform their own underlying. Not because leverage is inherently bad, but because it costs more than anyone tells you.
+Most leveraged ETFs underperform their own underlying. Not because leverage is inherently bad, but because it typically costs way more than you think.
 
 [Leveraged ETFs](https://www.investopedia.com/terms/l/leveraged-etf.asp) (LETFs) have exploded in popularity among retail. If you want 2x Tesla, 3x QQQ, or levered bitcoin, there is now a fund for it. Because they trade like ordinary ETFs, buyers evaluate them the same way: look at the chart and the expense ratio.
 
 The standard explanation for this underperformance is [volatility drag](https://www.investopedia.com/articles/financial-advisors/082515/why-leveraged-etfs-are-not-longterm-bet.asp): daily resets lose ground in choppy markets. That is real, but it is only half the story. The other half is [financing drag](https://www.etf.com/sections/features/leveraged-etfs-hidden-costs-eat-your-returns-0). It does not appear in the expense ratio. Nor is it disclosed in any standardized way.
 
-[We analyzed 109 long-only LETFs](https://frg-public-data.s3.amazonaws.com/durable-leverage/viz/letf_explorer.html) covering over $125 billion in assets to measure this hidden cost.
+[We analyzed 109 long-only LETFs](https://data.2factor.finance/durable-leverage/viz/letf_explorer.html) covering over $125 billion in assets to measure this hidden cost.
 
 ![The Leverage Expansion Pack](/assets/images/hidden-costs-leveraged-etfs/fig_letf_sims.jpg)
 
@@ -66,5 +66,5 @@ The full per-fund breakdown is in the paper and interactive dashboard below. Hat
 Additional reading:
 
 - [Durable Leverage](https://drive.google.com/file/d/14E0phxNhliy_Qc-kBPPbRAkaedBxe3ma/view)
-- [Interactive dashboard](https://frg-public-data.s3.amazonaws.com/durable-leverage/viz/letf_explorer.html)
+- [Interactive dashboard](https://data.2factor.finance/durable-leverage/viz/letf_explorer.html)
 - [Roy's original article](https://www.etf.com/sections/features/leveraged-etfs-hidden-costs-eat-your-returns-0)

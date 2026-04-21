@@ -5,7 +5,7 @@ layout: default
 
   <header class="post-header">
     <h1>{{ page.title }}</h1>
-    {% assign words = content | number_of_words %}{% assign minutes = words | divided_by: 265 %}{% if minutes < 1 %}{% assign minutes = 1 %}{% endif %}
+    {% assign words = content | strip_html | number_of_words %}{% assign minutes = words | divided_by: 265 %}{% if minutes < 1 %}{% assign minutes = 1 %}{% endif %}
     <p class="meta"><span>{{ page.date | date: "%b %-d, %Y" }}{% if page.author %} · {{ page.author }}{% endif %}</span><span class="read-time">{{ minutes }} min read</span></p>
   </header>
 
@@ -14,3 +14,24 @@ layout: default
   </article>
 
 </div>
+
+<script>
+// Replay SVG animations when scrolled into view
+(function() {
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        var img = entry.target;
+        var src = img.getAttribute('src');
+        img.setAttribute('src', '');
+        img.setAttribute('src', src);
+        observer.unobserve(img);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  document.querySelectorAll('img[src$=".svg"]').forEach(function(img) {
+    observer.observe(img);
+  });
+})();
+</script>
