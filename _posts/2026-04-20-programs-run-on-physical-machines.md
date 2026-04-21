@@ -14,7 +14,7 @@ Programs run on physical machines. They flip bits in physical memory, spin disks
 ![Physical landscape of a function call](/assets/images/programs-run-on-physical-machines/fig_landscape.svg)
 *From fuel to grid to silicon to heat. Every time.*
 
-The abstraction is so neat that we forget the messy atoms underneath. But physics doesn't disappear. And all physical objects wear out.
+The abstraction is so neat that we forget the messy atoms underneath. But physics doesn't disappear. And all physical objects break down.
 
 Code doesn't age. Computers do.
 
@@ -34,7 +34,7 @@ Then one day your AWS bill jumps 3x.
 
 I rage-open the billing console to find the EC2 generation my instances ran on was being retired. The hardware had aged out.
 
-The [second law](https://en.wikipedia.org/wiki/Second_law_of_thermodynamics) doesn't care about my abstractions. Silicon is fatiguing, fans are spinning and capacitors are leaking. Machines are wearing out. Matter degrades.
+The [second law](https://en.wikipedia.org/wiki/Second_law_of_thermodynamics) doesn't care about my abstractions. Silicon is fatiguing, fans are spinning and capacitors are leaking. Matter degrades.
 
 Reluctantly, I venture into the blizzard that is the physical world to briefly deal with atoms. Upgrade a few dependencies so my code can run on new silicon.
 
