@@ -16,21 +16,27 @@ layout: default
 </div>
 
 <script>
-// Replay SVG animations when scrolled into view
+// Animate SVGs only when scrolled into view
 (function() {
+  var svgs = document.querySelectorAll('img[src$=".svg"]');
+
+  // Blank out all SVGs initially to prevent load animation
+  svgs.forEach(function(img) {
+    img.dataset.src = img.getAttribute('src');
+    img.setAttribute('src', 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"/>');
+  });
+
   var observer = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
       if (entry.isIntersecting) {
         var img = entry.target;
-        var src = img.getAttribute('src');
-        img.setAttribute('src', '');
-        img.setAttribute('src', src);
+        img.setAttribute('src', img.dataset.src + '?t=' + Date.now());
         observer.unobserve(img);
       }
     });
   }, { threshold: 0.2 });
 
-  document.querySelectorAll('img[src$=".svg"]').forEach(function(img) {
+  svgs.forEach(function(img) {
     observer.observe(img);
   });
 })();
