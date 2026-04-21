@@ -36,9 +36,9 @@ new:
 	echo "" >> "$$file"; \
 	echo "Created $$file"
 
-## lint: Lint markdown files in _posts/
+## lint: Lint and fix markdown files in _posts/
 lint:
-	. $$NVM_DIR/nvm.sh && nvm exec 22 npx --yes markdownlint-cli _posts/
+	. $$NVM_DIR/nvm.sh && nvm exec 22 npx --yes markdownlint-cli --fix _posts/
 
 ## deploy: Commit and push to GitHub Pages
 deploy:

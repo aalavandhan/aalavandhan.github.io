@@ -17,7 +17,6 @@ Borrowers want commitment — a homeowner with a 30-year mortgage can't afford t
 
 This is a structural conflict between optionality and commitment, not a coordination failure better matching could solve. Even a depositor and borrower with identical time horizons would disagree on the *shape* of the contract. One wants it cancellable, the other wants it locked. Someone has to bear the gap.
 
-
 ## Banks try to patch it
 
 The traditional fix is [statistical pooling](https://www.investopedia.com/terms/f/fractionalreservebanking.asp). Most depositors don't withdraw on most days, so even though everyone *can* pull their money at any time, only a small fraction actually does. The bank keeps enough cash on hand for that fraction and lends the rest out long-term. A thin equity buffer absorbs the day-to-day variance, and most of the time everyone is happy.
@@ -26,7 +25,6 @@ Until a panic hits, everyone wants out at once, the buffer isn't sized for it, a
 
 ![Duration risk stack](/assets/images/demand-deposits-are-mispriced-options/fig_duration_stack.svg)
 *Duration risk starts at the bank and gets passed up the stack. The top layer has no one above it.*
-
 
 ## Demand deposits are puts
 
@@ -43,14 +41,13 @@ You could argue the spread *is* the put premium — the price the bank charges f
 
 ## Puts are mispriced
 
-The value of that put comes from the duration mismatch. A cash-only bank has no mismatch and nothing to protect against. The put is worthless. (*This is [narrow banking](https://en.wikipedia.org/wiki/Narrow_banking), which is what [GENIUS](https://www.congress.gov/bill/119th-congress/senate-bill/394) [stablecoins](https://www.investopedia.com/terms/s/stablecoin.asp) are.*) 
+The value of that put comes from the duration mismatch. A cash-only bank has no mismatch and nothing to protect against. The put is worthless. (*This is [narrow banking](https://en.wikipedia.org/wiki/Narrow_banking), which is what [GENIUS](https://www.congress.gov/bill/119th-congress/senate-bill/394) [stablecoins](https://www.investopedia.com/terms/s/stablecoin.asp) are.*)
 
 A bank holding 30-year mortgages funded on demand has a big mismatch and a lot to protect against. The put is worth a lot.
 
 The bigger the mismatch, the more risk embedded in the bank's balance sheet, and the more of it gets passed up the stack instead of falling on depositors. Depositors hold the put for free, and the gap between what it's worth and what they pay for it is the mispricing.
 
 The mismatch never goes away, and neither does the mispricing. Every checking account, savings account, money market account — any balance redeemable at par on demand — carries it.
-
 
 ## Mispricing is accepted
 
@@ -61,7 +58,7 @@ Depositors get a subsidized lunch — guaranteed by the rest of society. And eve
 ---
 
 **Further reading:**
+
 - [Banking the Future](https://thinking.farm/essays/2023-03-29-banking-the-future-p1/) — a deeper exploration of banking's structural fragility.
 - [Diamond and Dybvig (1983)](https://www.bu.edu/econ/files/2012/01/DD83jpe.pdf) formalized banks as providers of liquidity insurance against privately-known consumption shocks — the paper that won the [2022 Nobel](https://www.nobelprize.org/prizes/economic-sciences/2022/summary/).
 - [Robert Merton (1977)](https://www.sciencedirect.com/science/article/abs/pii/0378426677900152) modeled deposit insurance as a put option written by the FDIC on the bank's assets — the foundational framing for deposits-as-puts.
-
