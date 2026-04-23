@@ -38,4 +38,4 @@ The [second law](https://en.wikipedia.org/wiki/Second_law_of_thermodynamics) doe
 
 Reluctantly, I venture into the blizzard that is the physical world to briefly deal with atoms. Upgrade a few dependencies so my code can run on new silicon.
 
-Then back to the armchair by the fire — until entropy knocks politely on the door again and hands me an invoice.
+Then back to the armchair by the fire — until entropy knocks politely on the door again and hands me another invoice.

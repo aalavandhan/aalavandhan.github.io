@@ -26,4 +26,3 @@ plugins:
 exclude:
   - Makefile
   - threads
-  - papers
