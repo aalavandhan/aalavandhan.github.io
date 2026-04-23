@@ -3,28 +3,83 @@
     <marker id="hp-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
     </marker>
+    <style>
+      @keyframes fill1 {
+        0%, 30%, 100% { fill: #eff6ff; }
+        10%, 20%      { fill: #bfdbfe; }
+      }
+      @keyframes fill2 {
+        0%, 30%, 100% { fill: #dbeafe; }
+        10%, 20%      { fill: #93c5fd; }
+      }
+      @keyframes fill3 {
+        0%, 30%, 100% { fill: #cfe4fc; }
+        10%, 20%      { fill: #7db8f0; }
+      }
+      @keyframes fill4 {
+        0%, 30%, 100% { fill: #bfdbfe; }
+        10%, 20%      { fill: #60a5fa; }
+      }
+      @keyframes fill5 {
+        0%, 30%, 100% { fill: #fecaca; }
+        10%, 20%      { fill: #f87171; }
+      }
+      @keyframes arrowDarken {
+        0%, 30%, 100% { stroke: #94a3b8; }
+        10%, 20%      { stroke: #475569; }
+      }
+
+      .box-1 { animation: fill1       7s ease-in-out infinite; animation-delay: 0.0s; }
+      .arr-1 { animation: arrowDarken 7s ease-in-out infinite; animation-delay: 0.7s; }
+      .box-2 { animation: fill2       7s ease-in-out infinite; animation-delay: 1.4s; }
+      .arr-2 { animation: arrowDarken 7s ease-in-out infinite; animation-delay: 2.1s; }
+      .box-3 { animation: fill3       7s ease-in-out infinite; animation-delay: 2.8s; }
+      .arr-3 { animation: arrowDarken 7s ease-in-out infinite; animation-delay: 3.5s; }
+      .box-4 { animation: fill4       7s ease-in-out infinite; animation-delay: 4.2s; }
+      .arr-4 { animation: arrowDarken 7s ease-in-out infinite; animation-delay: 4.9s; }
+      .box-5 { animation: fill5       7s ease-in-out infinite; animation-delay: 5.6s; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .box-1, .box-2, .box-3, .box-4, .box-5,
+        .arr-1, .arr-2, .arr-3, .arr-4 { animation: none; }
+      }
+    </style>
   </defs>
-  <rect x="50" y="392" width="400" height="55" rx="6" fill="#eff6ff" stroke="#3b82f6"/>
+
+  <!-- Saver / household (bottom) -->
+  <rect class="box-1" x="50" y="392" width="400" height="55" rx="6" fill="#eff6ff" stroke="#3b82f6"/>
   <text x="250" y="416" text-anchor="middle" font-size="14" font-weight="600">Saver / household</text>
-  <text x="250" y="434" text-anchor="middle" font-size="11" fill="#64748b">demand-redeemable claim, no maturity</text>
-  <line x1="250" y1="389" x2="250" y2="359" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#hp-arr)"/>
+  <text x="250" y="434" text-anchor="middle" font-size="11" fill="#334155">demand-redeemable claim, no maturity</text>
+
+  <line class="arr-1" x1="250" y1="389" x2="250" y2="359" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#hp-arr)"/>
   <text x="265" y="379" font-size="10" fill="#94a3b8" font-style="italic">duration risk</text>
-  <rect x="50" y="299" width="400" height="55" rx="6" fill="#dbeafe" stroke="#3b82f6"/>
+
+  <!-- Commercial bank -->
+  <rect class="box-2" x="50" y="299" width="400" height="55" rx="6" fill="#dbeafe" stroke="#3b82f6"/>
   <text x="250" y="323" text-anchor="middle" font-size="14" font-weight="600">Commercial bank</text>
-  <text x="250" y="341" text-anchor="middle" font-size="11" fill="#64748b">long assets, demand liabilities, equity buffer</text>
-  <line x1="250" y1="296" x2="250" y2="266" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#hp-arr)"/>
+  <text x="250" y="341" text-anchor="middle" font-size="11" fill="#334155">long assets, demand liabilities, equity buffer</text>
+
+  <line class="arr-2" x1="250" y1="296" x2="250" y2="266" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#hp-arr)"/>
   <text x="265" y="286" font-size="10" fill="#94a3b8" font-style="italic">duration risk</text>
-  <rect x="50" y="206" width="400" height="55" rx="6" fill="#cfe4fc" stroke="#3b82f6"/>
+
+  <!-- FDIC -->
+  <rect class="box-3" x="50" y="206" width="400" height="55" rx="6" fill="#cfe4fc" stroke="#3b82f6"/>
   <text x="250" y="230" text-anchor="middle" font-size="14" font-weight="600">FDIC / deposit insurance</text>
-  <text x="250" y="248" text-anchor="middle" font-size="11" fill="#64748b">guarantees deposits up to $250k</text>
-  <line x1="250" y1="203" x2="250" y2="173" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#hp-arr)"/>
+  <text x="250" y="248" text-anchor="middle" font-size="11" fill="#334155">guarantees deposits up to $250k</text>
+
+  <line class="arr-3" x1="250" y1="203" x2="250" y2="173" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#hp-arr)"/>
   <text x="265" y="193" font-size="10" fill="#94a3b8" font-style="italic">duration risk</text>
-  <rect x="50" y="113" width="400" height="55" rx="6" fill="#bfdbfe" stroke="#3b82f6"/>
+
+  <!-- Central bank -->
+  <rect class="box-4" x="50" y="113" width="400" height="55" rx="6" fill="#bfdbfe" stroke="#3b82f6"/>
   <text x="250" y="137" text-anchor="middle" font-size="14" font-weight="600">Central bank</text>
-  <text x="250" y="155" text-anchor="middle" font-size="11" fill="#64748b">long assets, demand liabilities</text>
-  <line x1="250" y1="110" x2="250" y2="80" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#hp-arr)"/>
+  <text x="250" y="155" text-anchor="middle" font-size="11" fill="#334155">long assets, demand liabilities</text>
+
+  <line class="arr-4" x1="250" y1="110" x2="250" y2="80" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#hp-arr)"/>
   <text x="265" y="100" font-size="10" fill="#94a3b8" font-style="italic">duration risk</text>
-  <rect x="50" y="20" width="400" height="55" rx="6" fill="#fecaca" stroke="#dc2626"/>
+
+  <!-- Currency holder (top) -->
+  <rect class="box-5" x="50" y="20" width="400" height="55" rx="6" fill="#fecaca" stroke="#dc2626"/>
   <text x="250" y="44" text-anchor="middle" font-size="14" font-weight="600">Currency holder</text>
-  <text x="250" y="62" text-anchor="middle" font-size="11" fill="#64748b">no backstop above — bears the residual via inflation</text>
+  <text x="250" y="62" text-anchor="middle" font-size="11" fill="#334155">no backstop above — bears the residual via inflation</text>
 </svg>
