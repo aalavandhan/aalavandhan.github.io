@@ -292,7 +292,8 @@ a:visited { color: inherit; }
   transition: transform 0.1s ease;
 }
 
-.post-content img + em {
+.post-content img + em,
+.post-content script + p > em {
   display: block;
   text-align: center;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;

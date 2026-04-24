@@ -95,9 +95,9 @@
     .electron-5 { animation-delay: 0.32s; }
     .electron-6 { animation-delay: 0.40s; }
     @keyframes electronPulse {
-      0%, 65%, 100%   { opacity: 0.25; transform: translateX(0); }
-      72%             { opacity: 1;    transform: translateX(6px); }
-      82%             { opacity: 0.15; transform: translateX(14px); }
+      0%, 65%, 88%, 100% { opacity: 0; transform: translateX(0); }
+      72%                { opacity: 1; transform: translateX(6px); }
+      82%                { opacity: 0.6; transform: translateX(14px); }
     }
 
     /* Transistor gate flares when the packet arrives */
@@ -112,15 +112,37 @@
       88%           { opacity: 0;   transform: scale(2.2); }
     }
 
-    /* Existing heat plumes ride higher as dissipation ramps up */
+    /* Heat plumes appear and rise when energy hits the silicon */
     .heat-wave {
       animation: heatRise 8s ease-in-out infinite;
       transform-box: fill-box;
+      transform-origin: center bottom;
     }
+    .heat-wave-1 { animation-delay: 0s; }
+    .heat-wave-2 { animation-delay: 0.15s; }
+    .heat-wave-3 { animation-delay: 0.3s; }
+    .heat-wave-4 { animation-delay: 0.1s; }
+    .heat-wave-5 { animation-delay: 0.25s; }
     @keyframes heatRise {
-      0%, 65%, 100% { opacity: 0.55; }
-      80%           { opacity: 1;    }
-      95%           { opacity: 0.65; }
+      0%, 68%       { opacity: 0; transform: translateY(0); }
+      74%           { opacity: 0.3; transform: translateY(-2px); }
+      80%           { opacity: 0.9; transform: translateY(-6px); }
+      90%           { opacity: 0.5; transform: translateY(-16px); }
+      97%           { opacity: 0; transform: translateY(-24px); }
+      100%          { opacity: 0; transform: translateY(0); }
+    }
+
+    /* Silicon chip surface glows as energy enters the wire toward it */
+    .chip-glow {
+      animation: chipGlow 8s ease-in-out infinite;
+    }
+    @keyframes chipGlow {
+      0%, 62%, 100% { opacity: 0; }
+      68%           { opacity: 0.04; }
+      74%           { opacity: 0.1; }
+      78%           { opacity: 0.18; }
+      88%           { opacity: 0.04; }
+      94%           { opacity: 0; }
     }
   ]]></style>
 </defs>
@@ -230,12 +252,12 @@
 <circle cx="568.5" cy="212" r="8" fill="#F2A623" opacity="0.5" style="fill:rgb(242, 166, 35);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.5;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
 <rect x="566" y="210" width="5" height="4" fill="#F9CB42" style="fill:rgb(249, 203, 66);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
 
-<circle cx="488" cy="214" r="1.8" fill="#5DCAA5" class="electron electron-1" style="fill:rgb(93, 202, 165);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
-<circle cx="495" cy="212" r="1.5" fill="#5DCAA5" class="electron electron-2" style="fill:rgb(93, 202, 165);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.9;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
-<circle cx="502" cy="214" r="1.3" fill="#5DCAA5" class="electron electron-3" style="fill:rgb(93, 202, 165);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.75;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
-<circle cx="518" cy="212" r="1.1" fill="#5DCAA5" class="electron electron-4" style="fill:rgb(93, 202, 165);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.6;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
-<circle cx="535" cy="214" r="1" fill="#5DCAA5" class="electron electron-5" style="fill:rgb(93, 202, 165);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.5;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
-<circle cx="552" cy="212" r="0.9" fill="#5DCAA5" class="electron electron-6" style="fill:rgb(93, 202, 165);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.4;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<circle cx="488" cy="214" r="1.8" fill="#5DCAA5" class="electron electron-1" opacity="0"/>
+<circle cx="495" cy="212" r="1.5" fill="#5DCAA5" class="electron electron-2" opacity="0"/>
+<circle cx="502" cy="214" r="1.3" fill="#5DCAA5" class="electron electron-3" opacity="0"/>
+<circle cx="518" cy="212" r="1.1" fill="#5DCAA5" class="electron electron-4" opacity="0"/>
+<circle cx="535" cy="214" r="1" fill="#5DCAA5" class="electron electron-5" opacity="0"/>
+<circle cx="552" cy="212" r="0.9" fill="#5DCAA5" class="electron electron-6" opacity="0"/>
 
 <path d="M 513 196 L 515 200 L 514 204" stroke="#141418" stroke-width="0.5" fill="none" style="fill:none;stroke:rgb(20, 20, 24);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
 <path d="M 599 204 L 602 208 L 600 212 L 604 216" stroke="#141418" stroke-width="0.5" fill="none" style="fill:none;stroke:rgb(20, 20, 24);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
@@ -251,11 +273,14 @@
   <line x1="650" y1="258" x2="650" y2="273" style="fill:rgb(0, 0, 0);stroke:rgb(90, 90, 87);color:rgb(255, 255, 255);stroke-width:0.8px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
 </g>
 
-<path d="M 568 167 Q 573 140 565 110 Q 570 78 562 46 Q 568 20 562 6" fill="none" stroke="url(#heat)" stroke-width="2.3" class="heat-wave" style="fill:none;color:rgb(255, 255, 255);stroke-width:2.3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
-<path d="M 520 167 Q 515 140 522 110 Q 518 80 525 54" fill="none" stroke="url(#heat)" stroke-width="1.4" class="heat-wave" style="fill:none;color:rgb(255, 255, 255);stroke-width:1.4px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
-<path d="M 545 167 Q 548 140 541 115 Q 546 85 540 56" fill="none" stroke="url(#heat)" stroke-width="1.4" class="heat-wave" style="fill:none;color:rgb(255, 255, 255);stroke-width:1.4px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
-<path d="M 594 167 Q 589 140 597 115 Q 592 85 598 56" fill="none" stroke="url(#heat)" stroke-width="1.4" class="heat-wave" style="fill:none;color:rgb(255, 255, 255);stroke-width:1.4px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
-<path d="M 622 167 Q 627 140 619 115 Q 625 85 618 56" fill="none" stroke="url(#heat)" stroke-width="1.4" class="heat-wave" style="fill:none;color:rgb(255, 255, 255);stroke-width:1.4px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<!-- Chip surface glow when energy arrives -->
+<rect x="478" y="168" width="180" height="90" rx="1" fill="#5DCAA5" class="chip-glow" opacity="0"/>
+
+<path d="M 568 167 Q 573 140 565 110 Q 570 78 562 46 Q 568 20 562 6" fill="none" stroke="url(#heat)" stroke-width="2.3" class="heat-wave heat-wave-1" style="fill:none;color:rgb(255, 255, 255);stroke-width:2.3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<path d="M 520 167 Q 515 140 522 110 Q 518 80 525 54" fill="none" stroke="url(#heat)" stroke-width="1.4" class="heat-wave heat-wave-2" style="fill:none;color:rgb(255, 255, 255);stroke-width:1.4px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<path d="M 545 167 Q 548 140 541 115 Q 546 85 540 56" fill="none" stroke="url(#heat)" stroke-width="1.4" class="heat-wave heat-wave-3" style="fill:none;color:rgb(255, 255, 255);stroke-width:1.4px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<path d="M 594 167 Q 589 140 597 115 Q 592 85 598 56" fill="none" stroke="url(#heat)" stroke-width="1.4" class="heat-wave heat-wave-4" style="fill:none;color:rgb(255, 255, 255);stroke-width:1.4px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<path d="M 622 167 Q 627 140 619 115 Q 625 85 618 56" fill="none" stroke="url(#heat)" stroke-width="1.4" class="heat-wave heat-wave-5" style="fill:none;color:rgb(255, 255, 255);stroke-width:1.4px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
 
 <!-- =========================================================
      ANIMATED LAYER — energy traveling from plant to silicon
