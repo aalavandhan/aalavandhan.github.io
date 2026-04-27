@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Trade Network (2025)</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0e17;
+    color: #c8d6e5;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    overflow: hidden;
+  }
+  #container { width: 100vw; height: 100vh; position: relative; }
+  canvas { display: block; cursor: grab; }
+  canvas.dragging { cursor: grabbing; }
+
+  #info-panel {
+    position: fixed; bottom: 16px; right: 16px;
+    width: 340px; pointer-events: none;
+    background: rgba(10, 14, 23, 0.95); border: 1px solid rgba(200, 214, 229, 0.2);
+    border-radius: 8px; padding: 14px 18px; font-size: 13px; line-height: 1.5;
+    opacity: 0; transition: opacity 0.15s;
+    z-index: 100; backdrop-filter: blur(8px);
+  }
+  #info-panel.visible { opacity: 1; }
+  #info-panel h3 { font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+  #info-panel .tag {
+    display: inline-block; font-size: 11px; padding: 1px 8px;
+    border-radius: 10px; margin-bottom: 4px; margin-right: 4px; color: #fff; opacity: 0.85;
+  }
+  #info-panel .stat { display: flex; justify-content: space-between; gap: 20px; }
+  #info-panel .stat .label { color: #8395a7; }
+  #info-panel .stat .value { color: #fff; font-weight: 500; font-variant-numeric: tabular-nums; }
+  #info-panel .partners { margin-top: 8px; border-top: 1px solid rgba(200,214,229,0.1); padding-top: 8px; }
+  #info-panel .partners h4 { font-size: 12px; color: #8395a7; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  #info-panel .partner-row { display: flex; justify-content: space-between; font-size: 12px; gap: 12px; }
+  #info-panel .partner-row .name { color: #c8d6e5; }
+  #info-panel .partner-row .val { color: #fff; font-weight: 500; white-space: nowrap; }
+  #info-panel .edge-flow { margin-bottom: 6px; }
+  #info-panel .edge-flow .flow-title { color: #fff; font-weight: 600; margin-bottom: 2px; }
+  #info-panel .edge-flow .flow-detail { color: #8395a7; font-size: 12px; }
+
+  #controls { position: absolute; top: 16px; left: 16px; z-index: 50; max-width: 260px; }
+  #title-block { margin-bottom: 12px; }
+  #title-block h1 { font-size: 22px; font-weight: 700; color: #fff; letter-spacing: -0.3px; }
+  #title-block .subtitle { font-size: 13px; color: #8395a7; margin-top: 2px; }
+
+  .control-group {
+    background: rgba(10, 14, 23, 0.8); border: 1px solid rgba(200, 214, 229, 0.1);
+    border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; backdrop-filter: blur(8px);
+  }
+  .control-group label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+    color: #8395a7; display: block; margin-bottom: 4px;
+  }
+  .control-group input[type="range"] { width: 180px; accent-color: #54a0ff; }
+  .control-group .range-value {
+    font-size: 12px; color: #fff; font-weight: 500;
+    display: inline-block; margin-left: 8px;
+  }
+
+  .toggle-group { display: flex; gap: 4px; margin-top: 4px; flex-wrap: wrap; }
+  .toggle-btn {
+    font-size: 11px; padding: 3px 10px; border-radius: 4px;
+    border: 1px solid rgba(200, 214, 229, 0.15); background: transparent;
+    color: #8395a7; cursor: pointer; transition: all 0.15s;
+  }
+  .toggle-btn.active { background: rgba(84, 160, 255, 0.2); color: #54a0ff; border-color: #54a0ff; }
+
+  #legend {
+    position: absolute; bottom: 16px; left: 16px;
+    background: rgba(10, 14, 23, 0.8); border: 1px solid rgba(200, 214, 229, 0.1);
+    border-radius: 8px; padding: 10px 14px; backdrop-filter: blur(8px); z-index: 50;
+    max-width: 560px;
+  }
+  #legend h4 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #8395a7; margin-bottom: 6px; }
+  .legend-item {
+    display: inline-flex; align-items: center; margin-right: 10px; margin-bottom: 4px;
+    font-size: 11px; cursor: pointer; opacity: 1; transition: opacity 0.2s;
+  }
+  .legend-item.dimmed { opacity: 0.3; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; display: inline-block; }
+
+  #stats-bar {
+    position: absolute; top: 16px; right: 16px;
+    background: rgba(10, 14, 23, 0.8); border: 1px solid rgba(200, 214, 229, 0.1);
+    border-radius: 8px; padding: 10px 14px; backdrop-filter: blur(8px);
+    z-index: 50; font-size: 12px; color: #8395a7;
+  }
+  #stats-bar .num { color: #fff; font-weight: 500; }
+
+  #source {
+    position: absolute; bottom: 16px; right: 370px;
+    font-size: 11px; color: #576574; z-index: 50;
+  }
+  #source a { color: #576574; text-decoration: none; }
+  #source a:hover { color: #8395a7; }
+</style>
+</head>
+<body>
+<div id="container">
+  <canvas id="graph"></canvas>
+
+  <div id="controls">
+    <div id="title-block">
+      <h1>Global Trade Network</h1>
+      <div class="subtitle">Bilateral goods exports, 2025 &middot; 196 economies</div>
+    </div>
+    <div class="control-group">
+      <label>Color by</label>
+      <div class="toggle-group">
+        <button class="toggle-btn" data-color="region">Geography</button>
+        <button class="toggle-btn active" data-color="community">Trade community</button>
+      </div>
+    </div>
+    <div class="control-group" id="comm-resolution-group">
+      <label>Community granularity</label>
+      <div class="toggle-group">
+        <button class="toggle-btn" data-res="coarse">Coarse</button>
+        <button class="toggle-btn active" data-res="default">Default</button>
+        <button class="toggle-btn" data-res="fine">Fine</button>
+      </div>
+    </div>
+    <div class="control-group">
+      <label>Min GDP (hide tail)</label>
+      <input type="range" id="minGdp" min="0" max="5" value="0" step="0.05">
+      <span class="range-value" id="minGdpVal">$0</span>
+    </div>
+    <div class="control-group">
+      <label>Edge weight</label>
+      <div class="toggle-group">
+        <button class="toggle-btn active" data-mode="pctGdp">% of GDP</button>
+        <button class="toggle-btn" data-mode="absolute">Absolute $</button>
+      </div>
+    </div>
+    <div class="control-group">
+      <label id="thresholdLabel">Min edge (% of exporter GDP)</label>
+      <input type="range" id="edgeThreshold" min="0.01" max="10" value="0.5" step="0.01">
+      <span class="range-value" id="edgeThresholdVal">0.5%</span>
+    </div>
+    <div class="control-group">
+      <label>Node size</label>
+      <div class="toggle-group">
+        <button class="toggle-btn" data-size="trade">Trade vol.</button>
+        <button class="toggle-btn active" data-size="tradeGdp">Trade/GDP</button>
+        <button class="toggle-btn" data-size="gdp">GDP</button>
+      </div>
+    </div>
+    <div class="control-group">
+      <label>Cluster pull</label>
+      <input type="range" id="clusterStrength" min="0" max="0.15" value="0.04" step="0.005">
+      <span class="range-value" id="clusterVal">0.04</span>
+    </div>
+  </div>
+
+  <div id="stats-bar">
+    <span>Nodes: <span class="num" id="nodeCount">0</span></span> &middot;
+    <span>Edges: <span class="num" id="edgeCount">0</span></span> &middot;
+    <span>Communities: <span class="num" id="commCount">0</span></span>
+  </div>
+
+  <div id="legend"></div>
+  <div id="info-panel"></div>
+
+  <div id="source">
+    Data: <a href="https://data.imf.org" target="_blank">IMF DOTS</a> + <a href="https://data.worldbank.org" target="_blank">World Bank</a> &middot; 2025 &middot; Communities via Louvain
+  </div>
+</div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+// ── Config ─────────────────────────────────────────────────
+const REGION_COLORS = {
+  "East Asia":"#ff6b6b","SE Asia":"#ee5a24","South Asia":"#f0932b",
+  "Europe":"#54a0ff","N. America":"#00d2d3","C. America":"#0abde3",
+  "S. America":"#1dd1a1","Caribbean":"#10ac84","Middle East":"#feca57",
+  "Africa":"#ff9ff3","Russia/CIS":"#c44569","Central Asia":"#e17055",
+  "Oceania":"#a29bfe","Other":"#636e72",
+};
+
+// Generate distinct community colors (max ~25)
+const COMM_PALETTE = [
+  "#ff6b6b","#54a0ff","#1dd1a1","#feca57","#a29bfe",
+  "#ee5a24","#00d2d3","#ff9ff3","#c44569","#e17055",
+  "#0abde3","#10ac84","#f0932b","#636e72","#6c5ce7",
+  "#fd79a8","#00b894","#e84393","#74b9ff","#55efc4",
+  "#fab1a0","#81ecec","#dfe6e9","#b2bec3","#ffeaa7",
+];
+
+const dpr = window.devicePixelRatio || 1;
+const width = window.innerWidth;
+const height = window.innerHeight;
+
+const canvas = document.getElementById("graph");
+canvas.width = width * dpr;
+canvas.height = height * dpr;
+canvas.style.width = width + "px";
+canvas.style.height = height + "px";
+const ctx = canvas.getContext("2d");
+ctx.scale(dpr, dpr);
+
+const infoPanel = document.getElementById("info-panel");
+
+// ── State ──────────────────────────────────────────────────
+let allNodes = [], allEdges = [], filteredEdges = [];
+let currentThreshold = 0.5;
+let edgeMode = "pctGdp";
+let sizeMode = "tradeGdp";
+let colorMode = "community";   // "region" or "community"
+let commResolution = "default"; // "coarse", "default", "fine"
+let clusterStrength = 0.04;
+let minGdpM = 0;               // minimum GDP in millions USD
+let activeNodes = new Set();    // nodes passing GDP filter
+let activeGroups = new Set();   // active region or community names
+let hoveredNode = null, hoveredEdge = null;
+let draggedNode = null;
+let needsRedraw = true;
+let transform = { x: 0, y: 0, k: 1 };
+let connectedMap = new Map();
+let edgesBySrc = new Map();
+let edgesByTgt = new Map();
+
+// Community color mapping (built dynamically)
+let commColorMap = {};
+
+const nodeScale = d3.scaleSqrt();
+const edgeWidthScale = d3.scalePow().exponent(0.4);
+const edgeOpacityScale = d3.scalePow().exponent(0.4);
+
+// GDP slider: 0-5 log scale → $0 to ~$100B
+function sliderToGdp(v) {
+  if (v <= 0) return 0;
+  return Math.pow(10, v) * 10; // 10^0*10=$10M .. 10^5*10=$1,000,000M=$1T
+}
+function gdpLabel(gdpM) {
+  if (gdpM <= 0) return "$0";
+  if (gdpM >= 1000000) return `$${(gdpM/1000000).toFixed(1)}T`;
+  if (gdpM >= 1000) return `$${(gdpM/1000).toFixed(0)}B`;
+  return `$${gdpM.toFixed(0)}M`;
+}
+
+function updateActiveNodes() {
+  activeNodes.clear();
+  allNodes.forEach(n => {
+    if (n.gdp >= minGdpM) activeNodes.add(n.id);
+  });
+}
+
+function isNodeActive(n) {
+  return activeNodes.has(typeof n === "string" ? n : n.id);
+}
+
+function formatValue(v) {
+  if (Math.abs(v) >= 1000) return `$${(v / 1000).toFixed(1)}B`;
+  if (Math.abs(v) >= 1) return `$${v.toFixed(0)}M`;
+  return `$${(v * 1000).toFixed(0)}K`;
+}
+function formatPct(v) {
+  if (v >= 10) return v.toFixed(1) + "%";
+  if (v >= 1) return v.toFixed(2) + "%";
+  return v.toFixed(3) + "%";
+}
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+// ── Color helpers ──────────────────────────────────────────
+function getNodeGroup(n) {
+  if (colorMode === "region") return n.region;
+  return n["commName_" + commResolution];
+}
+
+function getNodeCommId(n) {
+  return n["comm_" + commResolution];
+}
+
+function getNodeColor(n) {
+  const group = getNodeGroup(n);
+  if (colorMode === "region") return REGION_COLORS[group] || REGION_COLORS.Other;
+  return commColorMap[group] || "#636e72";
+}
+
+function buildCommColorMap() {
+  // Assign colors to communities, sorted by size (largest first gets most distinct color)
+  const commCounts = {};
+  allNodes.forEach(n => {
+    const name = n["commName_" + commResolution];
+    commCounts[name] = (commCounts[name] || 0) + 1;
+  });
+  const sorted = Object.entries(commCounts).sort((a, b) => b[1] - a[1]);
+  commColorMap = {};
+  sorted.forEach(([name], i) => {
+    commColorMap[name] = COMM_PALETTE[i % COMM_PALETTE.length];
+  });
+  document.getElementById("commCount").textContent = sorted.length;
+}
+
+// ── Coordinate transforms ──────────────────────────────────
+function screenToSim(sx, sy) {
+  return [(sx - transform.x) / transform.k, (sy - transform.y) / transform.k];
+}
+
+// ── Hit testing ────────────────────────────────────────────
+function findNodeAt(sx, sy) {
+  const [mx, my] = screenToSim(sx, sy);
+  for (let i = allNodes.length - 1; i >= 0; i--) {
+    const n = allNodes[i];
+    if (!isNodeActive(n) || !activeGroups.has(getNodeGroup(n))) continue;
+    const r = getNodeRadius(n);
+    const dx = n.x - mx, dy = n.y - my;
+    if (dx * dx + dy * dy <= (r + 4) * (r + 4)) return n;
+  }
+  return null;
+}
+
+function distToSegment(px, py, x1, y1, x2, y2) {
+  const dx = x2 - x1, dy = y2 - y1;
+  const lenSq = dx * dx + dy * dy;
+  if (lenSq === 0) return Math.hypot(px - x1, py - y1);
+  let t = ((px - x1) * dx + (py - y1) * dy) / lenSq;
+  t = Math.max(0, Math.min(1, t));
+  return Math.hypot(px - (x1 + t * dx), py - (y1 + t * dy));
+}
+
+function findEdgeAt(sx, sy) {
+  const [mx, my] = screenToSim(sx, sy);
+  const threshold = 6 / transform.k;
+  let best = null, bestDist = threshold;
+  for (const e of filteredEdges) {
+    if (!isNodeActive(e.source) || !isNodeActive(e.target)) continue;
+    if (!activeGroups.has(getNodeGroup(e.source)) || !activeGroups.has(getNodeGroup(e.target))) continue;
+    const d = distToSegment(mx, my, e.source.x, e.source.y, e.target.x, e.target.y);
+    if (d < bestDist) { bestDist = d; best = e; }
+  }
+  return best;
+}
+
+// ── Index structures ───────────────────────────────────────
+function buildConnectedMap() {
+  connectedMap.clear();
+  for (const e of filteredEdges) {
+    const sid = e.source.id ?? e.source;
+    const tid = e.target.id ?? e.target;
+    if (!connectedMap.has(sid)) connectedMap.set(sid, new Set());
+    if (!connectedMap.has(tid)) connectedMap.set(tid, new Set());
+    connectedMap.get(sid).add(tid);
+    connectedMap.get(tid).add(sid);
+  }
+}
+
+function buildEdgeIndex() {
+  edgesBySrc.clear(); edgesByTgt.clear();
+  for (const e of filteredEdges) {
+    const sid = e.source.id ?? e.source;
+    const tid = e.target.id ?? e.target;
+    if (!edgesBySrc.has(sid)) edgesBySrc.set(sid, []);
+    if (!edgesByTgt.has(tid)) edgesByTgt.set(tid, []);
+    edgesBySrc.get(sid).push(e);
+    edgesByTgt.get(tid).push(e);
+  }
+}
+
+// ── Node sizing ────────────────────────────────────────────
+function getNodeSizeValue(n) {
+  if (sizeMode === "trade") return n.totalTrade;
+  if (sizeMode === "tradeGdp") return n.tradeToGdp;
+  return n.gdp;
+}
+function getNodeRadius(n) { return nodeScale(getNodeSizeValue(n)); }
+function updateNodeScale() {
+  const values = allNodes.map(n => getNodeSizeValue(n)).filter(v => v > 0);
+  nodeScale.domain(d3.extent(values)).range([3, 38]);
+}
+
+function edgeWeight(e) {
+  return edgeMode === "pctGdp" ? Math.max(e.pctSrcGdp, e.pctDstGdp) : e.value;
+}
+
+// ── Filter edges ───────────────────────────────────────────
+function filterEdges() {
+  const gdpOk = e => isNodeActive(e.source) && isNodeActive(e.target);
+  filteredEdges = edgeMode === "pctGdp"
+    ? allEdges.filter(e => gdpOk(e) && (e.pctSrcGdp >= currentThreshold || e.pctDstGdp >= currentThreshold))
+    : allEdges.filter(e => gdpOk(e) && e.value >= currentThreshold);
+
+  const weights = filteredEdges.map(e => edgeWeight(e));
+  const ext = d3.extent(weights);
+  edgeWidthScale.domain(ext || [0.01, 100]).range([0.2, 4]);
+  edgeOpacityScale.domain(ext || [0.01, 100]).range([0.06, 0.4]);
+  buildConnectedMap();
+  buildEdgeIndex();
+  document.getElementById("edgeCount").textContent = filteredEdges.length;
+  const vis = new Set();
+  filteredEdges.forEach(e => { vis.add(e.source.id ?? e.source); vis.add(e.target.id ?? e.target); });
+  document.getElementById("nodeCount").textContent = vis.size;
+}
+
+// ── Convex hull computation ────────────────────────────────
+function convexHull(points) {
+  if (points.length < 3) return points.slice();
+  // Graham scan
+  points = points.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const lower = [];
+  for (const p of points) {
+    while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 0) lower.pop();
+    lower.push(p);
+  }
+  const upper = [];
+  for (let i = points.length - 1; i >= 0; i--) {
+    const p = points[i];
+    while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 0) upper.pop();
+    upper.push(p);
+  }
+  upper.pop(); lower.pop();
+  return lower.concat(upper);
+}
+
+function expandHull(hull, padding) {
+  // Compute centroid
+  let cx = 0, cy = 0;
+  hull.forEach(p => { cx += p[0]; cy += p[1]; });
+  cx /= hull.length; cy /= hull.length;
+  // Push each point outward from centroid
+  return hull.map(p => {
+    const dx = p[0] - cx, dy = p[1] - cy;
+    const len = Math.hypot(dx, dy) || 1;
+    return [p[0] + dx / len * padding, p[1] + dy / len * padding];
+  });
+}
+
+function drawSmoothHull(hull, color, alpha) {
+  if (hull.length < 3) return;
+  ctx.beginPath();
+  // Draw rounded polygon using quadratic curves through midpoints
+  const n = hull.length;
+  const mid = (i) => [(hull[i % n][0] + hull[(i + 1) % n][0]) / 2, (hull[i % n][1] + hull[(i + 1) % n][1]) / 2];
+  ctx.moveTo(mid(n - 1)[0], mid(n - 1)[1]);
+  for (let i = 0; i < n; i++) {
+    ctx.quadraticCurveTo(hull[i][0], hull[i][1], mid(i)[0], mid(i)[1]);
+  }
+  ctx.closePath();
+  ctx.fillStyle = hexToRgba(color, alpha);
+  ctx.fill();
+}
+
+// ── Drawing ────────────────────────────────────────────────
+function draw() {
+  ctx.save();
+  ctx.clearRect(0, 0, width, height);
+  ctx.translate(transform.x, transform.y);
+  ctx.scale(transform.k, transform.k);
+
+  const isHoveringNode = hoveredNode != null;
+  const hovId = hoveredNode ? hoveredNode.id : null;
+  const hovConn = hoveredNode ? (connectedMap.get(hovId) || new Set()) : null;
+  const hovColor = hoveredNode ? getNodeColor(hoveredNode) : null;
+  const labelMinRadius = 6 / transform.k;
+
+  // ── Convex hulls (community mode only) ──
+  if (colorMode === "community") {
+    // Group nodes by community
+    const commGroups = {};
+    allNodes.forEach(n => {
+      if (!isNodeActive(n)) return;
+      const cid = getNodeCommId(n);
+      const name = getNodeGroup(n);
+      if (!activeGroups.has(name)) return;
+      if (!commGroups[cid]) commGroups[cid] = { name, nodes: [] };
+      commGroups[cid].nodes.push(n);
+    });
+
+    for (const cid in commGroups) {
+      const group = commGroups[cid];
+      if (group.nodes.length < 3) continue;
+      const points = group.nodes.map(n => [n.x, n.y]);
+      const hull = convexHull(points);
+      if (hull.length < 3) continue;
+      const padding = 30 + 10 / transform.k;
+      const expanded = expandHull(hull, padding);
+      const color = commColorMap[group.name] || "#636e72";
+
+      let hullAlpha = 0.06;
+      if (isHoveringNode) {
+        const hovCommName = getNodeGroup(hoveredNode);
+        hullAlpha = group.name === hovCommName ? 0.1 : 0.015;
+      }
+      drawSmoothHull(expanded, color, hullAlpha);
+    }
+  }
+
+  // ── Edges ──
+  ctx.lineCap = "round";
+  for (let i = 0; i < filteredEdges.length; i++) {
+    const e = filteredEdges[i];
+    if (!isNodeActive(e.source) || !isNodeActive(e.target)) continue;
+    const srcVis = activeGroups.has(getNodeGroup(e.source));
+    const tgtVis = activeGroups.has(getNodeGroup(e.target));
+
+    let alpha, lineWidth, color = "#4a6fa5";
+
+    if (isHoveringNode) {
+      const isConn = e.source.id === hovId || e.target.id === hovId;
+      if (isConn) {
+        alpha = 0.65; color = hovColor;
+        lineWidth = Math.max(edgeWidthScale(edgeWeight(e)), 1.2);
+      } else { alpha = 0.015; lineWidth = 0.3; }
+    } else if (hoveredEdge === e) {
+      alpha = 0.8; color = "#54a0ff";
+      lineWidth = Math.max(edgeWidthScale(edgeWeight(e)), 2);
+    } else {
+      if (!srcVis && !tgtVis) { alpha = 0.005; lineWidth = 0.2; }
+      else if (!srcVis || !tgtVis) { alpha = 0.02; lineWidth = 0.2; }
+      else {
+        alpha = edgeOpacityScale(edgeWeight(e));
+        lineWidth = edgeWidthScale(edgeWeight(e));
+      }
+    }
+
+    ctx.beginPath();
+    ctx.moveTo(e.source.x, e.source.y);
+    ctx.lineTo(e.target.x, e.target.y);
+    ctx.strokeStyle = hexToRgba(color.startsWith("#") ? color : "#4a6fa5", alpha);
+    ctx.lineWidth = lineWidth;
+    ctx.stroke();
+  }
+
+  // ── Nodes ──
+  for (const n of allNodes) {
+    if (!isNodeActive(n)) continue;
+    const r = getNodeRadius(n);
+    const nodeColor = getNodeColor(n);
+    const groupVis = activeGroups.has(getNodeGroup(n));
+    let alpha = groupVis ? 1 : 0.06;
+
+    if (isHoveringNode) {
+      if (n.id === hovId) alpha = 1;
+      else if (hovConn.has(n.id)) alpha = 0.9;
+      else alpha = 0.06;
+    }
+
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+    ctx.fillStyle = hexToRgba(nodeColor, alpha);
+    ctx.fill();
+    if (alpha > 0.3) {
+      ctx.strokeStyle = `rgba(255,255,255,${0.2 * alpha})`;
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+    }
+  }
+
+  // ── Labels ──
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  for (const n of allNodes) {
+    if (!isNodeActive(n)) continue;
+    const r = getNodeRadius(n);
+    if (r < labelMinRadius && (!isHoveringNode || (n.id !== hovId && !(hovConn && hovConn.has(n.id))))) continue;
+
+    const fontSize = Math.max(7, Math.min(13, r * 0.6));
+    const groupVis = activeGroups.has(getNodeGroup(n));
+    let alpha = groupVis ? 0.8 : 0.04;
+
+    if (isHoveringNode) {
+      if (n.id === hovId) alpha = 1;
+      else if (hovConn.has(n.id)) alpha = 0.85;
+      else alpha = 0.04;
+    }
+    if (alpha < 0.05) continue;
+
+    ctx.font = `500 ${fontSize}px Inter, system-ui, sans-serif`;
+    ctx.fillStyle = `rgba(200,214,229,${alpha})`;
+    ctx.fillText(n.id, n.x, n.y + r + 2);
+  }
+
+  ctx.restore();
+  needsRedraw = false;
+}
+
+// ── Animation loop ─────────────────────────────────────────
+let animating = false;
+function forceDraw() {
+  needsRedraw = true;
+  if (!animating) { animating = true; requestAnimationFrame(drawLoop); }
+}
+function drawLoop() {
+  if (needsRedraw) draw();
+  if (simulation && simulation.alpha() > simulation.alphaMin()) {
+    needsRedraw = true;
+    requestAnimationFrame(drawLoop);
+  } else { animating = false; }
+}
+
+// ── Custom cluster force ───────────────────────────────────
+function forceCluster(strength) {
+  let nodes;
+  function force(alpha) {
+    // Compute centroids
+    const centroids = {};
+    const counts = {};
+    nodes.forEach(n => {
+      const c = getNodeCommId(n);
+      if (!centroids[c]) { centroids[c] = { x: 0, y: 0 }; counts[c] = 0; }
+      centroids[c].x += n.x;
+      centroids[c].y += n.y;
+      counts[c]++;
+    });
+    for (const c in centroids) {
+      centroids[c].x /= counts[c];
+      centroids[c].y /= counts[c];
+    }
+    // Pull nodes toward their centroid
+    const s = strength * alpha;
+    nodes.forEach(n => {
+      const c = getNodeCommId(n);
+      const cent = centroids[c];
+      if (!cent) return;
+      n.vx += (cent.x - n.x) * s;
+      n.vy += (cent.y - n.y) * s;
+    });
+  }
+  force.initialize = function(_) { nodes = _; };
+  force.strength = function(s) { if (arguments.length) { strength = s; return force; } return strength; };
+  return force;
+}
+
+// ── Simulation ─────────────────────────────────────────────
+let simulation;
+
+function initGraph(data) {
+  allNodes = data.nodes;
+  allEdges = data.edges;
+
+  const nodeMap = new Map(allNodes.map(n => [n.id, n]));
+  allEdges.forEach(e => {
+    if (typeof e.source === "string") e.source = nodeMap.get(e.source);
+    if (typeof e.target === "string") e.target = nodeMap.get(e.target);
+  });
+  allEdges = allEdges.filter(e => e.source && e.target);
+
+  buildCommColorMap();
+  updateNodeScale();
+  updateActiveNodes();
+  filterEdges();
+  buildLegend();
+
+  simulation = d3.forceSimulation(allNodes)
+    .force("charge", d3.forceManyBody()
+      .strength(d => {
+        // Larger nodes repel more strongly — scaled by radius squared
+        const r = getNodeRadius(d);
+        return -30 * r;
+      })
+      .distanceMax(500))
+    .force("center", d3.forceCenter(width / 2, height / 2))
+    .force("collision", d3.forceCollide().radius(d => getNodeRadius(d) + 4).iterations(3))
+    .force("x", d3.forceX(width / 2).strength(0.02))
+    .force("y", d3.forceY(height / 2).strength(0.02))
+    .force("link", d3.forceLink(filteredEdges).id(d => d.id).distance(80).strength(d => {
+      return Math.min(0.15, edgeWeight(d) / 100);
+    }))
+    .force("cluster", forceCluster(clusterStrength))
+    .alphaDecay(0.02)
+    .velocityDecay(0.4)
+    .on("tick", () => {
+      needsRedraw = true;
+      if (!animating) { animating = true; requestAnimationFrame(drawLoop); }
+    });
+}
+
+function updateSimEdges() {
+  filterEdges();
+  simulation.force("link", d3.forceLink(filteredEdges).id(d => d.id).distance(80).strength(d => {
+    return Math.min(0.15, edgeWeight(d) / 100);
+  }));
+  simulation.alpha(0.3).restart();
+  forceDraw();
+}
+
+// ── Legend ──────────────────────────────────────────────────
+function buildLegend() {
+  const legend = document.getElementById("legend");
+
+  let groups, colorFn;
+  if (colorMode === "region") {
+    groups = [...new Set(allNodes.map(n => n.region))].sort();
+    colorFn = g => REGION_COLORS[g] || REGION_COLORS.Other;
+  } else {
+    // Sort communities by size (descending)
+    const counts = {};
+    allNodes.forEach(n => {
+      const name = n["commName_" + commResolution];
+      counts[name] = (counts[name] || 0) + 1;
+    });
+    groups = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
+    colorFn = g => commColorMap[g] || "#636e72";
+  }
+
+  activeGroups = new Set(groups);
+
+  const label = colorMode === "region" ? "Regions" : "Trade communities (named by largest economy)";
+  legend.innerHTML = `<h4>${label}</h4>`;
+  groups.forEach(g => {
+    const item = document.createElement("span");
+    item.className = "legend-item";
+    const count = allNodes.filter(n => getNodeGroup(n) === g).length;
+    const displayName = colorMode === "community" ? `${g} (${count})` : g;
+    item.innerHTML = `<span class="legend-dot" style="background:${colorFn(g)}"></span>${displayName}`;
+    item.addEventListener("click", () => {
+      if (activeGroups.has(g)) { activeGroups.delete(g); item.classList.add("dimmed"); }
+      else { activeGroups.add(g); item.classList.remove("dimmed"); }
+      forceDraw();
+    });
+    legend.appendChild(item);
+  });
+}
+
+// ── Tooltips ───────────────────────────────────────────────
+function showNodeInfo(node) {
+  const srcEdges = edgesBySrc.get(node.id) || [];
+  const tgtEdges = edgesByTgt.get(node.id) || [];
+  const topExports = srcEdges.slice().sort((a, b) => b.value - a.value).slice(0, 5);
+  const topImports = tgtEdges.slice().sort((a, b) => b.value - a.value).slice(0, 5);
+
+  const commName = node["commName_" + commResolution];
+  const commColor = commColorMap[commName] || "#636e72";
+  const regionColor = REGION_COLORS[node.region] || REGION_COLORS.Other;
+
+  let html = `<h3>${node.id}</h3>`;
+  html += `<span class="tag" style="background:${regionColor}">${node.region}</span>`;
+  html += `<span class="tag" style="background:${commColor}">Trade bloc: ${commName}</span>`;
+  html += `<div class="stat"><span class="label">GDP</span><span class="value">${formatValue(node.gdp)}</span></div>`;
+  html += `<div class="stat"><span class="label">Total trade</span><span class="value">${formatValue(node.totalTrade)}</span></div>`;
+  html += `<div class="stat"><span class="label">Trade / GDP</span><span class="value">${node.tradeToGdp.toFixed(1)}%</span></div>`;
+
+  if (topExports.length) {
+    html += `<div class="partners"><h4>Top exports to</h4>`;
+    topExports.forEach(e => {
+      html += `<div class="partner-row"><span class="name">${e.target.id}</span><span class="val">${formatValue(e.value)} (${formatPct(e.pctSrcGdp)} GDP)</span></div>`;
+    });
+    html += `</div>`;
+  }
+  if (topImports.length) {
+    html += `<div class="partners"><h4>Top imports from</h4>`;
+    topImports.forEach(e => {
+      html += `<div class="partner-row"><span class="name">${e.source.id}</span><span class="val">${formatValue(e.value)}</span></div>`;
+    });
+    html += `</div>`;
+  }
+
+  infoPanel.innerHTML = html;
+  infoPanel.classList.add("visible");
+}
+
+function showEdgeInfo(edge) {
+  const src = edge.source.id, tgt = edge.target.id;
+  const reverse = filteredEdges.find(e => e.source.id === tgt && e.target.id === src);
+
+  let html = `<div class="edge-flow"><div class="flow-title">${src} &rarr; ${tgt}</div>`;
+  html += `<div>Exports: <strong style="color:#fff">${formatValue(edge.value)}</strong></div>`;
+  html += `<div class="flow-detail">${formatPct(edge.pctSrcGdp)} of ${src}'s GDP &middot; ${formatPct(edge.pctDstGdp)} of ${tgt}'s GDP</div></div>`;
+  if (reverse) {
+    html += `<div class="edge-flow"><div class="flow-title">${tgt} &rarr; ${src}</div>`;
+    html += `<div>Exports: <strong style="color:#fff">${formatValue(reverse.value)}</strong></div>`;
+    html += `<div class="flow-detail">${formatPct(reverse.pctSrcGdp)} of ${tgt}'s GDP &middot; ${formatPct(reverse.pctDstGdp)} of ${src}'s GDP</div></div>`;
+  }
+
+  infoPanel.innerHTML = html;
+  infoPanel.classList.add("visible");
+}
+
+function hideInfo() {
+  infoPanel.classList.remove("visible");
+}
+
+// ── Mouse interaction ──────────────────────────────────────
+let isPanning = false, panStart = {}, transformStart = {};
+
+canvas.addEventListener("mousedown", (e) => {
+  const node = findNodeAt(e.clientX, e.clientY);
+  if (node) {
+    draggedNode = node;
+    draggedNode.fx = node.x; draggedNode.fy = node.y;
+    simulation.alphaTarget(0.3).restart();
+    canvas.classList.add("dragging");
+  } else {
+    isPanning = true;
+    panStart = { x: e.clientX, y: e.clientY };
+    transformStart = { x: transform.x, y: transform.y };
+    canvas.classList.add("dragging");
+  }
+});
+
+canvas.addEventListener("mousemove", (e) => {
+  if (draggedNode) {
+    const [sx, sy] = screenToSim(e.clientX, e.clientY);
+    draggedNode.fx = sx; draggedNode.fy = sy;
+    forceDraw(); return;
+  }
+  if (isPanning) {
+    transform.x = transformStart.x + (e.clientX - panStart.x);
+    transform.y = transformStart.y + (e.clientY - panStart.y);
+    forceDraw(); return;
+  }
+
+  const node = findNodeAt(e.clientX, e.clientY);
+  if (node) {
+    if (hoveredNode !== node) {
+      hoveredNode = node; hoveredEdge = null;
+      showNodeInfo(node);
+      canvas.style.cursor = "pointer"; forceDraw();
+    } else { /* panel is fixed, no repositioning needed */ }
+  } else {
+    const edge = findEdgeAt(e.clientX, e.clientY);
+    if (edge) {
+      if (hoveredEdge !== edge) {
+        hoveredEdge = edge; hoveredNode = null;
+        showEdgeInfo(edge);
+        canvas.style.cursor = "pointer"; forceDraw();
+      } else { /* panel is fixed */ }
+    } else if (hoveredNode || hoveredEdge) {
+      hoveredNode = null; hoveredEdge = null; hideInfo();
+      canvas.style.cursor = "grab"; forceDraw();
+    }
+  }
+});
+
+canvas.addEventListener("mouseup", () => {
+  if (draggedNode) { draggedNode.fx = null; draggedNode.fy = null; draggedNode = null; simulation.alphaTarget(0); }
+  isPanning = false; canvas.classList.remove("dragging");
+});
+
+canvas.addEventListener("mouseleave", () => {
+  hoveredNode = null; hoveredEdge = null; hideInfo(); isPanning = false;
+  if (draggedNode) { draggedNode.fx = null; draggedNode.fy = null; draggedNode = null; simulation.alphaTarget(0); }
+  canvas.classList.remove("dragging"); forceDraw();
+});
+
+canvas.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  const scaleFactor = e.deltaY > 0 ? 0.92 : 1.08;
+  const newK = Math.max(0.2, Math.min(8, transform.k * scaleFactor));
+  const mx = e.clientX, my = e.clientY;
+  transform.x = mx - (mx - transform.x) * (newK / transform.k);
+  transform.y = my - (my - transform.y) * (newK / transform.k);
+  transform.k = newK;
+  forceDraw();
+}, { passive: false });
+
+// ── Controls ───────────────────────────────────────────────
+document.getElementById("edgeThreshold").addEventListener("input", function() {
+  currentThreshold = +this.value;
+  if (edgeMode === "pctGdp") {
+    document.getElementById("edgeThresholdVal").textContent = currentThreshold.toFixed(2) + "%";
+  } else {
+    const d = currentThreshold >= 1000 ? `$${(currentThreshold/1000).toFixed(1)}B` : `$${currentThreshold.toFixed(0)}M`;
+    document.getElementById("edgeThresholdVal").textContent = d;
+  }
+  updateSimEdges();
+});
+
+document.getElementById("clusterStrength").addEventListener("input", function() {
+  clusterStrength = +this.value;
+  document.getElementById("clusterVal").textContent = clusterStrength.toFixed(3);
+  simulation.force("cluster").strength(clusterStrength);
+  simulation.alpha(0.3).restart();
+  forceDraw();
+});
+
+// Min GDP slider
+document.getElementById("minGdp").addEventListener("input", function() {
+  const raw = +this.value;
+  minGdpM = sliderToGdp(raw);
+  document.getElementById("minGdpVal").textContent = raw <= 0 ? "$0" : gdpLabel(minGdpM);
+  updateActiveNodes();
+  filterEdges();
+  // Rebuild legend since community member counts change
+  buildLegend();
+  simulation.alpha(0.2).restart();
+  forceDraw();
+});
+
+// Color mode toggle
+document.querySelectorAll('[data-color]').forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll('[data-color]').forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    colorMode = btn.dataset.color;
+    document.getElementById("comm-resolution-group").style.display = colorMode === "community" ? "" : "none";
+    buildLegend();
+    forceDraw();
+  });
+});
+
+// Community resolution toggle
+document.querySelectorAll('[data-res]').forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll('[data-res]').forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    commResolution = btn.dataset.res;
+    buildCommColorMap();
+    buildLegend();
+    // Reheat simulation since cluster force targets changed
+    simulation.alpha(0.4).restart();
+    forceDraw();
+  });
+});
+
+// Edge weight toggle
+document.querySelectorAll('[data-mode]').forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll('[data-mode]').forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    edgeMode = btn.dataset.mode;
+    const slider = document.getElementById("edgeThreshold");
+    if (edgeMode === "pctGdp") {
+      slider.min = 0.01; slider.max = 10; slider.step = 0.01; slider.value = 0.5;
+      currentThreshold = 0.5;
+      document.getElementById("thresholdLabel").textContent = "Min edge (% of exporter GDP)";
+      document.getElementById("edgeThresholdVal").textContent = "0.50%";
+    } else {
+      slider.min = 100; slider.max = 100000; slider.step = 100; slider.value = 1000;
+      currentThreshold = 1000;
+      document.getElementById("thresholdLabel").textContent = "Min edge (absolute $M)";
+      document.getElementById("edgeThresholdVal").textContent = "$1.0B";
+    }
+    updateSimEdges();
+  });
+});
+
+// Node size toggle
+document.querySelectorAll('[data-size]').forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll('[data-size]').forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    sizeMode = btn.dataset.size;
+    updateNodeScale();
+    simulation.force("collision", d3.forceCollide().radius(d => getNodeRadius(d) + 4).iterations(3));
+    simulation.alpha(0.2).restart();
+    forceDraw();
+  });
+});
+
+// ── Load data ──────────────────────────────────────────────
+fetch("trade_data.json")
+  .then(r => r.json())
+  .then(initGraph)
+  .catch(err => {
+    document.body.innerHTML = `<div style="padding:40px;color:#ff6b6b">Error loading data: ${err.message}</div>`;
+  });
+</script>
+</body>
+</html>
