@@ -12,7 +12,7 @@ Most people believe, 2x LETF gives them 2x returns. In practice though, most of 
 ![BTC vs 2x LETF](/assets/images/hidden-costs-leveraged-etfs/fig_btc_2x_underperformance.svg)
 *Double the leverage, less return.*
 
-The standard explanation is [volatility drag](https://www.investopedia.com/articles/financial-advisors/082515/why-leveraged-etfs-are-not-longterm-bet.asp): daily leverage resets lose ground in choppy markets. That's real, but it's only half the story. The other half is [financing drag](https://www.etf.com/sections/features/leveraged-etfs-hidden-costs-eat-your-returns-0). It doesn't appear in the expense ratio. It isn't disclosed in any standardized way.
+The standard explanation is [volatility drag](https://www.investopedia.com/articles/financial-advisors/082515/why-leveraged-etfs-are-not-longterm-bet.asp): daily leverage resets lose ground in choppy markets. That's real, but it's only half the story. The other half is [financing drag](https://www.etf.com/sections/features/leveraged-etfs-hidden-costs-eat-your-returns-0). It doesn't appear in the [expense ratio](https://www.investopedia.com/terms/e/expenseratio.asp). It isn't disclosed in any standardized way.
 
 ## Where the leverage comes from
 
@@ -22,7 +22,7 @@ A 3x fund with $100 of investor capital needs $300 of exposure. The extra $200 c
 
 That rate never shows up in the expense ratio. It shows up in the price chart. [We measured it](https://drive.google.com/file/d/14E0phxNhliy_Qc-kBPPbRAkaedBxe3ma/view) across 109 long-only LETFs covering $125 billion in assets. For each fund, we compared the actual return against what a version borrowing at the [risk-free rate](https://www.investopedia.com/terms/r/risk-freerate.asp) would have delivered, net of stated expenses. The residual is the [financing premium](https://drive.google.com/file/d/14E0phxNhliy_Qc-kBPPbRAkaedBxe3ma/view), or the hidden cost of leverage.
 
-The premia vary enormously.
+The premia vary a lot.
 
 ## It's about hedging, not volatility
 
@@ -47,7 +47,7 @@ Group by asset class and the pattern is clear.
 
 1) Equity index and fixed income funds sit on deep futures markets. Premia are low and tight. 2) Sector funds cost more. A semiconductor basket is harder to offset than the broad index. 3) Commodities split in two. Gold and crude oil are cheap. Uranium and natural gas are all over the map. 4) Single-stock and crypto is where costs climb.
 
-Thinner, more fragmented markets. Premia are both high and widely dispersed.
+Thinner markets. Premia are high and all over the place.
 
 ## Same label, very different economics
 
@@ -55,25 +55,25 @@ Thinner, more fragmented markets. Premia are both high and widely dispersed.
 
 Nearly 30x higher.
 
-Tesla has one of the deepest single-stock derivatives markets in the world — liquid options, deep borrow, plenty of ways to hedge at scale. MicroStrategy has a thinner options book and harder-to-source hedges. The dealer passes the difference through.
+Tesla has the deepest single-stock derivatives market on the planet. MicroStrategy trades like a mid-cap with a bitcoin habit. The dealer charges accordingly.
 
 <div id="letf-bubble-viz" style="position:relative; width:100%; height:420px; margin:40px 0; overflow:hidden;"></div>
 <script src="/assets/js/hidden-costs-leveraged-etfs/letf_bubbles.js"></script>
 
 *Green beats spot, pink lags it. [Full dashboard](https://data.2factor.finance/durable-leverage/viz/letf_explorer.html){:target="_blank"}*
 
-Competition doesn't compress these costs. Three competing 2x Nvidia ETFs ([NVDL](https://finance.yahoo.com/quote/NVDL/) and others) from different issuers have premia ranging from 10% to 28%. Same underlying. Nearly identical labels.
+You might expect scale to help. It doesn't. TSLL's premium nearly tripled as AUM grew — more notional to hedge, same thin options book.
 
-Scale doesn't help either. TSLL's premium nearly tripled as AUM grew. TQQQ grew to $29 billion and the premium barely budged in 15 years. Hedging a modest amount of notional is easy. Hedging tens of billions is a different problem.
+TQQQ grew to $29 billion and the premium barely budged in 15 years. When the underlying market is deep, size is free. When it isn't, size is the problem.
 
 ## The compounding trap
 
-[TQQQ](https://finance.yahoo.com/quote/TQQQ/) is the largest and oldest 3x fund. Over 16 years it turned $1 into $262. But a 3x QQQ portfolio with zero financing premium would have delivered roughly a third more.
+[TQQQ](https://finance.yahoo.com/quote/TQQQ/) is the largest and oldest 3x fund. It's had a great run. But compare it to what a 3x QQQ portfolio would have done if it could borrow at the risk-free rate — same leverage, no financing premium.
 
 ![TQQQ vs zero-premium 3x QQQ](/assets/images/hidden-costs-leveraged-etfs/fig_letf_decomposition.svg)
 
-The stated expense ratio on TQQQ is 88 bps. The financing premium is roughly double that. And TQQQ is one of the cheaper LETFs.
+That gap is the financing premium compounding over 16 years. It doesn't look like much in any single year. But a small annual drag, reinvested against you for a decade and a half, eats roughly half the total return.
 
-For buy-and-hold investors, this drag compounds year after year, widening the gap between the return you expect and the return you get.
+TQQQ is one of the *cheapest* LETFs in our sample, but its financing premium is still roughly double its stated expense ratio.
 
-The real price of leverage isn't on any label.
+The longer you hold, the wider the gap between the leverage you paid for and the returns you actually get.
