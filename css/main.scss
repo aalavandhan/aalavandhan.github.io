@@ -1,0 +1,18 @@
+---
+# Front matter is required: it marks this file for Jekyll to process.
+# Partials live in _sass/ and are imported in cascade order — _responsive last.
+---
+
+@import
+  "variables",
+  "base",
+  "layout",
+  "home",
+  "post",
+  "overlay",
+  "callout",
+  "options",
+  "figure-tabs",
+  "code-viewer",
+  "syntax",
+  "responsive";

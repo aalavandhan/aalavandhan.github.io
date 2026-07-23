@@ -3,7 +3,12 @@
 
   {% include head.html %}
 
-    <body>
+    {%- comment -%}
+      Optional per-post theme: `theme: autumn` in front matter scopes a palette
+      override to that post. It lands on <body>, not on .post, because the code
+      viewer's overlay is appended to <body> and has to inherit it too.
+    {%- endcomment -%}
+    <body{% if page.theme %} class="theme-{{ page.theme }}"{% endif %}>
 
     {% include header.html %}
 
@@ -16,31 +21,53 @@
     {% include footer.html %}
 
     <script>
+    // Full-screen overlay, shared by figures (click any .post-content img) and by
+    // the code viewer (_includes/code-viewer.html).
     (function() {
-      var overlay, zoomedImg, scale;
+      var overlay, zoomedImg, scale, modal;
 
-      function open(src) {
+      function open(node, opts) {
+        opts = opts || {};
+        modal = !!opts.modal;
         overlay = document.createElement('div');
-        overlay.className = 'img-zoom-overlay';
+        overlay.className = 'img-zoom-overlay' + (opts.modifier ? ' ' + opts.modifier : '');
+        overlay.appendChild(node);
+        document.body.appendChild(overlay);
+        document.body.classList.add('overlay-open');
+        requestAnimationFrame(function() { overlay.classList.add('active'); });
+        overlay.addEventListener('click', onOverlayClick);
+        if (opts.zoomable) overlay.addEventListener('wheel', onWheel, { passive: false });
+        document.addEventListener('keydown', onKey);
+      }
+
+      // Images dismiss on any click. Modal content (code) only dismisses on the
+      // backdrop or the close button, so readers can select text inside it.
+      function onOverlayClick(e) {
+        if (modal && e.target !== overlay && !e.target.closest('[data-close]')) return;
+        close();
+      }
+
+      function openImage(src) {
         zoomedImg = document.createElement('img');
         zoomedImg.src = src;
         scale = 1;
-        overlay.appendChild(zoomedImg);
-        document.body.appendChild(overlay);
-        requestAnimationFrame(function() { overlay.classList.add('active'); });
-        overlay.addEventListener('click', close);
-        overlay.addEventListener('wheel', onWheel, { passive: false });
-        document.addEventListener('keydown', onKey);
+        open(zoomedImg, { zoomable: true });
+      }
+
+      function openCode(tpl) {
+        open(tpl.content.cloneNode(true), { modifier: 'code-overlay', modal: true });
       }
 
       function close() {
         if (!overlay) return;
-        overlay.classList.remove('active');
+        var closing = overlay;
+        closing.classList.remove('active');
         setTimeout(function() {
-          if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
-          overlay = null;
-          zoomedImg = null;
+          if (closing.parentNode) closing.parentNode.removeChild(closing);
         }, 200);
+        overlay = null;
+        zoomedImg = null;
+        document.body.classList.remove('overlay-open');
         document.removeEventListener('keydown', onKey);
       }
 
@@ -56,9 +83,17 @@
       }
 
       document.addEventListener('click', function(e) {
-        if (e.target.matches('.post-content img') && !e.target.closest('.img-zoom-overlay')) {
-          open(e.target.src);
+        if (!e.target.closest) return;
+        if (e.target.closest('.img-zoom-overlay')) return;
+
+        var card = e.target.closest('.code-card');
+        if (card) {
+          var tpl = card.parentNode.querySelector('template.code-source');
+          if (tpl) openCode(tpl);
+          return;
         }
+
+        if (e.target.matches('.post-content img')) openImage(e.target.src);
       });
     })();
 

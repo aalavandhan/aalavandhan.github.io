@@ -1,0 +1,164 @@
+<svg width="100%" viewBox="0 100 1120 532" role="img" xmlns="http://www.w3.org/2000/svg" font-family="'Anthropic Sans', -apple-system, system-ui, 'Segoe UI', sans-serif">
+<title>How the publisher reads the AMM, signs an order, posts it to the solver, and the solver executes against the pool</title>
+<desc>The AMM on the left exposes a swap method over a pair of reserves. The publisher in the centre holds an on-chain publisher contract above an off-chain keeper, split by a trust boundary. The AMM instructs the publisher to buy 1 BTC for 100k USD (1); the publisher signs a matching order to the on-chain relayer (2) while the keeper posts it to the off-chain orderbook (3). Finally the solver executes the settlement against the AMM (4), and the BTC and USD reserves adjust. The four steps then replay for the reverse swap, selling 1 BTC for 100k USD, which restores the reserves to their original levels.</desc>
+
+<defs>
+  <filter id="pglow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4"/></filter>
+  <style><![CDATA[
+    text{ fill:#6b5a44; }
+    .mono{ font-family:'SFMono-Regular', ui-monospace, 'Courier New', monospace; }
+    .num{ fill:#fff; font-weight:700; }
+
+    /* arrows draw themselves in sequence: 1 buy/sell -> (2 sign & 3 post) -> 4 execute,
+       stay on screen as the picture builds up, then everything fades and loops.
+       base state (and prefers-reduced-motion) is the fully drawn diagram. */
+    .wire{ stroke-dasharray:1; stroke-dashoffset:0; fill:none; }
+    .hl{opacity:0}
+
+    .steps{animation:fadeAll 14s linear infinite}
+    .w2{animation:draw2 14s linear infinite}
+    .l2{animation:lab2 14s linear infinite}
+    .w34{animation:draw34 14s linear infinite}
+    .l34{animation:lab34 14s linear infinite}
+    .w5{animation:draw5 14s linear infinite}
+    .l5{animation:lab5 14s linear infinite}
+    .hlAmm{animation:hlAmm 14s linear infinite}
+    .hlPub{animation:hlPub 14s linear infinite}
+    .hlSolver{animation:hlSolver 14s linear infinite}
+    .poolBtc{transform-box:fill-box; transform-origin:50% 100%; animation:poolBtc 28s ease-in-out infinite}
+    .poolUsd{transform-box:fill-box; transform-origin:50% 100%; animation:poolUsd 28s ease-in-out infinite}
+    /* the 5 steps replay every 14s; the quote text alternates buy/sell across the two passes */
+    .qBuy{animation:qBuy 28s linear infinite}
+    .qSell{opacity:0; animation:qSell 28s linear infinite}
+
+    /* snappy draws in sequence: 1 buy/sell (2%) -> 2 sign & 3 post (18%) -> 4 execute (36%) */
+    @keyframes draw2{0%,2%{stroke-dashoffset:1}8%{stroke-dashoffset:0}100%{stroke-dashoffset:0}}
+    @keyframes lab2{0%,8%{opacity:0}10%{opacity:1}100%{opacity:1}}
+    @keyframes draw34{0%,18%{stroke-dashoffset:1}24%{stroke-dashoffset:0}100%{stroke-dashoffset:0}}
+    @keyframes lab34{0%,24%{opacity:0}26%{opacity:1}100%{opacity:1}}
+    @keyframes draw5{0%,36%{stroke-dashoffset:1}44%{stroke-dashoffset:0}100%{stroke-dashoffset:0}}
+    @keyframes lab5{0%,44%{opacity:0}46%{opacity:1}100%{opacity:1}}
+    /* whole picture holds, then fades before the loop restarts */
+    @keyframes fadeAll{0%{opacity:1}93%{opacity:1}98%{opacity:0}100%{opacity:0}}
+
+    /* box glows pulse as each arrow arrives at its destination box */
+    @keyframes hlPub{0%,8%{opacity:0}11%{opacity:.42}16%{opacity:.42}22%{opacity:0}100%{opacity:0}}
+    @keyframes hlSolver{0%,24%{opacity:0}27%{opacity:.42}32%{opacity:.42}38%{opacity:0}100%{opacity:0}}
+    @keyframes hlAmm{0%,44%{opacity:0}47%{opacity:.42}62%{opacity:.42}72%{opacity:0}100%{opacity:0}}
+
+    /* pools on a 28s double cycle: buy pass raises BTC / lowers USD, sell pass restores.
+       22% and 72% = the moment arrow 4 lands in each 14s pass. */
+    @keyframes poolBtc{0%,22%{transform:scaleY(1)}26%{transform:scaleY(1.35)}72%{transform:scaleY(1.35)}76%{transform:scaleY(1)}100%{transform:scaleY(1)}}
+    @keyframes poolUsd{0%,22%{transform:scaleY(1)}26%{transform:scaleY(.72)}72%{transform:scaleY(.72)}76%{transform:scaleY(1)}100%{transform:scaleY(1)}}
+    /* quote text: buy on the first pass, sell on the second; the switch lands
+       at 50% of 28s, while fadeAll has everything at opacity 0 */
+    @keyframes qBuy{0%,49%{opacity:1}50%,100%{opacity:0}}
+    @keyframes qSell{0%,49%{opacity:0}50%,100%{opacity:1}}
+
+    @media (prefers-reduced-motion: reduce){
+      .steps,.w1,.l1,.w2,.l2,.w34,.l34,.w5,.l5,.hlAmm,.hlPub,.hlSolver,.poolBtc,.poolUsd,.qBuy,.qSell{animation:none}
+      .hl{opacity:0}
+    }
+  ]]></style>
+</defs>
+
+<rect x="0" y="0" width="1120" height="640" fill="#fdf8f1"/>
+
+<!-- ===== AMM (left) ===== -->
+<rect x="40" y="150" width="230" height="360" rx="16" fill="#fdf6ea" stroke="#d9a86a" stroke-width="1.8"/>
+<text x="155" y="196" text-anchor="middle" font-size="26" font-weight="700">AMM</text>
+<rect x="66" y="228" width="178" height="46" rx="10" fill="#fbe6c9" stroke="#e6b06a" stroke-width="1.4"/>
+<text x="155" y="258" text-anchor="middle" font-size="22" class="mono" fill="#9a5a1f">swap()</text>
+<rect x="74" y="475" width="162" height="3" fill="#e0cba6"/>
+<rect class="poolBtc" x="100" y="355" width="46" height="120" rx="6" fill="#d9812c"/>
+<text x="123" y="498" text-anchor="middle" font-size="17" font-weight="600" fill="#c26a1f">BTC</text>
+<rect class="poolUsd" x="178" y="387" width="46" height="88" rx="6" fill="#7d8a34"/>
+<text x="201" y="498" text-anchor="middle" font-size="17" font-weight="600" fill="#5f6e24">USD</text>
+
+<!-- ===== AMM publisher (centre) ===== -->
+<rect x="440" y="150" width="290" height="360" rx="18" fill="#fbf4e9" stroke="#dcc199" stroke-width="1.6"/>
+<text x="460" y="186" font-size="15" font-weight="600" letter-spacing="1.2" fill="#b79a72">AMM PUBLISHER</text>
+
+<!-- trust boundary: on-chain swapper above, off-chain keeper below -->
+<line x1="452" y1="340" x2="718" y2="340" stroke="#cdbd9c" stroke-width="1.4" stroke-dasharray="7 6"/>
+
+<!-- swapper contract (on-chain) -->
+<rect x="460" y="206" width="250" height="90" rx="14" fill="#fff3e0" stroke="#e08a2e" stroke-width="2.2"/>
+<text x="585" y="262" text-anchor="middle" font-size="22" font-weight="700">Publisher</text>
+<rect x="612" y="212" width="90" height="21" rx="6" fill="#fbe6c9"/><text x="657" y="227" text-anchor="middle" font-size="12" font-weight="600" fill="#c26a1f">on-chain</text>
+
+<!-- offchain keeper (off-chain) -->
+<rect x="460" y="384" width="250" height="90" rx="14" fill="#eef1e2" stroke="#7d8a34" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="496" y="442" font-size="21" font-weight="700" class="mono" fill="#4f5e1e">&gt;_</text>
+<text x="530" y="441" font-size="19" font-weight="700" fill="#4f5e1e">Offchain keeper</text>
+<rect x="612" y="392" width="90" height="21" rx="6" fill="#e6ecc9"/><text x="657" y="407" text-anchor="middle" font-size="12" font-weight="600" fill="#5f6e24">off-chain</text>
+
+<!-- ===== Solver (right): on-chain settlement above, orderbook below ===== -->
+<rect x="856" y="150" width="244" height="360" rx="18" fill="#f7f1e6" stroke="#d8cbb2" stroke-width="1.6"/>
+<text x="876" y="184" font-size="15" font-weight="600" letter-spacing="1.2" fill="#9a8a6a">SOLVER</text>
+<line x1="868" y1="340" x2="1088" y2="340" stroke="#cdbd9c" stroke-width="1.4" stroke-dasharray="7 6"/>
+
+<!-- settlement contract (on-chain) -->
+<rect x="876" y="206" width="204" height="90" rx="14" fill="#fff3e0" stroke="#e08a2e" stroke-width="2.2"/>
+<text x="978" y="262" text-anchor="middle" font-size="21" font-weight="700">Relayer</text>
+<rect x="1006" y="212" width="68" height="19" rx="6" fill="#fbe6c9"/><text x="1040" y="226" text-anchor="middle" font-size="11" font-weight="600" fill="#c26a1f">on-chain</text>
+
+<!-- orderbook (off-chain), styled like the keeper/settlement components -->
+<rect x="876" y="384" width="204" height="90" rx="14" fill="#eef1e2" stroke="#7d8a34" stroke-width="2" stroke-dasharray="8 6"/>
+<rect x="1006" y="392" width="72" height="19" rx="6" fill="#e6ecc9"/><text x="1042" y="407" text-anchor="middle" font-size="11" font-weight="600" fill="#5f6e24">off-chain</text>
+<text x="960" y="436" text-anchor="middle" font-size="21" font-weight="700">Orderbook</text>
+<g stroke="#5f6e24" stroke-width="1.5">
+  <rect x="1032" y="424" width="18" height="11" fill="#eef1dc" stroke="none"/>
+  <line x1="1032" y1="424" x2="1032" y2="435"/>
+  <line x1="1050" y1="424" x2="1050" y2="435"/>
+  <ellipse cx="1041" cy="435" rx="9" ry="3" fill="#eef1dc"/>
+  <ellipse cx="1041" cy="424" rx="9" ry="3" fill="#f4f6e6"/>
+</g>
+
+<!-- ===== animated flow: arrows draw in sequence and stay ===== -->
+<g class="steps">
+
+  <!-- 1 AMM instructs the publisher to buy/sell (AMM -> publisher) -->
+  <path class="wire w2" pathLength="1" d="M270,251 L426,251" stroke="#d9812c" stroke-width="3"/>
+  <g class="l2">
+    <path d="M440,251 L426,244.5 L426,257.5 Z" fill="#d9812c"/>
+    <circle cx="365" cy="251" r="16" fill="#e08a2e"/><text x="365" y="257" text-anchor="middle" font-size="18" class="num">1</text>
+    <text class="qBuy" x="358" y="284" text-anchor="middle" font-size="13" font-weight="600" fill="#c26a1f">buy 1 BTC for 100k USD</text>
+    <text class="qSell" x="358" y="284" text-anchor="middle" font-size="13" font-weight="600" fill="#c26a1f">sell 1 BTC for 100k USD</text>
+  </g>
+
+  <!-- 3 swapper signs the order to the settlement contract (on-chain) -->
+  <path class="wire w34" pathLength="1" d="M730,251 L842,251" stroke="#d9812c" stroke-width="3"/>
+  <g class="l34">
+    <path d="M856,251 L842,244.5 L842,257.5 Z" fill="#d9812c"/>
+    <text x="793" y="228" text-anchor="middle" font-size="16" font-weight="600" fill="#c26a1f">signs order</text>
+    <circle cx="793" cy="251" r="16" fill="#e08a2e"/><text x="793" y="257" text-anchor="middle" font-size="18" class="num">2</text>
+    <text x="793" y="284" text-anchor="middle" font-size="13" class="mono" fill="#c88a4a">ERC-1271</text>
+  </g>
+
+  <!-- 4 keeper posts the order to the orderbook (off-chain), simultaneous with 3 -->
+  <path class="wire w34" pathLength="1" d="M730,429 L842,429" stroke="#7d8a34" stroke-width="3"/>
+  <g class="l34">
+    <path d="M856,429 L842,422.5 L842,435.5 Z" fill="#7d8a34"/>
+    <text x="793" y="407" text-anchor="middle" font-size="15" class="mono" font-weight="600" fill="#5f6e24">POST /orders</text>
+    <circle cx="793" cy="429" r="16" fill="#7d8a34"/><text x="793" y="435" text-anchor="middle" font-size="18" class="num">3</text>
+    <text x="793" y="459" text-anchor="middle" font-size="12" class="mono" fill="#8a9a5a">flashLoan</text>
+    <text x="793" y="476" text-anchor="middle" font-size="12" class="mono" fill="#8a9a5a">appData</text>
+  </g>
+
+  <!-- 5 solver executes the swap against the AMM (bottom route), pools rebalance -->
+  <path class="wire w5" pathLength="1" d="M978,510 L978,540 Q978,548 970,548 L163,548 Q155,548 155,540 L155,524" stroke="#d9812c" stroke-width="3"/>
+  <g class="l5">
+    <path d="M155,510 L148.5,524 L161.5,524 Z" fill="#d9812c"/>
+    <circle cx="566" cy="548" r="16" fill="#e08a2e"/><text x="566" y="554" text-anchor="middle" font-size="18" class="num">4</text>
+    <text x="544" y="574" text-anchor="end" font-size="16" font-weight="600" fill="#c26a1f">executes settlement</text>
+    <text x="588" y="574" text-anchor="start" font-size="14" class="mono" fill="#c88a4a">prehook()</text>
+  </g>
+
+</g>
+
+<!-- ===== box glows pulse as each arrow lands ===== -->
+<rect class="hl hlAmm" x="40" y="150" width="230" height="360" rx="16" fill="none" stroke="#e0a24a" stroke-width="2.5" filter="url(#pglow)"/>
+<rect class="hl hlPub" x="440" y="150" width="290" height="360" rx="18" fill="none" stroke="#e0a24a" stroke-width="2.5" filter="url(#pglow)"/>
+<rect class="hl hlSolver" x="856" y="150" width="244" height="360" rx="18" fill="none" stroke="#e0a24a" stroke-width="2.5" filter="url(#pglow)"/>
+</svg>

@@ -11,10 +11,20 @@ markdown: kramdown
 permalink: pretty
 
 highlighter: rouge
+
 kramdown:
   input: GFM
   auto_ids: true
   syntax_highlighter: rouge
+
+sass:
+  sass_dir: _sass
+  style: expanded
+  # Local dart-sass warns that @import is deprecated. We can't move to @use:
+  # the site is built by GitHub Pages' legacy pipeline, which runs libsass, and
+  # libsass never implemented @use. @import works on both, so keep it and mute
+  # the local warning. (Older converters ignore this key.)
+  silence_deprecations: ["import"]
 
 header_pages:
   - research.markdown

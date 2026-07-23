@@ -1,0 +1,33 @@
+// Options list, styled as a console.
+
+/* Options list — styled as a console/terminal */
+.post-content .options {
+  background: #15181e;
+  border: 1px solid #2b2f38;
+  border-radius: 0;
+  padding: 24px 20px;
+  margin: 32px 0;
+  font-family: "SFMono-Regular", ui-monospace, Menlo, Consolas, "Courier New", monospace;
+}
+.post-content .options p {
+  margin: 0;
+  padding: 12px 0;
+  line-height: 1.55;
+  font-family: "SFMono-Regular", ui-monospace, Menlo, Consolas, "Courier New", monospace;
+  font-size: 14px;
+  color: #c3c9d2;
+}
+.post-content .options p::before {
+  content: "[x] ";
+  color: #8a919b;
+}
+.post-content .options strong {
+  color: #8fc99a;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: #6b727c;
+}
+.post-content .options a {
+  color: #7fb6d9;
+}

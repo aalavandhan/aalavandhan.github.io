@@ -1,0 +1,34 @@
+// Reset, page defaults, and the type scale everything inherits.
+
+/* Reset */
+/* ----------------------------------------------------------*/
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body { height: 100%; }
+
+body {
+  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+  font-size: 21px;
+  line-height: 1.58;
+  font-weight: 400;
+  color: #292929;
+  background-color: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  word-wrap: break-word;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  color: #292929;
+}
+
+a         { color: inherit; text-decoration: none; }
+a:hover   { color: #000; }
+a:visited { color: inherit; }

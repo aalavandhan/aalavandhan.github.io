@@ -1,0 +1,55 @@
+{%- comment -%}
+Full-screen code viewer. Generic — usable from any post.
+
+Call it with:  include code-viewer.html file="..." label="..." href="..."
+
+Params:
+  file       (required) path under _includes/ to a markdown file holding ONE fenced
+             code block. The fence's language tag selects the Rouge LEXER, so it
+             must name a language Rouge actually ships.
+  label      card title. Default: "View the code".
+  lang       language NAME shown on the card. Defaults to the fence tag. Set this
+             when the fence tag is only a stand-in lexer — Rouge has no Solidity
+             lexer, so Solidity files fence as `javascript` and pass lang="Solidity".
+  meta       overrides the whole "<Lang> · <N> lines" line.
+  href       optional external link (gist, repo) shown in the overlay header.
+  href_label anchor text for href. Default: "Open on GitHub".
+
+The code file is run through Liquid like any other include, so wrap its fenced
+block in a raw/endraw pair if the code itself contains Liquid delimiters.
+
+Note: the site is built by GitHub Pages' legacy Jekyll build, which ignores
+_plugins/. A custom Rouge lexer would work locally and silently no-op in
+production, which is why the fence tag has to be a stock Rouge language.
+{%- endcomment -%}
+
+{%- capture code_md -%}{%- include {{ include.file }} -%}{%- endcapture -%}
+{%- assign code_lines = code_md | strip | newline_to_br | split: "<br />" -%}
+{%- assign fence_tag = code_lines | first | remove: "`" | remove: "~" | strip -%}
+{%- assign lang = include.lang | default: fence_tag | capitalize -%}
+{%- assign line_count = code_lines | size | minus: 2 -%}
+{%- assign label = include.label | default: "View the code" -%}
+
+<div class="code-viewer">
+  <button class="code-card" type="button" aria-haspopup="dialog">
+    <span class="code-card-icon">{% include icons/code.svg %}</span>
+    <span class="code-card-text">
+      <span class="code-card-label">{{ label }}</span>
+      <span class="code-card-meta">{% if include.meta %}{{ include.meta }}{% else %}{{ lang }} · {{ line_count }} lines{% endif %}</span>
+    </span>
+    <span class="code-card-arrow" aria-hidden="true">→</span>
+  </button>
+
+  <template class="code-source">
+    <div class="code-doc" role="dialog" aria-modal="true" aria-label="{{ label }}">
+      <div class="code-doc-head">
+        <span class="code-doc-title">{{ label }}</span>
+        {%- if include.href %}
+        <a class="code-doc-link" href="{{ include.href }}" target="_blank" rel="noopener">{{ include.href_label | default: "Open on GitHub" }}</a>
+        {%- endif %}
+        <button class="code-doc-close" type="button" data-close aria-label="Close">×</button>
+      </div>
+      <div class="code-doc-body">{{ code_md | markdownify }}</div>
+    </div>
+  </template>
+</div>

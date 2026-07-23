@@ -1,0 +1,219 @@
+// A post: header, hero banner, and prose inside .post-content.
+
+/* Post styles */
+/* ----------------------------------------------------------*/
+
+.post-header {
+  margin: 50px 0 10px;
+}
+
+.post-header h1 {
+  font-size: 40px;
+  letter-spacing: -0.5px;
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+.post-header .meta {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #757575;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post-header .meta .read-time {
+  color: #757575;
+}
+
+.post-content {
+  margin: 30px 0 50px;
+}
+
+.post-content > * {
+  margin-bottom: 28px;
+}
+
+.post-content p {
+  letter-spacing: -0.003em;
+}
+
+.post-content h1,
+.post-content h2,
+.post-content h3,
+.post-content h4,
+.post-content h5,
+.post-content h6 {
+  line-height: 1.2;
+  margin-top: 50px;
+  margin-bottom: 8px;
+}
+
+.post-content h2 {
+  font-size: 30px;
+  letter-spacing: -0.5px;
+}
+
+.post-content h3 {
+  font-size: 24px;
+  letter-spacing: -0.25px;
+}
+
+.post-content h4 {
+  font-size: 20px;
+  letter-spacing: 0;
+}
+
+.post-content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 40px auto;
+  cursor: zoom-in;
+}
+
+/* Figures allowed to break out wider than the text column */
+.post-content img.wide {
+  width: min(940px, 92vw);
+  max-width: none;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Post hero — full-bleed image banner with the title + subtitle overlaid.
+   Enabled per-post via the `hero:` front-matter key; reusable across posts. */
+.post-hero {
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  margin-top: -10px;
+  margin-bottom: 46px;
+  overflow: hidden;
+}
+.post-hero-img {
+  display: block;
+  width: 100%;
+  height: clamp(242px, 36vw, 420px);
+  object-fit: cover;
+}
+.post-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(18,12,8,0.06) 0%, rgba(18,12,8,0) 32%, rgba(18,12,8,0.66) 100%);
+  pointer-events: none;
+}
+.post-hero-text {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0 20px 28px;
+}
+.post-hero-inner {
+  max-width: 680px;
+  margin: 0 auto;
+}
+.post-hero-inner h1 {
+  color: #fff;
+  font-size: 40px;
+  letter-spacing: -0.5px;
+  line-height: 1.14;
+  font-weight: 700;
+  margin: 0 0 8px;
+  text-shadow: 0 1px 16px rgba(0,0,0,0.5);
+}
+.post-hero-inner .subtitle {
+  color: rgba(255,255,255,0.94);
+  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+  font-style: italic;
+  font-size: 19px;
+  margin: 0 0 12px;
+  text-shadow: 0 1px 14px rgba(0,0,0,0.55);
+}
+.post-hero-inner .meta {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: rgba(255,255,255,0.85);
+  display: flex;
+  gap: 16px;
+  text-shadow: 0 1px 12px rgba(0,0,0,0.55);
+}
+.post-header .subtitle {
+  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+  font-style: italic;
+  font-size: 19px;
+  color: #555;
+  margin: 8px 0 0;
+}
+
+.post-content ul,
+.post-content ol {
+  padding-left: 30px;
+}
+
+.post-content li {
+  margin-bottom: 8px;
+}
+
+.post-content a {
+  text-decoration: underline;
+  text-decoration-color: rgba(0,0,0,.35);
+  text-underline-offset: 2px;
+}
+
+.post-content a:hover {
+  text-decoration-color: rgba(0,0,0,.85);
+}
+
+.post-content strong { font-weight: 700; }
+
+/* Tables */
+
+.post-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 35px 0;
+}
+
+.post-content table th,
+.post-content table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.post-content table th {
+  font-weight: 600;
+  color: #757575;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.post-content table td strong {
+  font-weight: 600;
+}
+
+/* Horizontal rules — Medium-style three dots */
+
+.post-content hr {
+  border: none;
+  text-align: center;
+  margin: 45px 0;
+}
+
+.post-content hr::before {
+  content: '\00b7\00a0\00a0\00b7\00a0\00a0\00b7';
+  font-size: 24px;
+  letter-spacing: 0;
+  color: #292929;
+}

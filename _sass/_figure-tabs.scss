@@ -1,0 +1,77 @@
+// Figure tabs — .pieces / .piece / .piece-view.
+
+/* Figure tabs — click a tab to reveal its figure, which then opens full-screen */
+.post-content .pieces {
+  display: flex;
+  margin: 34px 0 16px;
+  border: 1px solid var(--ui-border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--ui-surface);
+}
+.post-content .piece {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 22px 16px;
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--ui-border-inner);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--ui-muted);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.post-content .piece:last-child {
+  border-right: none;
+}
+.post-content .piece:hover,
+.post-content .piece:focus-visible {
+  background: var(--ui-surface-active);
+  color: var(--ui-accent);
+  outline: none;
+}
+.post-content .piece.active {
+  background: var(--ui-surface-active);
+  color: var(--ui-accent);
+  box-shadow: inset 0 -3px 0 var(--ui-accent);
+}
+.post-content .piece-n {
+  font-weight: 700;
+  color: inherit;
+  font-size: 16px;
+}
+.post-content .fig-cap {
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  color: var(--ui-muted);
+  margin: 12px 0 16px;
+}
+.post-content .piece-view {
+  margin: 0 0 40px;
+  width: min(1040px, 90vw);
+  margin-left: 50%;
+  transform: translateX(-50%);
+  aspect-ratio: 1120 / 532;
+  background: var(--ui-surface);
+  border: 1px solid var(--ui-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.post-content .piece-view img.piece-fig {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  margin: 0;
+  border: none;
+  cursor: zoom-in;
+  animation: pieceFade 0.3s ease;
+}
+@keyframes pieceFade { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .post-content .piece-view img.piece-fig { animation: none; }
+}

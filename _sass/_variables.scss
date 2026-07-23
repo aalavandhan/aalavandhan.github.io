@@ -1,0 +1,45 @@
+// Palette and post themes. Everything else reads from here.
+
+/* Shared component palette */
+/* ----------------------------------------------------------*/
+/* The reusable post components — callout, tabs, code viewer — read their every
+   color from these. The defaults are neutral so a component dropped into any
+   post looks at home. A post that wants its own look sets `theme: <name>` in
+   front matter and overrides the variables below; it never restyles the
+   components themselves. */
+
+:root {
+  --ui-surface: #fafafa;
+  --ui-surface-active: #f0f0f0;
+  --ui-border: #e6e6e6;
+  --ui-border-inner: #ededed;
+  --ui-border-hover: #d6d6d6;
+  --ui-text: #292929;
+  --ui-muted: #757575;
+  --ui-accent: #292929;
+  --ui-scrim: rgba(26, 26, 26, 0.55);
+
+  /* The code viewer keeps its own namespace, declared here and nowhere else, so
+     a post theme cannot reach it. Source listings read as chrome rather than as
+     part of the prose, and should look identical in every post. */
+  --code-surface: #fafafa;
+  --code-surface-active: #f0f0f0;
+  --code-border: #e6e6e6;
+  --code-border-hover: #d6d6d6;
+  --code-text: #292929;
+  --code-muted: #757575;
+  --code-scrim: rgba(26, 26, 26, 0.55);
+}
+
+/* Autumn — used by source-your-own-order-flow, matching that post's figures. */
+.theme-autumn {
+  --ui-surface: #fdf8f1;
+  --ui-surface-active: #fbeedd;
+  --ui-border: #e6ddcd;
+  --ui-border-inner: #efe4d1;
+  --ui-border-hover: #d9c7a6;
+  --ui-text: #2b2620;
+  --ui-muted: #8a765a;
+  --ui-accent: #b45309;
+  --ui-scrim: rgba(46, 36, 24, 0.55);
+}

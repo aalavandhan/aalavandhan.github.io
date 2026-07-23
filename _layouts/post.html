@@ -1,13 +1,37 @@
 ---
 layout: default
 ---
+{%- comment -%}
+  Read time counts prose only. The code viewer parks its listing in a <template>,
+  which strip_html would otherwise count as words — four source files is enough
+  to double the estimate. Drop every <template>…</template> span first.
+{%- endcomment -%}
+{%- assign chunks = content | split: '<template' -%}
+{%- capture prose -%}
+  {{- chunks[0] -}}
+  {%- for chunk in chunks offset: 1 -%}{{ chunk | split: '</template>' | last }}{%- endfor -%}
+{%- endcapture -%}
+{% assign words = prose | strip_html | number_of_words %}{% assign minutes = words | divided_by: 265 %}{% if minutes < 1 %}{% assign minutes = 1 %}{% endif %}
 <div class="post">
 
+  {% if page.hero %}
+  <div class="post-hero">
+    <img class="post-hero-img" src="{{ page.hero }}" alt="{{ page.hero_alt | default: page.title }}">
+    <div class="post-hero-text">
+      <div class="post-hero-inner">
+        <h1>{{ page.title }}</h1>
+        {% if page.subtitle %}<p class="subtitle">{{ page.subtitle }}</p>{% endif %}
+        <p class="meta"><span>{{ page.date | date: "%b %-d, %Y" }}{% if page.author %} · {{ page.author }}{% endif %}</span><span class="read-time">{{ minutes }} min read</span></p>
+      </div>
+    </div>
+  </div>
+  {% else %}
   <header class="post-header">
     <h1>{{ page.title }}</h1>
-    {% assign words = content | strip_html | number_of_words %}{% assign minutes = words | divided_by: 265 %}{% if minutes < 1 %}{% assign minutes = 1 %}{% endif %}
+    {% if page.subtitle %}<p class="subtitle">{{ page.subtitle }}</p>{% endif %}
     <p class="meta"><span>{{ page.date | date: "%b %-d, %Y" }}{% if page.author %} · {{ page.author }}{% endif %}</span><span class="read-time">{{ minutes }} min read</span></p>
   </header>
+  {% endif %}
 
   <article class="post-content">
   {{ content }}
@@ -16,11 +40,11 @@ layout: default
 </div>
 
 <script>
-// Animate SVGs only when scrolled into view
+// Animate content SVGs only when scrolled into view (the hero SVG animates immediately)
 (function() {
-  var svgs = document.querySelectorAll('img[src$=".svg"]');
+  var svgs = document.querySelectorAll('.post-content img[src$=".svg"]');
 
-  // Blank out all SVGs initially to prevent load animation
+  // Blank out content SVGs initially to prevent load animation
   svgs.forEach(function(img) {
     img.dataset.src = img.getAttribute('src');
     img.setAttribute('src', 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"/>');
@@ -39,5 +63,32 @@ layout: default
   svgs.forEach(function(img) {
     observer.observe(img);
   });
+})();
+
+// Interactive piece overview: click a piece to reveal its figure below.
+// The revealed figure is a .post-content img, so clicking it opens full-screen.
+(function() {
+  var pieces = document.querySelectorAll('.piece[data-figure]');
+  var view = document.querySelector('.piece-view');
+  if (!pieces.length || !view) return;
+
+  function show(p) {
+    pieces.forEach(function(x) { x.classList.remove('active'); });
+    p.classList.add('active');
+    var src = p.getAttribute('data-figure');
+    var alt = p.getAttribute('data-alt') || p.textContent.trim();
+    var img = document.createElement('img');
+    img.className = 'piece-fig';
+    img.alt = alt;
+    // ?t= busts the cache so the SVG's entry animation replays on every switch
+    img.src = src + '?t=' + Date.now();
+    view.innerHTML = '';
+    view.appendChild(img);
+  }
+
+  pieces.forEach(function(p) {
+    p.addEventListener('click', function() { show(p); });
+  });
+  show(pieces[0]);
 })();
 </script>

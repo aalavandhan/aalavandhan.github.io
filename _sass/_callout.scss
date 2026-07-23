@@ -1,0 +1,38 @@
+// Callout blockquote — <blockquote class="callout">.
+
+/* Callout blockquote. Named .callout, not .highlight, so it can't collide with
+   the .highlight wrapper Rouge emits around every fenced code block. */
+.post-content blockquote.callout {
+  margin: 36px 0;
+  padding: 24px 28px;
+  font-style: normal;
+  font-size: 19px;
+  line-height: 1.62;
+  color: var(--ui-text);
+  background-color: var(--ui-surface);
+  border: 1px solid var(--ui-border);
+  border-radius: 10px;
+}
+.post-content blockquote.callout p {
+  margin: 0 0 14px;
+}
+.post-content blockquote.callout p:last-child {
+  margin-bottom: 0;
+}
+/* Eyebrow label with inline icon */
+.post-content blockquote.callout .how-label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 16px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ui-accent);
+}
+.post-content blockquote.callout .how-label svg {
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
+}

@@ -1,0 +1,167 @@
+// Code viewer component — the card, and its modal overlay.
+
+/* Code viewer — {% include code-viewer.html %}. The card sits in the post; the
+   code itself lives in a <template> and is cloned into the full-screen overlay. */
+/* Consecutive cards read as one stack. Margins are symmetric so the collapse
+   between two adjacent viewers resolves to the small gap, not the outer one —
+   the first and last in a run restore the full spacing against the prose. */
+.post-content .code-viewer {
+  margin: 6px 0;
+}
+.post-content .code-viewer:first-of-type {
+  margin-top: 34px;
+}
+.post-content .code-viewer:last-of-type {
+  margin-bottom: 40px;
+}
+.post-content .code-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 20px 22px;
+  text-align: left;
+  background: var(--code-surface);
+  border: 1px solid var(--code-border);
+  border-radius: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.post-content .code-card:hover,
+.post-content .code-card:focus-visible {
+  background: var(--code-surface-active);
+  border-color: var(--code-border-hover);
+  outline: none;
+}
+.post-content .code-card-icon {
+  display: flex;
+  flex-shrink: 0;
+  color: var(--code-text);
+}
+.post-content .code-card-icon svg {
+  width: 22px;
+  height: 22px;
+}
+.post-content .code-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.post-content .code-card-label {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--code-text);
+}
+.post-content .code-card-meta {
+  font-size: 12.5px;
+  color: var(--code-muted);
+}
+.post-content .code-card-arrow {
+  flex-shrink: 0;
+  font-size: 18px;
+  color: var(--code-text);
+  transition: transform 0.15s ease;
+}
+.post-content .code-card:hover .code-card-arrow {
+  transform: translateX(3px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .post-content .code-card,
+  .post-content .code-card-arrow { transition: none; }
+  .post-content .code-card:hover .code-card-arrow { transform: none; }
+}
+
+/* Code overlay — the modal variant of .img-zoom-overlay */
+.img-zoom-overlay.code-overlay {
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 20px;
+  overflow-y: auto;
+  cursor: default;
+  background: var(--code-scrim);
+}
+.code-doc {
+  width: min(1000px, 100%);
+  min-width: 0;
+  background: #fff;
+  border: 1px solid var(--code-border);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+}
+.code-doc-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  background: var(--code-surface);
+  border-bottom: 1px solid var(--code-border);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+.code-doc-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--code-text);
+}
+.code-doc-link {
+  font-size: 13px;
+  color: var(--code-muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.code-doc-link:hover {
+  color: var(--code-text);
+}
+.code-doc-close {
+  flex-shrink: 0;
+  padding: 0 4px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--code-muted);
+  cursor: pointer;
+}
+.code-doc-close:hover,
+.code-doc-close:focus-visible {
+  color: var(--code-text);
+  outline: none;
+}
+.code-doc-body {
+  max-height: calc(100vh - 140px);
+  overflow: auto;
+}
+/* The overlay is appended to <body>, outside .post, so code styling is restated
+   here. Token colors come from the shared .highlight rules further down. */
+.code-doc-body .highlight,
+.code-doc-body pre {
+  margin: 0;
+  background: #fff;
+}
+/* Set the metrics on <pre>, not <code>: <code> is inline, so the line boxes are
+   sized by the block container's strut and inheriting body's 1.58/18px here
+   leaves the code double-spaced. */
+.code-doc-body pre {
+  padding: 20px 24px;
+  overflow-x: auto;
+  font-family: Menlo, Monaco, "Courier New", monospace;
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+.code-doc-body code {
+  font: inherit;
+  background: none;
+  padding: 0;
+  white-space: pre;
+  tab-size: 4;
+}
+
+@media (max-width: 700px) {
+  .img-zoom-overlay.code-overlay { padding: 16px 10px; }
+  .code-doc-body pre { padding: 16px; font-size: 12px; }
+}

@@ -1,0 +1,58 @@
+<svg width="100%" viewBox="0 70 1120 532" role="img" xmlns="http://www.w3.org/2000/svg" font-family="'Anthropic Sans', -apple-system, system-ui, 'Segoe UI', sans-serif">
+<title>A bespoke two-asset AMM pool and its custom invariant curve</title>
+<desc>Left: an AMM pool holding two reserves as bars, BTC in amber and USD in olive-green. Right: the bespoke invariant curve on graph paper with a marker riding exactly along it. The marker position, the bar heights, and the curve all come from the same invariant x*y*(x+y)=k, so balances and price move in precise sync; the marker's tangent is the price.</desc>
+
+<defs>
+  <linearGradient id="btcBar" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#eaa24a"/><stop offset="100%" stop-color="#d9812c"/></linearGradient>
+  <linearGradient id="usdBar" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a6b356"/><stop offset="100%" stop-color="#7d8a34"/></linearGradient>
+  <filter id="dotGlow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="5"/></filter>
+  <pattern id="gridFine" width="28" height="28" patternUnits="userSpaceOnUse">
+    <path d="M28 0H0V28" fill="none" stroke="#efe4cd" stroke-width="1"/>
+  </pattern>
+  <pattern id="gridBold" width="140" height="140" patternUnits="userSpaceOnUse">
+    <rect width="140" height="140" fill="url(#gridFine)"/>
+    <path d="M140 0H0V140" fill="none" stroke="#e3d2b0" stroke-width="1.5"/>
+  </pattern>
+  <style><![CDATA[
+    .bar{transform-box:fill-box;transform-origin:center bottom}
+    .btc{animation:btc 10s linear infinite}
+    .usd{animation:usd 10s linear infinite}
+    .pt{animation:ride 10s linear infinite}
+    @keyframes btc{0%{transform:scaleY(0.750)}2.8%{transform:scaleY(0.746)}5.6%{transform:scaleY(0.735)}8.3%{transform:scaleY(0.717)}11.1%{transform:scaleY(0.692)}13.9%{transform:scaleY(0.661)}16.7%{transform:scaleY(0.625)}19.4%{transform:scaleY(0.586)}22.2%{transform:scaleY(0.543)}25%{transform:scaleY(0.500)}27.8%{transform:scaleY(0.457)}30.6%{transform:scaleY(0.414)}33.3%{transform:scaleY(0.375)}36.1%{transform:scaleY(0.339)}38.9%{transform:scaleY(0.308)}41.7%{transform:scaleY(0.283)}44.4%{transform:scaleY(0.265)}47.2%{transform:scaleY(0.254)}50%{transform:scaleY(0.250)}52.8%{transform:scaleY(0.254)}55.6%{transform:scaleY(0.265)}58.3%{transform:scaleY(0.283)}61.1%{transform:scaleY(0.308)}63.9%{transform:scaleY(0.339)}66.7%{transform:scaleY(0.375)}69.4%{transform:scaleY(0.414)}72.2%{transform:scaleY(0.457)}75%{transform:scaleY(0.500)}77.8%{transform:scaleY(0.543)}80.6%{transform:scaleY(0.586)}83.3%{transform:scaleY(0.625)}86.1%{transform:scaleY(0.661)}88.9%{transform:scaleY(0.692)}91.7%{transform:scaleY(0.717)}94.4%{transform:scaleY(0.735)}97.2%{transform:scaleY(0.746)}100%{transform:scaleY(0.750)}}
+    @keyframes usd{0%{transform:scaleY(0.179)}2.8%{transform:scaleY(0.181)}5.6%{transform:scaleY(0.185)}8.3%{transform:scaleY(0.192)}11.1%{transform:scaleY(0.202)}13.9%{transform:scaleY(0.216)}16.7%{transform:scaleY(0.233)}19.4%{transform:scaleY(0.254)}22.2%{transform:scaleY(0.280)}25%{transform:scaleY(0.309)}27.8%{transform:scaleY(0.343)}30.6%{transform:scaleY(0.380)}33.3%{transform:scaleY(0.420)}36.1%{transform:scaleY(0.461)}38.9%{transform:scaleY(0.501)}41.7%{transform:scaleY(0.537)}44.4%{transform:scaleY(0.567)}47.2%{transform:scaleY(0.586)}50%{transform:scaleY(0.593)}52.8%{transform:scaleY(0.586)}55.6%{transform:scaleY(0.567)}58.3%{transform:scaleY(0.537)}61.1%{transform:scaleY(0.501)}63.9%{transform:scaleY(0.461)}66.7%{transform:scaleY(0.420)}69.4%{transform:scaleY(0.380)}72.2%{transform:scaleY(0.343)}75%{transform:scaleY(0.309)}77.8%{transform:scaleY(0.280)}80.6%{transform:scaleY(0.254)}83.3%{transform:scaleY(0.233)}86.1%{transform:scaleY(0.216)}88.9%{transform:scaleY(0.202)}91.7%{transform:scaleY(0.192)}94.4%{transform:scaleY(0.185)}97.2%{transform:scaleY(0.181)}100%{transform:scaleY(0.179)}}
+    @keyframes ride{0%{transform:translate(663.12px,293.00px) rotate(-127.0deg)}2.8%{transform:translate(663.91px,294.05px) rotate(-127.3deg)}5.6%{transform:translate(666.32px,297.16px) rotate(-128.1deg)}8.3%{transform:translate(670.41px,302.24px) rotate(-129.5deg)}11.1%{transform:translate(676.29px,309.14px) rotate(-131.4deg)}13.9%{transform:translate(684.11px,317.65px) rotate(-133.7deg)}16.7%{transform:translate(694.02px,327.50px) rotate(-136.5deg)}19.4%{transform:translate(706.18px,338.40px) rotate(-139.7deg)}22.2%{transform:translate(720.73px,350.02px) rotate(-143.0deg)}25%{transform:translate(737.68px,362.00px) rotate(-146.4deg)}27.8%{transform:translate(756.98px,373.98px) rotate(-149.8deg)}30.6%{transform:translate(778.34px,385.60px) rotate(-153.0deg)}33.3%{transform:translate(801.23px,396.50px) rotate(-156.0deg)}36.1%{transform:translate(824.83px,406.35px) rotate(-158.6deg)}38.9%{transform:translate(847.92px,414.86px) rotate(-160.9deg)}41.7%{transform:translate(868.91px,421.76px) rotate(-162.7deg)}44.4%{transform:translate(885.93px,426.84px) rotate(-164.0deg)}47.2%{transform:translate(897.11px,429.95px) rotate(-164.8deg)}50%{transform:translate(901.02px,431.00px) rotate(-165.1deg)}52.8%{transform:translate(897.11px,429.95px) rotate(-164.8deg)}55.6%{transform:translate(885.93px,426.84px) rotate(-164.0deg)}58.3%{transform:translate(868.91px,421.76px) rotate(-162.7deg)}61.1%{transform:translate(847.92px,414.86px) rotate(-160.9deg)}63.9%{transform:translate(824.83px,406.35px) rotate(-158.6deg)}66.7%{transform:translate(801.23px,396.50px) rotate(-156.0deg)}69.4%{transform:translate(778.34px,385.60px) rotate(-153.0deg)}72.2%{transform:translate(756.98px,373.98px) rotate(-149.8deg)}75%{transform:translate(737.68px,362.00px) rotate(-146.4deg)}77.8%{transform:translate(720.73px,350.02px) rotate(-143.0deg)}80.6%{transform:translate(706.18px,338.40px) rotate(-139.7deg)}83.3%{transform:translate(694.02px,327.50px) rotate(-136.5deg)}86.1%{transform:translate(684.11px,317.65px) rotate(-133.7deg)}88.9%{transform:translate(676.29px,309.14px) rotate(-131.4deg)}91.7%{transform:translate(670.41px,302.24px) rotate(-129.5deg)}94.4%{transform:translate(666.32px,297.16px) rotate(-128.1deg)}97.2%{transform:translate(663.91px,294.05px) rotate(-127.3deg)}100%{transform:translate(663.12px,293.00px) rotate(-127.0deg)}}
+    @media(prefers-reduced-motion:reduce){.btc{transform:scaleY(0.500)}.usd{transform:scaleY(0.309)}.pt{transform:translate(737.68px,362.00px) rotate(-146.4deg)}.btc,.usd,.pt{animation:none}}
+    text{fill:#6b5a44}
+  ]]></style>
+</defs>
+
+<rect x="0" y="0" width="1120" height="640" fill="#fdf8f1"/>
+
+<!-- left: pool reserves -->
+<rect x="70" y="150" width="390" height="380" rx="16" fill="#fdf6ea" stroke="#e6d3b3" stroke-width="1.6"/>
+<text x="265" y="200" text-anchor="middle" font-size="24" font-weight="600">Pool reserves</text>
+<rect x="110" y="475" width="310" height="3" fill="#e0cba6"/>
+<rect class="bar btc" x="180" y="225" width="66" height="250" rx="6" fill="url(#btcBar)"/>
+<text x="213" y="503" text-anchor="middle" font-size="20" font-weight="600" fill="#c26a1f">BTC</text>
+<rect class="bar usd" x="300" y="225" width="66" height="250" rx="6" fill="url(#usdBar)"/>
+<text x="333" y="503" text-anchor="middle" font-size="20" font-weight="600" fill="#5f6e24">USD</text>
+
+<!-- right: bespoke invariant curve on graph paper -->
+<rect x="560" y="160" width="490" height="340" fill="url(#gridBold)"/>
+<line x1="560" y1="150" x2="560" y2="500" stroke="#c9b58f" stroke-width="2.2"/>
+<line x1="560" y1="500" x2="1050" y2="500" stroke="#c9b58f" stroke-width="2.2"/>
+<text x="548" y="166" text-anchor="end" font-size="17" fill="#8a765a">BTC</text>
+<text x="1050" y="528" text-anchor="end" font-size="17" fill="#8a765a">USD</text>
+
+<path id="amm" d="M640.88,258.50 L642.47,261.37 L644.10,264.24 L645.78,267.10 L647.50,269.97 L649.27,272.84 L651.08,275.71 L652.94,278.57 L654.86,281.44 L656.83,284.31 L658.85,287.18 L660.92,290.05 L663.05,292.91 L665.25,295.78 L667.50,298.65 L669.82,301.52 L672.20,304.38 L674.64,307.25 L677.16,310.12 L679.75,312.99 L682.41,315.86 L685.15,318.72 L687.96,321.59 L690.86,324.46 L693.84,327.33 L696.91,330.20 L700.06,333.06 L703.31,335.93 L706.66,338.80 L710.10,341.67 L713.64,344.53 L717.30,347.40 L721.06,350.27 L724.94,353.14 L728.93,356.01 L733.05,358.87 L737.30,361.74 L741.67,364.61 L746.19,367.48 L750.85,370.34 L755.66,373.21 L760.63,376.08 L765.76,378.95 L771.06,381.82 L776.55,384.68 L782.22,387.55 L788.08,390.42 L794.16,393.29 L800.46,396.15 L806.99,399.02 L813.76,401.89 L820.80,404.76 L828.11,407.63 L835.73,410.49 L843.65,413.36 L851.92,416.23 L860.56,419.10 L869.59,421.97 L879.04,424.83 L888.97,427.70 L899.40,430.57 L910.39,433.44 L922.00,436.30 L934.29,439.17 L947.34,442.04" fill="none" stroke="#b45309" stroke-width="3.4" stroke-linecap="round"/>
+<rect x="738" y="168" width="312" height="74" rx="12" fill="#fdf6ea" fill-opacity="0.94" stroke="#e2c79c" stroke-width="1.4"/>
+<text x="1034" y="200" text-anchor="end" font-size="24" font-style="italic" fill="#b45309">&#966;(x, y) = x&#183;y&#183;(x+y)<tspan dy="-8" font-size="16">&#945;</tspan><tspan dy="8"> = k</tspan></text>
+<text x="1034" y="227" text-anchor="end" font-size="16" fill="#a07d4a">funky invariant</text>
+
+<g class="pt">
+  <line x1="-52" y1="0" x2="52" y2="0" stroke="#6b5a44" stroke-width="1.8" stroke-dasharray="5 6" opacity="0.75"/>
+  <circle cx="0" cy="0" r="13" fill="#e08a2e" filter="url(#dotGlow)" opacity="0.5"/>
+  <circle cx="0" cy="0" r="9" fill="#e08a2e" stroke="#fff" stroke-width="2.4"/>
+</g>
+<text x="805" y="560" text-anchor="middle" font-size="16" font-style="italic" fill="#8a765a">price = slope at the point</text>
+</svg>
