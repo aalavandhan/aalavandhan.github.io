@@ -4,13 +4,31 @@ layout: default
 
 <div class="home">
 
-  <ul class="posts">
-    {% for post in site.posts %}
-      <li>
-        <span class="post-date">{{ post.date | date: "%b %-d, %Y" }}</span>
-        <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-      </li>
-    {% endfor %}
+  <ul class="post-cards">
+    {%- for post in site.posts -%}
+    {%- if post.description -%}
+      {%- assign card_desc = post.description -%}
+    {%- elsif post.subtitle -%}
+      {%- assign card_desc = post.subtitle -%}
+    {%- else -%}
+      {%- assign card_desc = post.excerpt | strip_html -%}
+    {%- endif -%}
+    {%- assign card_desc = card_desc | strip_newlines | strip | truncate: 150 -%}
+    <li>
+      <a class="post-card" href="{{ post.url | prepend: site.baseurl }}">
+        <span class="post-card-media">
+          <img src="{{ post.image | default: site.og_image }}"
+               alt="{{ post.title | escape }}"
+               width="1200" height="630" loading="lazy">
+        </span>
+        <span class="post-card-body">
+          <span class="post-card-date">{{ post.date | date: "%b %-d, %Y" }}</span>
+          <span class="post-card-title">{{ post.title | escape }}</span>
+          <span class="post-card-desc">{{ card_desc | escape }}</span>
+        </span>
+      </a>
+    </li>
+    {%- endfor -%}
   </ul>
 
 </div>

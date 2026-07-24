@@ -1,4 +1,4 @@
-// Home page and the post index.
+// Home page: the post index, shown as cards.
 
 /* Home styles */
 /* ----------------------------------------------------------*/
@@ -13,30 +13,96 @@
   margin-top: 0;
 }
 
-.posts { list-style-type: none; }
+/* Post cards */
+/* ----------------------------------------------------------*/
 
-.posts li {
-  margin-bottom: 35px;
+.post-cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px 24px;
 }
 
-.posts .post-link {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--page-text);
-  letter-spacing: -0.3px;
-  line-height: 1.25;
+.post-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   text-decoration: none;
+  color: inherit;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
-.posts .post-link:hover {
-  text-decoration: underline;
+.post-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--ui-border-hover);
 }
 
-.posts .post-date {
+.post-card-media {
+  display: block;
+  /* The figure sits on its own surface so art with a transparent ground still
+     reads cleanly. The 1200x630 attributes hold the box (no load-time jump). */
+  background: var(--ui-surface);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.post-card-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1200 / 630;
+  object-fit: cover;
+  margin: 0;
+}
+
+.post-card-body {
+  display: block;
+  padding: 16px 18px 18px;
+}
+
+.post-card-date {
   display: block;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   color: var(--page-muted);
-  margin-top: 4px;
+  letter-spacing: 0.2px;
+}
+
+.post-card-title {
+  display: block;
+  margin-top: 6px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  line-height: 1.25;
+  color: var(--page-text);
+}
+
+.post-card:hover .post-card-title {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.post-card-desc {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  margin-top: 8px;
+  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--page-subtle);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .post-card { transition: border-color 0.2s ease; }
+  .post-card:hover { transform: none; }
 }

@@ -32,6 +32,11 @@
      light panel so the strokes stay legible. */
   --figure-bg: transparent;
 
+  /* Home cards. A warm paper footer under the figure, one hairline warmer than
+     the page so the card reads as its own object without shouting. */
+  --card-bg: #f5f2ea;
+  --card-border: #e9e4d9;
+
   --ui-surface: #fafafa;
   --ui-surface-active: #f0f0f0;
   --ui-border: #e6e6e6;
@@ -79,6 +84,9 @@
   --link-underline-hover: rgba(255, 255, 255, 0.9);
   --overlay-bg: rgba(22, 23, 26, 0.95);
   --figure-bg: #e6e6e4;
+
+  --card-bg: #1c1e24;
+  --card-border: #2b2e36;
 
   --ui-surface: #1e2026;
   --ui-surface-active: #262931;
