@@ -128,8 +128,6 @@ make_card() {
 
 # Neutral (default) palette — from :root in _sass/_variables.scss
 BG="#ffffff"; TEXT="#232323"; MUTED="#8f8f8f"; TINT="#f7f5f1"
-# Autumn palette — from .theme-autumn
-A_BG="#fdf8f1"; A_TEXT="#2b2620"; A_MUTED="#8a765a"; A_TINT="#f3ebda"
 
 IMG="assets/images"
 
@@ -159,7 +157,7 @@ make_card "programs-run-on-physical-machines" 4 \
 
 make_card "source-your-own-order-flow" 5 \
   "$IMG/integrating-a-bespoke-amm-with-cowswap/fig_pool.svg" \
-  "$A_BG" "$A_TEXT" "$A_MUTED" "$A_TINT"
+  "$BG" "$TEXT" "$MUTED" "$TINT"
 
 # Site default — used for the home page and any page without its own image.
 make_brand_card "default" \
