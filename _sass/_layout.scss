@@ -22,6 +22,11 @@
   border-bottom: 1px solid var(--chrome-border);
   background-color: var(--chrome-bg);
   transition: background-color 0.2s ease, border-color 0.2s ease;
+  /* Sit above the content. A hero post's full-bleed banner is positioned and
+     tucked up 10px (margin-top: -10px), so without this it paints over the
+     header's lower edge and the navbar looks short. */
+  position: relative;
+  z-index: 1;
 }
 
 .site-title,
