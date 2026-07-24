@@ -65,7 +65,7 @@ make_brand_card() {
 
   # Square avatar with softly rounded corners. CopyOpacity turns the white
   # rounded-rectangle mask into alpha, so the corners read as the card background.
-  magick "$avatar" -resize "230x230^" -gravity center -extent 230x230 \
+  magick "$avatar" -resize "230x230^" -gravity north -extent 230x230 \
     \( -size 230x230 xc:black -fill white -draw "roundrectangle 0,0 229,229 20,20" \) \
     -alpha off -compose CopyOpacity -composite "$t/avatar.png"
 
