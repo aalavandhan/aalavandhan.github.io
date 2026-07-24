@@ -4,7 +4,14 @@
 /* ----------------------------------------------------------*/
 
 .home {
-  padding-top: 40px;
+  padding: 40px 0 64px;
+  /* The card gallery breaks out wider than the reading column so three fit per
+     row on a desktop, staying centred on the page (same technique as .wide
+     figures). The grid below collapses it to two columns, then one, as the
+     viewport narrows. */
+  width: min(1080px, 92vw);
+  margin-left: 50%;
+  transform: translateX(-50%);
 }
 
 .home h1 {
@@ -21,8 +28,8 @@
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 28px 24px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 32px 24px;
 }
 
 .post-card {
@@ -35,11 +42,12 @@
   border: 1px solid var(--card-border);
   border-radius: 14px;
   overflow: hidden;
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
+/* Highlight in place on hover — just the outline, no lift or shadow, so the
+   card never shifts under the cursor. */
 .post-card:hover {
-  transform: translateY(-3px);
   border-color: var(--ui-border-hover);
 }
 
@@ -84,12 +92,6 @@
   color: var(--page-text);
 }
 
-.post-card:hover .post-card-title {
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 2px;
-}
-
 .post-card-desc {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -100,9 +102,4 @@
   font-size: 15px;
   line-height: 1.45;
   color: var(--page-subtle);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .post-card { transition: border-color 0.2s ease; }
-  .post-card:hover { transform: none; }
 }

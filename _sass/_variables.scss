@@ -32,10 +32,10 @@
      light panel so the strokes stay legible. */
   --figure-bg: transparent;
 
-  /* Home cards. A warm paper footer under the figure, one hairline warmer than
-     the page so the card reads as its own object without shouting. */
-  --card-bg: #f5f2ea;
-  --card-border: #e9e4d9;
+  /* Home cards. White panel under the figure, set off from the page by a
+     neutral hairline. */
+  --card-bg: #ffffff;
+  --card-border: #e6e6e6;
 
   --ui-surface: #fafafa;
   --ui-surface-active: #f0f0f0;
