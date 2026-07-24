@@ -16,10 +16,16 @@
   var yScale = d3.scaleLinear().domain([0, yMax]).range([ih, 0]);
   var rScale = d3.scaleSqrt().domain([0, d3.max(funds, function(f) { return f.aum || 0; })]).range([3, 24]);
 
-  // Grid
-  g.append('g').selectAll('line').data(yScale.ticks(6)).join('line')
-    .attr('x1', 0).attr('x2', iw).attr('y1', function(d) { return yScale(d); }).attr('y2', function(d) { return yScale(d); })
-    .attr('stroke', '#eee').attr('stroke-width', 0.5);
+  // Grid aligned to the axis ticks — a vertical line at each x-tick and a
+  // horizontal line at each y-tick, so the background lines up with the axes.
+  var gp = g.append('g');
+  gp.selectAll('line.gx').data(xScale.ticks(8)).join('line')
+    .attr('x1', function(d) { return xScale(d); }).attr('x2', function(d) { return xScale(d); })
+    .attr('y1', 0).attr('y2', ih).attr('stroke', '#eeede7').attr('stroke-width', 0.7);
+  gp.selectAll('line.gy').data(yScale.ticks(6)).join('line')
+    .attr('x1', 0).attr('x2', iw)
+    .attr('y1', function(d) { return yScale(d); }).attr('y2', function(d) { return yScale(d); })
+    .attr('stroke', '#eeede7').attr('stroke-width', 0.7);
 
   // Axes
   g.append('g').attr('transform', 'translate(0,' + ih + ')')

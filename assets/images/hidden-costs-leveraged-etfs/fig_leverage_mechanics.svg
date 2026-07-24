@@ -19,16 +19,10 @@
       <rect width="8" height="8" fill="#fef3f7"/>
       <line x1="0" y1="0" x2="0" y2="8" stroke="#c4396e" stroke-width="1.6" stroke-opacity="0.5"/>
     </pattern>
-
-    <!-- Muted graph-paper grid. -->
-    <pattern id="graphpaper" x="30" y="24" width="19" height="19" patternUnits="userSpaceOnUse">
-      <path d="M19 0 H0 V19" fill="none" stroke="#eeede7" stroke-width="0.7" />
-    </pattern>
   </defs>
 
   <!-- Background -->
   <rect width="900" height="500" fill="#ffffff"/>
-  <rect width="900" height="500" fill="url(#graphpaper)"/>
 
   <!-- ======== TITLE ======== -->
   <text x="450" y="36" text-anchor="middle" font-size="19" font-weight="600" fill="#1a1a1a">
