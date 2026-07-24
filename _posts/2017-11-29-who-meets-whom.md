@@ -12,7 +12,7 @@ Most people understand the implications of virtual meetings through emails and p
 
 Multiple systems collect location data at scale. Telecom, tech companies, and [governments](https://www.washingtonpost.com/news/the-switch/wp/2013/12/10/new-documents-show-how-the-nsa-infers-relationships-based-on-mobile-location-data/) log user location with more precision than most people expect.
 
-![Tracking technologies: Cellular location identification, GPS systems, Wi-Fi Localization](/assets/images/who-meets-whom/tracking_technologies.webp)
+![Tracking technologies: Cellular location identification, GPS systems, Wi-Fi Localization](/assets/images/who-meets-whom/tracking_technologies.webp){: width="1666" height="500"}
 
 Google [was found to be collecting](https://www.theverge.com/2017/11/21/16684818/google-location-tracking-cell-tower-data-android-os-firebase-privacy) location data from Android devices even when GPS was explicitly turned off, potentially affecting over two billion monthly active users worldwide.
 

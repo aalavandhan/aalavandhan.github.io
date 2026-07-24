@@ -13,14 +13,14 @@ We write functions, prove invariants, compose abstractions. The work *feels* lik
 
 Programs run on physical machines. They flip bits in physical memory, spin disks, wear out flash cells. They push pixels onto displays, heat up processors, draw power from grids. Every function call is a tiny physical event — transistors switch, heat escapes into the air, current is drawn from the grid.
 
-![Physical landscape of a function call](/assets/images/programs-run-on-physical-machines/fig_landscape.svg)
+![Physical landscape of a function call](/assets/images/programs-run-on-physical-machines/fig_landscape.svg){: width="680" height="370"}
 *From fuel to grid to silicon to heat. Every time.*
 
 The abstraction is so neat that we forget the messy atoms underneath. But physics doesn't disappear. And all physical objects break down.
 
 Code doesn't age. Computers do.
 
-![Physical cascade of a single function call](/assets/images/programs-run-on-physical-machines/fig_cascade.svg)
+![Physical cascade of a single function call](/assets/images/programs-run-on-physical-machines/fig_cascade.svg){: width="680" height="534"}
 *What a single `add(a, b)` does to the machine.*
 
 Modern infrastructure has gotten spectacularly good at hiding this.
@@ -31,7 +31,7 @@ And so you start believing your code is timeless. Same input, same program, same
 
 Then one day your AWS bill jumps 3x.
 
-![AWS monthly bill](/assets/images/programs-run-on-physical-machines/fig_aws_bill.svg)
+![AWS monthly bill](/assets/images/programs-run-on-physical-machines/fig_aws_bill.svg){: width="520" height="320"}
 *Wait what?*
 
 I rage-open the billing console to find the EC2 generation my instances ran on was being retired. The hardware had aged out.

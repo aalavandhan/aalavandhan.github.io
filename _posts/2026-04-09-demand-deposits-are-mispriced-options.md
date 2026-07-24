@@ -25,7 +25,7 @@ The traditional fix is [statistical pooling](https://www.investopedia.com/terms/
 
 Until a panic hits, everyone wants out at once, the buffer isn't sized for it, and the central bank steps in as [lender of last resort](https://www.investopedia.com/terms/l/lenderoflastresort.asp). The mismatch doesn't go away — the loss just gets passed up the stack, from depositor to bank equity to FDIC to central bank to taxpayer. (*Credit risk, operational risk, market risk all matter too, but duration is the structural one — it exists even when every loan performs.*)
 
-![Duration risk stack](/assets/images/demand-deposits-are-mispriced-options/fig_duration_stack.svg)
+![Duration risk stack](/assets/images/demand-deposits-are-mispriced-options/fig_duration_stack.svg){: width="500" height="473"}
 *Loss runs up the stack. The top layer has no one above it.*
 
 ## Demand deposits are puts
@@ -34,7 +34,7 @@ Depositors hold the right to convert their balance into cash on demand at face v
 
 Each deposit is a perpetual [American put](https://www.investopedia.com/terms/p/putoption.asp) on the bank's solvency, struck at par. It's what protects depositors when the bank's assets fall below par. They still get par, and the loss runs up the stack: bank equity, then FDIC, then Fed, then taxpayer.
 
-![Put payoff diagram](/assets/images/demand-deposits-are-mispriced-options/fig_put_payoff.svg)
+![Put payoff diagram](/assets/images/demand-deposits-are-mispriced-options/fig_put_payoff.svg){: width="500" height="360"}
 *Losses keep running up the stack.*
 
 Depositors are shopping for an APY, not pricing a put. The APY is set downstream of central bank rates, not by what the put is actually worth.

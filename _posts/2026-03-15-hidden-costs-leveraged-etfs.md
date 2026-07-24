@@ -11,7 +11,7 @@ image: /assets/images/og/hidden-costs-leveraged-etfs.png
 
 Most people believe, 2x LETF gives them 2x returns. In practice though, most of these funds underperform the underlying, even over periods where the underlying asset is consistently going up in value.
 
-![BTC vs 2x LETF](/assets/images/hidden-costs-leveraged-etfs/fig_btc_2x_underperformance.svg)
+![BTC vs 2x LETF](/assets/images/hidden-costs-leveraged-etfs/fig_btc_2x_underperformance.svg){: width="720" height="370"}
 *Double the leverage, less return.*
 
 The standard explanation is [volatility drag](https://www.investopedia.com/articles/financial-advisors/082515/why-leveraged-etfs-are-not-longterm-bet.asp): daily leverage resets lose ground in choppy markets. That's real, but it's only half the story. The other half is [financing drag](https://www.etf.com/sections/features/leveraged-etfs-hidden-costs-eat-your-returns-0). It doesn't appear in the [expense ratio](https://www.investopedia.com/terms/e/expenseratio.asp). It isn't disclosed in any standardized way.
@@ -20,7 +20,7 @@ The standard explanation is [volatility drag](https://www.investopedia.com/artic
 
 A 3x fund with $100 of investor capital needs $300 of exposure. The extra $200 comes from [total return swaps](https://www.investopedia.com/terms/t/totalreturnswap.asp) with dealers. The dealer provides the leverage and charges a financing rate.
 
-![How a 3x LETF creates leverage](/assets/images/hidden-costs-leveraged-etfs/fig_leverage_mechanics.svg)
+![How a 3x LETF creates leverage](/assets/images/hidden-costs-leveraged-etfs/fig_leverage_mechanics.svg){: width="900" height="500"}
 
 That rate never shows up in the expense ratio. It shows up in the price chart. [We measured it](https://drive.google.com/file/d/14E0phxNhliy_Qc-kBPPbRAkaedBxe3ma/view) across 109 long-only LETFs covering $125 billion in assets. For each fund, we compared the actual return against what a version borrowing at the [risk-free rate](https://www.investopedia.com/terms/r/risk-freerate.asp) would have delivered, net of stated expenses. The residual is the [financing premium](https://drive.google.com/file/d/14E0phxNhliy_Qc-kBPPbRAkaedBxe3ma/view), or the hidden cost of leverage.
 
@@ -72,7 +72,7 @@ TQQQ grew to $29 billion and the premium barely budged in 15 years. When the und
 
 [TQQQ](https://finance.yahoo.com/quote/TQQQ/) is the largest and oldest 3x fund. It's had a great run. But compare it to what a 3x QQQ portfolio would have done if it could borrow at the risk-free rate — same leverage, no financing premium.
 
-![TQQQ vs zero-premium 3x QQQ](/assets/images/hidden-costs-leveraged-etfs/fig_letf_decomposition.svg)
+![TQQQ vs zero-premium 3x QQQ](/assets/images/hidden-costs-leveraged-etfs/fig_letf_decomposition.svg){: width="720" height="370"}
 
 That gap is the financing premium compounding over 16 years. It doesn't look like much in any single year. But a small annual drag, reinvested against you for a decade and a half, eats roughly half the total return.
 
