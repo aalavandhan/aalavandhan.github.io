@@ -44,10 +44,14 @@ layout: default
 (function() {
   var svgs = document.querySelectorAll('.post-content img[src$=".svg"]');
 
-  // Blank out content SVGs initially to prevent load animation
+  // Blank out content SVGs initially to prevent load animation. The placeholder
+  // carries the figure's aspect ratio (from its width/height attributes) so the
+  // box keeps its reserved height and the page doesn't jump while the real SVG
+  // is swapped out.
   svgs.forEach(function(img) {
     img.dataset.src = img.getAttribute('src');
-    img.setAttribute('src', 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"/>');
+    var w = img.getAttribute('width') || 3, h = img.getAttribute('height') || 2;
+    img.setAttribute('src', 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '"/>');
   });
 
   var observer = new IntersectionObserver(function(entries) {
