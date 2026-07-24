@@ -53,6 +53,7 @@
 
 .post-card-media {
   display: block;
+  position: relative;
   /* The figure sits on its own surface so art with a transparent ground still
      reads cleanly. The 1200x630 attributes hold the box (no load-time jump). */
   background: var(--ui-surface);
@@ -66,6 +67,23 @@
   aspect-ratio: 1200 / 630;
   object-fit: cover;
   margin: 0;
+}
+
+/* Subtle post number tucked in the top-left corner. The translucent pill keeps
+   it legible over whatever part of the figure sits behind it. */
+.post-card-num {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 2px 9px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.82);
+  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  color: var(--page-muted);
+  pointer-events: none;
 }
 
 .post-card-body {

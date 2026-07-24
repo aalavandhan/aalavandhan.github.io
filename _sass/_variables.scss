@@ -33,9 +33,9 @@
   --figure-bg: transparent;
 
   /* Home cards. White panel under the figure, set off from the page by a
-     neutral hairline. */
+     faint hairline (a darker outline appears on hover). */
   --card-bg: #ffffff;
-  --card-border: #e6e6e6;
+  --card-border: #eeeeee;
 
   --ui-surface: #fafafa;
   --ui-surface-active: #f0f0f0;
@@ -86,7 +86,7 @@
   --figure-bg: #e6e6e4;
 
   --card-bg: #1c1e24;
-  --card-border: #2b2e36;
+  --card-border: #26282e;
 
   --ui-surface: #1e2026;
   --ui-surface-active: #262931;
