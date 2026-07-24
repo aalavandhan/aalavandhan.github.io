@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="South Indian filter coffee">
+  <!-- tumbler -->
+  <path d="M21 16 L43 16 L39.5 40 L24.5 40 Z" fill="#c1922f"/>
+  <path d="M21 16 L27 16 L25.4 40 L24.5 40 Z" fill="#d9ad50"/>
+  <path d="M43 16 L39.5 40 L37.5 40 L41 16 Z" fill="#a67a24"/>
+
+  <!-- froth -->
+  <path d="M19.5 16 Q19.5 10 32 9.2 Q44.5 10 44.5 16 Q44.5 18.6 32 18.6 Q19.5 18.6 19.5 16 Z" fill="#efe3c7"/>
+  <path d="M22.5 13.8 Q26.5 11 32 10.8 Q37.5 11 41.5 13.8 Q37 12.6 32 12.6 Q27 12.6 22.5 13.8 Z" fill="#faf3e0"/>
+
+  <!-- davara (bowl) -->
+  <path d="M4 37 Q4 41 9.5 41 Q11.5 55.5 32 55.5 Q52.5 55.5 54.5 41 Q60 41 60 37 Z" fill="#c1922f"/>
+  <path d="M10.5 41 Q12.5 52.5 32 52.5 Q51.5 52.5 53.5 41 Q43 44 32 44 Q21 44 10.5 41 Z" fill="#a3781f" opacity="0.55"/>
+  <path d="M4 37 L60 37 Q60 39.7 54.5 39.7 L9.5 39.7 Q4 39.7 4 37 Z" fill="#e2bb5f"/>
+</svg>
