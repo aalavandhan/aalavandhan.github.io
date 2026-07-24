@@ -70,12 +70,12 @@
   <text class="code" x="252" y="352" font-size="16" fill="#5a4a36">GPv2Settlement.settle(batch)</text>
   <text x="1024" y="351" text-anchor="end" font-size="12.5" fill="#b79a72">the batch settles, inside the loan</text>
 </g>
-<!-- 5: AmmCowSwapper.provideInventory() -->
+<!-- 5: AmmCowPublisher.provideInventory() -->
 <g>
   <rect x="272" y="373" width="768" height="33" rx="7" fill="#fdf6ea" stroke="#e7d6ba" stroke-width="1.4"/>
   <rect class="hl hl5" x="272" y="373" width="768" height="33" rx="7" fill="#f2d6a6"/>
   <rect x="279" y="380" width="4" height="19" rx="2" fill="#7d8a34"/>
-  <text class="code" x="292" y="395" font-size="16" fill="#5a4a36">AmmCowSwapper.provideInventory()</text>
+  <text class="code" x="292" y="395" font-size="16" fill="#5a4a36">AmmCowPublisher.provideInventory()</text>
   <text x="1024" y="394" text-anchor="end" font-size="12.5" fill="#b79a72">pre-hook</text>
 </g>
 <!-- 6: MorphoFlashLoanRouter.takeLoan(USD) -->
@@ -94,12 +94,12 @@
   <text class="code" x="332" y="481" font-size="16" fill="#5a4a36">Amm.swap(USD &#8594; BTC)</text>
   <text x="1024" y="480" text-anchor="end" font-size="12.5" fill="#b79a72">fill from the AMM</text>
 </g>
-<!-- 8: AmmCowSwapper.isValidSignature() -->
+<!-- 8: AmmCowPublisher.isValidSignature() -->
 <g>
   <rect x="272" y="502" width="768" height="33" rx="7" fill="#fdf6ea" stroke="#e7d6ba" stroke-width="1.4"/>
   <rect class="hl hl8" x="272" y="502" width="768" height="33" rx="7" fill="#f2d6a6"/>
   <rect x="279" y="509" width="4" height="19" rx="2" fill="#7d8a34"/>
-  <text class="code" x="292" y="524" font-size="16" fill="#5a4a36">AmmCowSwapper.isValidSignature()</text>
+  <text class="code" x="292" y="524" font-size="16" fill="#5a4a36">AmmCowPublisher.isValidSignature()</text>
   <text x="1024" y="523" text-anchor="end" font-size="12.5" fill="#b79a72">ERC-1271 · CoW delivers BTC</text>
 </g>
 <!-- 9: Morpho pulls USD -->

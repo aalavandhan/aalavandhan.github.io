@@ -1,30 +1,28 @@
 {% raw %}
 ```javascript
-/// @title AmmCowSwapper
-/// @notice Publishes an AMM's own intent to trade into CoW Protocol: it signs
+/// @title AmmCowPublisher
+/// @notice Publishes an AMM's own intent to trade into CoW Protocol: signs
 ///         fill-or-kill orders via ERC-1271, sources the sell inventory from the
 ///         AMM against a flash-borrowed counter-leg, and returns what it captures.
 /// @dev Holds no working capital — the counter-leg is borrowed per settlement and
-///      the fill repays it in the same tx. An unrepayable draw fails the lender's
-///      pull and reverts the batch, so the borrow needs no bound here.
+///      the fill repays it in the same tx; an unrepayable draw reverts the batch.
 /// @dev The price floor (`_checkOrder`) only prevents a drain: it caps a
-///      solver-authored fill at the AMM's own `quote`. It does not capture
-///      surplus — this contract reads the AMM, never the live market, so routing
-///      the surplus is the CoW batch auction's job.
-contract AmmCowSwapper is IConditionalOrder, IERC1271, Ownable {
+///      solver-authored fill at the AMM's own `quote`. It never captures surplus
+///      — this contract reads the AMM, not the market, so routing surplus is the
+///      batch auction's job.
+contract AmmCowPublisher is IConditionalOrder, IERC1271, Ownable {
   /// @notice ERC-1271 "signature valid" magic value.
   bytes4 internal constant MAGIC_VALUE = IERC1271.isValidSignature.selector;
 
   /// @notice Fixed salt for the one ComposableCoW registration.
-  bytes32 public constant SALT = keccak256('AmmCowSwapper');
+  bytes32 public constant SALT = keccak256('AmmCowPublisher');
 
   /// @notice The AMM being published.
   IAmm public amm;
 
-  /// @notice Borrower the pre-hook draws the counter-leg from; also the order's
-  ///         `receiver`.
-  /// @dev Must have allowlisted this swapper via `setReceiver` — proceeds land
-  ///      there because that is where the lender pulls repayment from.
+  /// @notice Borrower the pre-hook draws the counter-leg from, and the order's
+  ///         `receiver`. Must have allowlisted this contract via `setReceiver`,
+  ///         since that is where the lender pulls repayment from.
   FlashLoanRouter public flashRouter;
 
   // … remaining storage, errors and modifiers elided …
@@ -73,14 +71,12 @@ contract AmmCowSwapper is IConditionalOrder, IERC1271, Ownable {
 
   /// @notice Pre-hook: draws the flash-borrowed counter-leg and sources the
   ///         order's `sellAmount` of inventory from the AMM against it.
-  /// @dev Trampoline-only. All args are solver-supplied but bounded: the AMM swap
+  /// @dev Trampoline-only. Every arg is solver-supplied but bounded: the AMM swap
   ///      gates `inputAmount` by direction, capacity and min-out, and the lender
-  ///      reverts a draw the fill can't return. `takeLoan` reverts outside a live
-  ///      loan, so the borrowed token arriving here is itself proof the loan ran.
-  /// @dev Returns prior settlements' surplus to the AMM (`_settleToAmm`) before it
-  ///      sources, so only this settlement's inventory is left for the relayer to
-  ///      pull. MUST precede `takeLoan`, or the sweep would take the borrowed
-  ///      counter-leg.
+  ///      reverts a draw the fill can't repay.
+  /// @dev Returns prior settlements' surplus to the AMM first (`_settleToAmm`), so
+  ///      only this settlement's inventory is left to pull. MUST precede
+  ///      `takeLoan`, or the sweep would take the borrowed counter-leg.
   function provideInventory(
     uint256 inputAmount,
     uint256 sellAmount,
@@ -117,17 +113,15 @@ contract AmmCowSwapper is IConditionalOrder, IERC1271, Ownable {
   // Internal
 
   /// @dev Pins every solver-variable order field. Structural: receiver, fill-or-
-  ///      kill sell, zero fee, unexpired, plain ERC20 balances, an AMM token pair.
-  ///      Amounts: jointly, via the price floor — `buyAmount` at or above the
-  ///      AMM's live quote for `sellAmount`.
-  /// @dev The floor is the only on-chain price gate: the signature isn't bound to
-  ///      what the keeper posted, so a solver could self-author a `buyAmount ≈ 0`
-  ///      order and drain the sourced inventory. `quote` scales the floor with the
-  ///      order's own `sellAmount`, capping the worst fill at the AMM's own rate —
-  ///      capping the drain, not capturing surplus.
-  /// @dev Reads only the order and `block.timestamp` (for expiry), never
-  ///      settlement-specific state, so the orderbook's submission `eth_call`
-  ///      accepts a well-formed order and it stays acceptable until it expires.
+  ///      kill sell, zero fee, unexpired, plain ERC20 balances, the AMM pair.
+  ///      Price: `buyAmount` at or above the AMM's `quote` for `sellAmount`.
+  /// @dev The floor is the only on-chain price gate. The signature isn't bound to
+  ///      what the keeper posted, so without it a solver could self-author a
+  ///      `buyAmount ≈ 0` order and drain the sourced inventory; `quote` scales
+  ///      the floor with `sellAmount`, capping the worst fill at the AMM's rate.
+  /// @dev Reads only the order and `block.timestamp`, never settlement state, so
+  ///      the orderbook's submission `eth_call` accepts a well-formed order and it
+  ///      stays acceptable until it expires.
   function _checkOrder(GPv2Order.Data memory order) internal view {
     if (order.receiver != address(flashRouter)) revert InvalidOrder('receiver');
 
@@ -143,9 +137,9 @@ contract AmmCowSwapper is IConditionalOrder, IERC1271, Ownable {
     }
   }
 
-  /// @dev Fill-or-kill sell order, sized and floored by `amm.previewSwap()`. The
-  ///      order enters the batch as a market order with the AMM's quote as its
-  ///      floor: a solver may fill it better, never worse.
+  /// @dev Fill-or-kill sell, sized and floored by `amm.previewSwap()`. It enters
+  ///      the batch as a market order with the AMM's quote as its floor: a solver
+  ///      may fill it better, never worse.
   function _buildOrder(
     bytes32 appData
   ) internal view returns (GPv2Order.Data memory order) {

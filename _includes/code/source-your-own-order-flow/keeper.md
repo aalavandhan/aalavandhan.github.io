@@ -1,19 +1,18 @@
 {% raw %}
 ```typescript
 /**
- * Keeper: polls the AMM, builds the order the swapper would sign, and posts it
+ * Keeper: polls the AMM, builds the order the publisher would sign, and posts it
  * to CoW's orderbook with the recipe a solver needs to settle it.
  *
- * The swapper holds no working capital: its sell side is created inside the
- * settlement, when the pre-hook draws the flash-borrowed counter-leg and hands
- * it to the AMM. Direction, `sellAmount` and the price floor all come off the
- * AMM's own `previewSwap` / `quote`, so what we post matches what the contract
- * would sign.
+ * The publisher holds no working capital — its sell side is created inside the
+ * settlement, when the pre-hook draws the flash-borrowed counter-leg and hands it
+ * to the AMM. Direction, `sellAmount` and the floor all come off the AMM's own
+ * `previewSwap` / `quote`, so what we post matches what the contract would sign.
  *
- * Every field a solver could vary is bounded on-chain: the borrower pins the
- * lender, and the swapper's ERC-1271 pins the receiver, the pair and the price
- * floor. The preflight below runs that same `isValidSignature` before posting,
- * because the orderbook's rate limit is strict and a rejection is deterministic.
+ * Every solver-variable field is bounded on-chain (the loan router pins the
+ * lender; the publisher's ERC-1271 pins the receiver, pair and floor). The
+ * preflight re-runs that same `isValidSignature` before posting, since the
+ * orderbook's rate limit is strict and rejections are deterministic.
  */
 
 const SETTLEMENT = '0x9008D19f58AAbD9eD0D60971565AA8510560ab41';
@@ -21,6 +20,10 @@ const SETTLEMENT = '0x9008D19f58AAbD9eD0D60971565AA8510560ab41';
 const MORPHO = '0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb';
 
 const API = 'https://api.cow.fi/mainnet/api/v1';
+
+// The two contracts you deploy for this AMM — set both before running.
+const swapperAddr = '0x…'; // AmmCowPublisher: reads the AMM and signs the order
+const loanRouterAddr = '0x…'; // MorphoFlashLoanRouter: funds and repays the settlement
 
 /// GPv2Order.Data in EIP-712 field order — the ERC-1271 signature payload.
 const ORDER_TUPLE =
@@ -35,15 +38,13 @@ const [sellTokenAddr, buyTokenAddr] = sellingTokenA
   ? [tokenAAddr, tokenBAddr]
   : [tokenBAddr, tokenAAddr];
 
-// `buyAmount` is the swapper's own ERC-1271 floor. Quoting below it is rejected
-// by `_checkOrder`, so it is read straight off the AMM.
+// `buyAmount` is the publisher's ERC-1271 floor — anything lower is rejected by
+// `_checkOrder`, so it's read straight off the AMM.
 const buyAmount: bigint = await amm.quote(sellTokenAddr, sellAmount);
 
 // The draw is the flash-borrowed counter-leg the pre-hook hands the AMM,
-// denominated in the buy token. The AMM swap must return at least `sellAmount`
-// from it, and the fill must return at least the draw to repay the lender — so
-// the draw sits between the two, and where exactly depends on the AMM leg's own
-// loss, which differs by direction.
+// denominated in the buy token. Its size sits between two bounds: the AMM swap
+// must yield at least `sellAmount`, and the fill must repay at least the draw.
 const loanAmount: bigint = args.loan ? BigInt(args.loan) : buyAmount;
 
 // The pre-hook that sources the inventory, run by the solver inside the batch.
@@ -62,16 +63,17 @@ const hooks = {
   post: [],
 };
 
-// The execution recipe: which lender to draw from, which contract adapts the
-// callback, and the hooks to run. CIP-66 lets a solver pick this up natively.
+// The execution recipe: the lender to draw from, the loan router that adapts its
+// callback and receives the funds, and the hooks. CIP-66 lets a solver pick this
+// up natively.
 const appDataDoc = {
   version: '1.3.0',
-  appCode: 'amm-cow-swapper',
+  appCode: 'amm-cow-publisher',
   metadata: {
     flashloan: {
       liquidityProvider: MORPHO,
-      protocolAdapter: borrowerAddr,
-      receiver: borrowerAddr,
+      protocolAdapter: loanRouterAddr,
+      receiver: loanRouterAddr,
       token: buyTokenAddr,
       amount: loanAmount.toString(),
     },
@@ -84,7 +86,7 @@ const appDataHash = keccak256(toUtf8Bytes(appDataStr));
 const order = {
   sellToken: sellTokenAddr,
   buyToken: buyTokenAddr,
-  receiver: borrowerAddr,
+  receiver: loanRouterAddr,
   sellAmount: sellAmount.toString(),
   buyAmount: buyAmount.toString(),
   validTo,
@@ -98,15 +100,15 @@ const order = {
 
 const digest = TypedDataEncoder.hash(DOMAIN, ORDER_TYPE, order);
 
-// ERC-1271: the swapper decodes this ABI-encoded order in isValidSignature.
-// There is no private key anywhere — the contract IS the signer.
+// ERC-1271: the publisher decodes this ABI-encoded order in isValidSignature.
+// There's no private key anywhere — the contract IS the signer.
 const signature = AbiCoder.defaultAbiCoder().encode(
   [ORDER_TUPLE],
   [
     [
       sellTokenAddr,
       buyTokenAddr,
-      borrowerAddr,
+      loanRouterAddr,
       sellAmount,
       buyAmount,
       validTo,
@@ -120,9 +122,9 @@ const signature = AbiCoder.defaultAbiCoder().encode(
   ]
 );
 
-// … preflight: borrower allowlists the swapper, floor covers the principal, the
-//     AMM still offers this direction and size, relayer allowance stands, and
-//     the swapper's own ERC-1271 accepts this exact order …
+// … preflight: the loan router allowlists the publisher, the floor covers the
+//     principal, the AMM still offers this direction and size, the relayer
+//     allowance stands, and the publisher's ERC-1271 accepts this exact order …
 
 // POST /orders registers the appData document itself when `appData` carries the
 // full JSON, so a separate PUT /app_data is redundant.

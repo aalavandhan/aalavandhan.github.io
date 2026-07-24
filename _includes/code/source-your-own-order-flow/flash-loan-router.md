@@ -3,9 +3,8 @@
 /// @title IMorpho
 /// @notice The Morpho Blue flash-loan surface.
 /// @dev Morpho pushes `assets` to the caller, invokes `onMorphoFlashLoan`, then
-///      pulls `assets` back by `transferFrom` — the caller must hold `assets` and
-///      have approved Morpho by the time the callback returns. No premium:
-///      `assets` in equals `assets` out.
+///      pulls `assets` back — the caller must hold and have approved `assets` by
+///      the time the callback returns. No premium: in equals out.
 interface IMorpho {
   /// @notice Flash-borrows `assets` of `token` to the caller.
   function flashLoan(
@@ -17,15 +16,13 @@ interface IMorpho {
 
 /// @title MorphoFlashLoanRouter
 /// @notice Sources Morpho Blue liquidity for a CoW settlement, lending it to an
-///         allowlisted receiver for the duration and repaying itself.
-/// @dev CoW's Borrower role for one lender (each lender's callback differs). What
-///      makes it usable by a third party: completing the loan needs no
-///      solver-authored settlement interactions — Morpho pushes the loan to its
-///      caller, and the CoW order names this contract as `receiver`, so proceeds
-///      land where Morpho is already approved to pull from.
-/// @dev INVARIANT: holds no balance of the borrowed token between txs. It transits
-///      within one settlement and any surplus is swept to the receiver that took
-///      it. Not custody.
+///         allowlisted receiver for the settlement and repaying itself.
+/// @dev CoW's Borrower role for one lender. Usable by a third party because
+///      completing the loan needs no solver-authored interactions: Morpho pushes
+///      the loan to its caller, and the CoW order names this contract as
+///      `receiver`, so proceeds land where Morpho is already approved to pull.
+/// @dev INVARIANT: never holds the borrowed token between txs — it transits one
+///      settlement and any surplus is swept to the receiver. Not custody.
 contract MorphoFlashLoanRouter is Ownable {
   using SafeERC20 for IERC20;
 
@@ -37,24 +34,22 @@ contract MorphoFlashLoanRouter is Ownable {
   /// @notice Contracts permitted to borrow through this router.
   mapping(address => bool) public isReceiver;
 
-  /// @notice Token borrowed in the settlement currently in flight.
+  /// @notice Token borrowed in the in-flight settlement.
   /// @dev Transient: Morpho's callback reports `assets` but not the token.
   address private transient loanToken;
-  /// @notice Receiver that took the loan in the settlement currently in flight.
-  /// @dev Transient, and the sweep's destination. Written only by `takeLoan`, so
-  ///      it can only ever name an allowlisted contract.
+  /// @notice Receiver that took the in-flight loan, and the sweep's destination.
+  /// @dev Transient. Written only by `takeLoan`, so it can only ever name an
+  ///      allowlisted contract.
   address private transient activeReceiver;
 
   // … constructor, errors, events and `setReceiver` elided …
 
   /// @notice Takes a Morpho flash loan and hands control back to the CoW router.
   /// @dev `lender_`, `token` and `amount` come from the order's appData and are
-  ///      solver-influenced. Pinning `lender_` keeps a solver from pointing this
-  ///      contract at a lender of their choosing; an `amount` the settlement can't
-  ///      return fails Morpho's pull and reverts, so it needs no bound. One loan
-  ///      per settlement: the CoW router borrows a multi-loan array by nesting
-  ///      each callback inside the last, which would overwrite the token and
-  ///      receiver this one still needs on the way out.
+  ///      solver-influenced. Pinning `lender_` stops a solver from pointing us at
+  ///      their own lender; an `amount` the settlement can't repay fails Morpho's
+  ///      pull, so it needs no bound. One loan per settlement — nested callbacks
+  ///      would overwrite the token and receiver this one still needs on exit.
   function flashLoanAndCallBack(
     address lender_,
     IERC20 token,
@@ -70,10 +65,10 @@ contract MorphoFlashLoanRouter is Ownable {
   }
 
   /// @notice Lends `amount` of the in-flight loan to the calling receiver.
-  /// @dev Callable by an allowlisted receiver from its CoW pre-hook, the one frame
-  ///      in a settlement where a receiver is `msg.sender`. The caller becomes the
-  ///      sweep's destination; a second, different receiver is rejected so the
-  ///      destination can't change mid-settlement.
+  /// @dev Callable by an allowlisted receiver from its CoW pre-hook — the one
+  ///      frame where a receiver is `msg.sender`. The caller becomes the sweep's
+  ///      destination; a different second receiver is rejected so it can't change
+  ///      mid-settlement.
   function takeLoan(uint256 amount) external {
     if (!isReceiver[msg.sender]) revert UnauthorizedCall();
 
@@ -86,10 +81,9 @@ contract MorphoFlashLoanRouter is Ownable {
   /// @notice Morpho's callback: runs the settlement, sweeps the surplus, then
   ///         authorizes repayment.
   /// @dev The settlement runs inside this call, so the receiver draws the loan and
-  ///      the proceeds arrive before it returns. Reverts `LoanNotTaken` when
-  ///      nothing drew the loan, since the surplus would then have no owner and no
-  ///      way out. Morpho pulls immediately after, so an unreturned loan reverts
-  ///      the transaction.
+  ///      the proceeds arrive before it returns. Reverts `LoanNotTaken` if nothing
+  ///      drew the loan (the surplus would have no owner). Morpho pulls right
+  ///      after, so an unreturned loan reverts the tx.
   function onMorphoFlashLoan(uint256 assets, bytes calldata data) external {
     if (msg.sender != lender) revert UnauthorizedCall();
 

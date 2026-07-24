@@ -42,7 +42,7 @@ In our [latest iteration](https://2factor.finance) we built an integration with 
 <blockquote class="callout">
   <p class="how-label">{% include icons/gear.svg %}How it works</p>
   <p>Instead of waiting and praying for order flow, the AMM publishes its own intent to trade into CoW's batch auction for any solver to fill.</p>
-  <p>Flash loans handle atomic, multi-party settlement between the AMM and takers from the CoW network.</p>
+  <p>Flash loans handle atomic, multi-party settlement between the AMM and counterparties from the CoW network.</p>
 </blockquote>
 
 <div class="pieces">
@@ -62,7 +62,7 @@ In our [latest iteration](https://2factor.finance) we built an integration with 
 
 **Permissionless.** No connector, no listing, no approval. Your order goes straight into CoW's public orderbook, live the moment you deploy.
 
-**Surplus capture.** CoW settles in a batch auction where solvers compete to return the most surplus. Your order enters floored at the AMM's own quote, so a solver wins only by beating it. Because your own contract is the receiver, everything above that floor flows back to the pool instead of leaking to whoever routed the fill. Incentives stay aligned: the solver takes its nominal batch fee, and the surplus goes to your LPs.
+**Surplus capture.** CoW settles in a batch auction where solvers compete to return the most surplus. Because your order is floored at the AMM's own quote and names your own contract as receiver, a solver wins only by beating that floor, and everything above it flows back to the pool. Incentives stay aligned: the solver takes its nominal batch fee, and the surplus goes to your LPs.
 
 **No upfront capital.** Someone has to front the USD to buy the BTC the pool is selling. The flash loan supplies it just in time and is repaid from the swap proceeds within the same settlement, so no one (not the AMM, not the solver) has to lock up inventory to be the counterparty. CoW supports this natively via [CIP-66](https://forum.cow.fi/t/cip-66-flash-loan-router-integration/2939).
 
