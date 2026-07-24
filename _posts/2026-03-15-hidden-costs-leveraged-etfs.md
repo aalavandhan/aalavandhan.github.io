@@ -3,7 +3,7 @@ layout: post
 title: "Hidden cost of leverage in LETFs"
 date: 2026-03-15
 categories: finance research
-description: "Leveraged ETFs have exploded among retail. Beneath the daily-reset mechanics sits a hidden cost — volatility decay and financing — that quietly erodes long-run returns."
+description: "A small annual drag, reinvested for over a decade, eats half the total return."
 image: /assets/images/og/hidden-costs-leveraged-etfs.png
 ---
 

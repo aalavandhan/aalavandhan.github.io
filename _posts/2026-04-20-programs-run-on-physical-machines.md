@@ -3,7 +3,7 @@ layout: post
 title: "Programs run on physical machines"
 date: 2026-04-20
 categories: programming
-description: "Programmers cosplay mathematicians, but every function call cascades through fuel, the grid, and silicon. A look at the physical machine underneath the abstraction."
+description: "Code doesn't age. Computers do — and entropy eventually sends an invoice."
 image: /assets/images/og/programs-run-on-physical-machines.png
 ---
 

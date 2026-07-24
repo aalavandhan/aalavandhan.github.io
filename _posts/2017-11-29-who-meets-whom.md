@@ -4,7 +4,7 @@ title: "Who Meets Whom"
 subtitle: "The Privacy Cost of Location Data"
 date: 2017-11-29
 categories: privacy research
-description: "We assume our physical meetings stay private. But location data can reconstruct who met whom, when, and where — at a far larger privacy cost than most people assume."
+description: "Location data alone can reconstruct who you know, where you go, and when you meet."
 image: /assets/images/og/who-meets-whom.png
 ---
 

@@ -3,7 +3,7 @@ layout: post
 title: "Demand deposits are mispriced options"
 date: 2026-04-09
 categories: finance
-description: "A demand deposit is really a short put on the bank's assets — written by depositors, backstopped by the FDIC and the taxpayer — and almost nobody prices it that way."
+description: "Depositors get a subsidized lunch, and nobody sees the itemized bill."
 image: /assets/images/og/demand-deposits-are-mispriced-options.png
 ---
 
