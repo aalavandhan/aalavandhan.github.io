@@ -26,7 +26,7 @@
   ]]></style>
 </defs>
 
-<rect x="0" y="0" width="1120" height="640" fill="#fdf8f1"/>
+<!-- transparent outer background (was fill #fdf8f1) -->
 
 <!-- left: pool reserves -->
 <rect x="70" y="150" width="390" height="380" rx="16" fill="#fdf6ea" stroke="#e6d3b3" stroke-width="1.6"/>

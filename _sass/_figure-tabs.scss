@@ -54,7 +54,9 @@
   margin: 0 0 40px;
   width: 100%;
   aspect-ratio: 1120 / 532;
-  background: var(--ui-surface);
+  /* Light mode: transparent so the figures sit on the page rather than a cream
+     panel. Dark mode still needs the light --figure-bg backing (below). */
+  background: transparent;
   border: 1px solid var(--ui-border);
   border-radius: 10px;
   overflow: hidden;

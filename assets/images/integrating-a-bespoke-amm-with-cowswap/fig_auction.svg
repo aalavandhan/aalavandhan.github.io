@@ -22,7 +22,7 @@
   ]]></style>
 </defs>
 
-<rect x="0" y="0" width="1120" height="640" fill="#fdf8f1"/>
+<!-- transparent outer background (was fill #fdf8f1) -->
 
 <text x="72" y="132" font-size="24" font-weight="700">Atomic settlement</text>
 
