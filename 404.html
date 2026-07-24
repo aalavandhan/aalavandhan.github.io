@@ -4,22 +4,88 @@ layout: page
 ---
 
 <style type="text/css" media="screen">
-  .container {
-    margin: 10px auto;
-    max-width: 600px;
-    text-align: center;
-  }
-  h1 {
-    margin: 30px 0;
-    font-size: 4em;
-    line-height: 1;
-    letter-spacing: -1px;
+  .nf { max-width: 720px; margin: 40px auto 60px; text-align: center; }
+  .nf-scope { width: 100%; max-width: 560px; height: auto; display: block; margin: 0 auto; }
+  .nf-glyph { fill: #292929; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 700; }
+  .nf-ring-strong { fill: none; stroke: #292929; stroke-width: 3; }
+  .nf-ring-faint { fill: none; stroke: #e0e0e0; stroke-width: 2; }
+  .nf-cross { stroke: #e6e6e6; stroke-width: 2; }
+  .nf-dot { fill: #292929; }
+
+  /* Rotate/scale about the scope centre. An unpainted full-radius circle sits in
+     each animated group so its geometry box is centred on the scope, letting
+     transform-box:fill-box / transform-origin:center pivot on the centre. */
+  .nf-sweep { transform-box: fill-box; transform-origin: center; animation: nf-sweep 4.5s linear infinite; }
+  .nf-pulse { transform-box: fill-box; transform-origin: center; animation: nf-pulse 3.2s ease-out infinite; }
+
+  @keyframes nf-sweep { to { transform: rotate(360deg); } }
+  @keyframes nf-pulse { 0% { transform: scale(.28); opacity: .45; } 70% { opacity: 0; } 100% { transform: scale(1); opacity: 0; } }
+
+  .nf h2 { font-size: 1.6em; margin: 24px 0 6px; }
+  .nf p { color: #757575; margin: 6px 0; }
+  .nf a { text-decoration: underline; text-decoration-color: rgba(0, 0, 0, .35); }
+  .nf a:hover { text-decoration-color: rgba(0, 0, 0, .85); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nf-sweep, .nf-pulse { animation: none; }
   }
 </style>
 
-<div class="container">
-  <h1>404</h1>
+<div class="nf">
+  <svg class="nf-scope" viewBox="0 0 760 300" role="img" aria-label="404 — page not found">
+    <!-- 4 _ 4 -->
+    <text class="nf-glyph" x="165" y="150" font-size="215" text-anchor="middle" dominant-baseline="central">4</text>
+    <text class="nf-glyph" x="595" y="150" font-size="215" text-anchor="middle" dominant-baseline="central">4</text>
 
-  <p><strong>Page not found :(</strong></p>
-  <p>The requested page could not be found.</p>
+    <!-- the 0 is a radar scope, centred at (380,150) -->
+    <circle class="nf-ring-strong" cx="380" cy="150" r="84"/>
+    <circle class="nf-ring-faint" cx="380" cy="150" r="56"/>
+    <circle class="nf-ring-faint" cx="380" cy="150" r="28"/>
+    <line class="nf-cross" x1="296" y1="150" x2="464" y2="150"/>
+    <line class="nf-cross" x1="380" y1="66" x2="380" y2="234"/>
+
+    <!-- expanding pulse, echoing the co-location radius -->
+    <circle class="nf-pulse nf-ring-strong" cx="380" cy="150" r="84" style="stroke-width:2"/>
+
+    <!-- rotating sweep: the unpainted r=84 circle anchors the rotation centre -->
+    <g class="nf-sweep">
+      <circle cx="380" cy="150" r="84" fill="none" stroke="none"/>
+      <path d="M380,150 L380,66 A84,84 0 0 1 452.7,108 Z" fill="#292929" fill-opacity="0.10"/>
+      <line x1="380" y1="150" x2="380" y2="66" stroke="#292929" stroke-width="2"/>
+    </g>
+
+    <!-- a red contact that wanders the scope along a random path (set below) -->
+    <g class="nf-blip">
+      <circle cx="380" cy="150" r="11" fill="#d94232" fill-opacity="0.15"/>
+      <circle cx="380" cy="150" r="5" fill="#d94232"/>
+    </g>
+    <circle class="nf-dot" cx="380" cy="150" r="4.5"/>
+  </svg>
+
+  <h2>Page not found</h2>
+  <p>We swept the area — there's nothing at this address.</p>
+  <p><a href="/">Head back home</a></p>
 </div>
+
+<script>
+  // Send the red contact wandering the scope along a fresh random path each
+  // load, looping smoothly. Skipped when the visitor prefers reduced motion.
+  (function () {
+    var blip = document.querySelector('.nf-blip');
+    if (!blip || !blip.animate) return;
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var R = 66, points = 6, frames = [];
+    for (var i = 0; i < points; i++) {
+      var angle = Math.random() * Math.PI * 2;
+      var radius = 16 + Math.random() * (R - 16);   // stay off the exact centre
+      frames.push({
+        transform: 'translate(' + (Math.cos(angle) * radius).toFixed(1) + 'px, ' + (Math.sin(angle) * radius).toFixed(1) + 'px)',
+        easing: 'ease-in-out'
+      });
+    }
+    frames.push(frames[0]);   // close the loop so it repeats seamlessly
+
+    blip.animate(frames, { duration: 12000 + Math.random() * 6000, iterations: Infinity });
+  })();
+</script>
