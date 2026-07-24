@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Source your own order flow"
-subtitle: "A permissionless solution to an AMM's discoverability problem"
+subtitle: "A permissionless solution to any AMM's discoverability problem"
 hero: /assets/images/integrating-a-bespoke-amm-with-cowswap/fig_forest.svg
 hero_alt: "A bare tree in a dense autumn forest, seen from above"
 date: 2026-07-23
