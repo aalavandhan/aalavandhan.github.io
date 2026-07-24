@@ -3,6 +3,8 @@ layout: post
 title: "Hidden cost of leverage in LETFs"
 date: 2026-03-15
 categories: finance research
+description: "Leveraged ETFs have exploded among retail. Beneath the daily-reset mechanics sits a hidden cost — volatility decay and financing — that quietly erodes long-run returns."
+image: /assets/images/og/hidden-costs-leveraged-etfs.png
 ---
 
 [Leveraged ETFs](https://www.investopedia.com/terms/l/leveraged-etf.asp) (LETFs) have exploded among retail. 2x Tesla, 3x QQQ, levered bitcoin. There's a fund for everything now.

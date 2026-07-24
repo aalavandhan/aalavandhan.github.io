@@ -7,6 +7,8 @@ hero_alt: "A bare tree in a dense autumn forest, seen from above"
 date: 2026-07-23
 categories: defi
 theme: autumn
+description: "A bespoke AMM can hold the best price and still never win the trade. How to source your own order flow permissionlessly by integrating with CoW Swap."
+image: /assets/images/og/source-your-own-order-flow.png
 ---
 
 DeFi promises to tokenize everything. Smart contract platforms offer flexibility to codify asset-specific trading strategies that execute trustlessly. With liquidity open to anyone, anywhere, markets compete on price alone. The best quote *should* win the trade.

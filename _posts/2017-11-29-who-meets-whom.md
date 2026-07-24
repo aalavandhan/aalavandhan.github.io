@@ -1,8 +1,11 @@
 ---
 layout: post
-title: "Who Meets Whom: The Privacy Cost of Location Data"
+title: "Who Meets Whom"
+subtitle: "The Privacy Cost of Location Data"
 date: 2017-11-29
 categories: privacy research
+description: "We assume our physical meetings stay private. But location data can reconstruct who met whom, when, and where — at a far larger privacy cost than most people assume."
+image: /assets/images/og/who-meets-whom.png
 ---
 
 Most people understand the implications of virtual meetings through emails and phone calls. Some of us are even aware that they are being constantly tracked. However, we assume that our physical meetings remain private. It is extremely unlikely that someone would follow everyone around all the time. Thus we seem to care less, if not at all, about the privacy of our physical meetings.

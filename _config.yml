@@ -6,6 +6,10 @@ url: "https://nithink.dev"
 github_username: aalavandhan
 twitter_username: aalavandhan84
 
+# Default social share image (Open Graph / Twitter), used for pages that don't
+# set their own `image:`. Regenerate cards with scripts/generate-og-cards.sh.
+og_image: "/assets/images/og/default.png"
+
 # Build settings
 markdown: kramdown
 permalink: pretty
