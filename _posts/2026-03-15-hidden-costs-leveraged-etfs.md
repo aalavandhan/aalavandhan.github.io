@@ -28,13 +28,13 @@ The premia vary a lot.
 
 ## It's about hedging, not volatility
 
-<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
-<script src="/assets/js/hidden-costs-leveraged-etfs/letf_funds.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script defer src="/assets/js/hidden-costs-leveraged-etfs/letf_funds.js"></script>
 <div id="letf-tooltip" style="position:fixed;pointer-events:none;background:#fff;border:1px solid #e6e6e6;border-radius:4px;padding:10px 14px;font-size:13px;line-height:1.5;z-index:1000;opacity:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#292929;max-width:320px;box-shadow:0 2px 8px rgba(0,0,0,.08);transition:opacity 0.25s ease,left 0.15s ease-out,top 0.15s ease-out;"></div>
-<script src="/assets/js/hidden-costs-leveraged-etfs/letf_shared.js"></script>
+<script defer src="/assets/js/hidden-costs-leveraged-etfs/letf_shared.js"></script>
 
 <div id="letf-scatter" style="position:relative; width:100%; height:420px; margin:40px 0; overflow:hidden;"></div>
-<script src="/assets/js/hidden-costs-leveraged-etfs/letf_scatter.js"></script>
+<script defer src="/assets/js/hidden-costs-leveraged-etfs/letf_scatter.js"></script>
 
 *No relationship between volatility and financing premium.*
 
@@ -43,7 +43,7 @@ What the premium tracks is hedging infrastructure. Dealers who can offload risk 
 Group by asset class and the pattern is clear.
 
 <div id="letf-boxplot" style="position:relative; width:100%; height:400px; margin:40px 0; overflow:hidden;"></div>
-<script src="/assets/js/hidden-costs-leveraged-etfs/letf_boxplot.js"></script>
+<script defer src="/assets/js/hidden-costs-leveraged-etfs/letf_boxplot.js"></script>
 
 *It's the asset class.*
 
@@ -60,7 +60,7 @@ Nearly 30x higher.
 Tesla has the deepest single-stock derivatives market on the planet. MicroStrategy trades like a mid-cap with a bitcoin habit. The dealer charges accordingly.
 
 <div id="letf-bubble-viz" style="position:relative; width:100%; height:420px; margin:40px 0; overflow:hidden;"></div>
-<script src="/assets/js/hidden-costs-leveraged-etfs/letf_bubbles.js"></script>
+<script defer src="/assets/js/hidden-costs-leveraged-etfs/letf_bubbles.js"></script>
 
 *Green beats spot, pink lags it. [Full dashboard](https://data.2factor.finance/durable-leverage/viz/letf_explorer.html){:target="_blank"}*
 
