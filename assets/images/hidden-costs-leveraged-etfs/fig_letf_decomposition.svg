@@ -10,7 +10,14 @@
                  keyTimes="0;0.03;0.47;0.84;0.94;0.941;1" />
       </rect>
     </clipPath>
+    <!-- Muted graph-paper grid, aligned to the plot origin (52, 24). -->
+    <pattern id="graphpaper" x="52" y="24" width="19" height="19" patternUnits="userSpaceOnUse">
+      <path d="M19 0 H0 V19" fill="none" stroke="#eeede7" stroke-width="0.7" />
+    </pattern>
   </defs>
+
+  <!-- Graph-paper backdrop, behind the axes and the plot. -->
+  <rect x="52" y="24" width="608" height="296" fill="url(#graphpaper)" />
 
   <line x1="52" y1="304.7" x2="660" y2="304.7" stroke="#e6e6e6" stroke-width="0.5" />
   <text x="44" y="308.7" text-anchor="end" font-size="11" fill="#757575">$1</text>
