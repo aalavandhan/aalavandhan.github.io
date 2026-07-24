@@ -9,6 +9,29 @@
    components themselves. */
 
 :root {
+  color-scheme: light;
+
+  /* Page palette — the reading surfaces (chrome, prose, links). The light
+     values are the defaults; the dark set lives in :root[data-theme="dark"]
+     below. Everything hardcoded in the stylesheets was moved onto these. */
+  --page-bg: #fff;
+  --page-text: #292929;
+  --page-text-strong: #000;
+  --page-muted: #757575;
+  --page-subtle: #555;
+  --chrome-bg: #fff;
+  --chrome-border: rgba(0, 0, 0, 0.05);
+  --nav-popover-border: #e8e8e8;
+  --rule-color: #292929;
+  --table-border: #e6e6e6;
+  --link-underline: rgba(0, 0, 0, 0.35);
+  --link-underline-hover: rgba(0, 0, 0, 0.85);
+  --overlay-bg: rgba(255, 255, 255, 0.95);
+  /* Figures are dark line-art drawn for the white page. In light mode they need
+     no backing (the page is already light); dark mode sits them on this muted
+     light panel so the strokes stay legible. */
+  --figure-bg: transparent;
+
   --ui-surface: #fafafa;
   --ui-surface-active: #f0f0f0;
   --ui-border: #e6e6e6;
@@ -21,7 +44,9 @@
 
   /* The code viewer keeps its own namespace, declared here and nowhere else, so
      a post theme cannot reach it. Source listings read as chrome rather than as
-     part of the prose, and should look identical in every post. */
+     part of the prose. A post theme never changes them, but dark mode does: the
+     dark set lives in the [data-theme="dark"] block below, alongside a dark
+     syntax palette in _syntax.scss. */
   --code-surface: #fafafa;
   --code-surface-active: #f0f0f0;
   --code-border: #e6e6e6;
@@ -29,6 +54,52 @@
   --code-text: #292929;
   --code-muted: #757575;
   --code-scrim: rgba(26, 26, 26, 0.55);
+  --code-doc-bg: #fff;
+  --code-inline-bg: #f7f7f7;
+  --code-inline-text: #292929;
+}
+
+/* Dark theme. Set by the inline script in <head> (from localStorage, falling
+   back to the OS preference) and flipped by the footer toggle. Only the page
+   and shared-component tokens change; the code viewer keeps its light surface. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --page-bg: #16171a;
+  --page-text: #e8e8e6;
+  --page-text-strong: #fff;
+  --page-muted: #9a9a9a;
+  --page-subtle: #b3b3b3;
+  --chrome-bg: #16171a;
+  --chrome-border: rgba(255, 255, 255, 0.08);
+  --nav-popover-border: #33353b;
+  --rule-color: #e8e8e6;
+  --table-border: #33353b;
+  --link-underline: rgba(255, 255, 255, 0.35);
+  --link-underline-hover: rgba(255, 255, 255, 0.9);
+  --overlay-bg: rgba(22, 23, 26, 0.95);
+  --figure-bg: #e6e6e4;
+
+  --ui-surface: #1e2026;
+  --ui-surface-active: #262931;
+  --ui-border: #2d3038;
+  --ui-border-inner: #33363f;
+  --ui-border-hover: #3c4049;
+  --ui-text: #e8e8e6;
+  --ui-muted: #9a9a9a;
+  --ui-accent: #e8e8e6;
+  --ui-scrim: rgba(0, 0, 0, 0.6);
+
+  --code-surface: #1b1f27;
+  --code-surface-active: #232833;
+  --code-border: #2d3340;
+  --code-border-hover: #3b4250;
+  --code-text: #e6e6e6;
+  --code-muted: #9aa4b2;
+  --code-scrim: rgba(0, 0, 0, 0.62);
+  --code-doc-bg: #0f1216;
+  --code-inline-bg: #1f242c;
+  --code-inline-text: #e6e6e6;
 }
 
 /* Autumn — used by source-your-own-order-flow, matching that post's figures. */

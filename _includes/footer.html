@@ -3,9 +3,26 @@
   <div class="wrap">
 
     <div class="footer-col-1 column">
-      <ul>
-        <li>{{ site.title }}</li>
-      </ul>
+      <button class="theme-switch" type="button" role="switch" aria-checked="false" aria-label="Toggle light and dark theme" title="Toggle light and dark theme">
+        <span class="theme-switch-track">
+          <svg class="theme-switch-end" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+          </svg>
+          <svg class="theme-switch-end" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <span class="theme-switch-knob">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </span>
+        </span>
+      </button>
     </div>
 
     <div class="footer-col-2 column">
@@ -56,3 +73,31 @@
   </div>
 
 </footer>
+
+<script>
+  // Footer theme switch. The page defaults to light; the <head> script applies
+  // dark only when the reader has chosen it. This flips the choice on click and
+  // remembers it.
+  (function () {
+    var root = document.documentElement;
+    var sw = document.querySelector('.theme-switch');
+    if (!sw) return;
+
+    function isDark() { return root.getAttribute('data-theme') === 'dark'; }
+
+    function apply(theme) {
+      if (theme === 'dark') root.setAttribute('data-theme', 'dark');
+      else root.removeAttribute('data-theme');
+      sw.setAttribute('aria-checked', theme === 'dark' ? 'true' : 'false');
+    }
+
+    // Reflect the theme the <head> script already applied.
+    apply(isDark() ? 'dark' : 'light');
+
+    sw.addEventListener('click', function () {
+      var next = isDark() ? 'light' : 'dark';
+      apply(next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>

@@ -16,19 +16,24 @@ body {
   font-size: 21px;
   line-height: 1.58;
   font-weight: 400;
-  color: #292929;
-  background-color: #fff;
+  color: var(--page-text);
+  background-color: var(--page-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   word-wrap: break-word;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body { transition: none; }
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-weight: 700;
-  color: #292929;
+  color: var(--page-text);
 }
 
 a         { color: inherit; text-decoration: none; }
-a:hover   { color: #000; }
+a:hover   { color: var(--page-text-strong); }
 a:visited { color: inherit; }

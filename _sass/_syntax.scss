@@ -6,7 +6,10 @@
 .post code {
   font-family: Menlo, Monaco, "Courier New", monospace;
   font-size: 16px;
-  background-color: #f7f7f7;
+  /* Pin the colour to the code palette so prose code doesn't inherit the page
+     text — dark mode gives it a dark surface with light text of its own. */
+  color: var(--code-inline-text);
+  background-color: var(--code-inline-bg);
   border: none;
   border-radius: 3px;
   padding: 12px 16px;
@@ -31,7 +34,7 @@
 /* Syntax highlighting */
 /* ----------------------------------------------------------*/
 
-.highlight  { background: #fff; }
+.highlight  { background: var(--code-doc-bg); }
 .highlight .c { color: #999988; font-style: italic }
 .highlight .err { color: #a61717; background-color: #e3d2d2 }
 .highlight .k { font-weight: bold }
@@ -91,3 +94,74 @@
 .highlight .vg { color: #008080 }
 .highlight .vi { color: #008080 }
 .highlight .il { color: #009999 }
+
+
+/* Dark syntax palette */
+/* ----------------------------------------------------------*/
+/* The light rules above are GitHub-light; these restate the token colours for
+   dark mode (GitHub-dark family) so the code viewer reads well on --code-doc-bg.
+   Punctuation (.p) and operators carry no colour and inherit --code-text. */
+
+:root[data-theme=dark] .highlight .c,
+:root[data-theme=dark] .highlight .cm,
+:root[data-theme=dark] .highlight .c1,
+:root[data-theme=dark] .highlight .cs,
+:root[data-theme=dark] .highlight .cd { color: #8b949e; font-style: italic }
+:root[data-theme=dark] .highlight .cp { color: #8b949e; font-weight: bold }
+
+:root[data-theme=dark] .highlight .k,
+:root[data-theme=dark] .highlight .kc,
+:root[data-theme=dark] .highlight .kd,
+:root[data-theme=dark] .highlight .kn,
+:root[data-theme=dark] .highlight .kp,
+:root[data-theme=dark] .highlight .kr,
+:root[data-theme=dark] .highlight .kt { color: #ff7b72 }
+
+:root[data-theme=dark] .highlight .o,
+:root[data-theme=dark] .highlight .ow { color: #ff7b72 }
+
+:root[data-theme=dark] .highlight .s,
+:root[data-theme=dark] .highlight .sb,
+:root[data-theme=dark] .highlight .sc,
+:root[data-theme=dark] .highlight .sd,
+:root[data-theme=dark] .highlight .s2,
+:root[data-theme=dark] .highlight .se,
+:root[data-theme=dark] .highlight .sh,
+:root[data-theme=dark] .highlight .si,
+:root[data-theme=dark] .highlight .sx,
+:root[data-theme=dark] .highlight .s1,
+:root[data-theme=dark] .highlight .dl { color: #a5d6ff }
+:root[data-theme=dark] .highlight .sr { color: #7ee787 }
+:root[data-theme=dark] .highlight .ss { color: #a5d6ff }
+
+:root[data-theme=dark] .highlight .m,
+:root[data-theme=dark] .highlight .mf,
+:root[data-theme=dark] .highlight .mh,
+:root[data-theme=dark] .highlight .mi,
+:root[data-theme=dark] .highlight .mo,
+:root[data-theme=dark] .highlight .il { color: #79c0ff }
+
+:root[data-theme=dark] .highlight .na,
+:root[data-theme=dark] .highlight .nb,
+:root[data-theme=dark] .highlight .no,
+:root[data-theme=dark] .highlight .nv,
+:root[data-theme=dark] .highlight .vc,
+:root[data-theme=dark] .highlight .vg,
+:root[data-theme=dark] .highlight .vi { color: #79c0ff }
+:root[data-theme=dark] .highlight .nf { color: #d2a8ff }
+:root[data-theme=dark] .highlight .nc,
+:root[data-theme=dark] .highlight .nt { color: #7ee787 }
+:root[data-theme=dark] .highlight .nn { color: #e6e6e6 }
+:root[data-theme=dark] .highlight .ni { color: #ffa657 }
+:root[data-theme=dark] .highlight .ne { color: #ff7b72; font-weight: bold }
+:root[data-theme=dark] .highlight .bp { color: #79c0ff }
+
+:root[data-theme=dark] .highlight .err { color: #ffa198; background-color: rgba(248, 81, 73, 0.15) }
+:root[data-theme=dark] .highlight .gr,
+:root[data-theme=dark] .highlight .gt { color: #ff7b72 }
+:root[data-theme=dark] .highlight .gh,
+:root[data-theme=dark] .highlight .gu,
+:root[data-theme=dark] .highlight .gp { color: #8b949e }
+:root[data-theme=dark] .highlight .gd { color: #ffdcd7; background-color: #67060c }
+:root[data-theme=dark] .highlight .gi { color: #aff5b4; background-color: #033a16 }
+:root[data-theme=dark] .highlight .w { color: #484f58 }

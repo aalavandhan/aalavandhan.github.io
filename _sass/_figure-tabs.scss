@@ -52,14 +52,17 @@
 }
 .post-content .piece-view {
   margin: 0 0 40px;
-  width: min(1040px, 90vw);
-  margin-left: 50%;
-  transform: translateX(-50%);
+  width: 100%;
   aspect-ratio: 1120 / 532;
   background: var(--ui-surface);
   border: 1px solid var(--ui-border);
   border-radius: 10px;
   overflow: hidden;
+}
+/* The figure is transparent line-art, so in dark mode the container's own fill
+   shows through it — light it up so the drawing reads. */
+:root[data-theme=dark] .post-content .piece-view {
+  background: var(--figure-bg);
 }
 .post-content .piece-view img.piece-fig {
   display: block;

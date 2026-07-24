@@ -64,6 +64,9 @@
 
 <rect x="0" y="0" width="1120" height="640" fill="#fdf8f1"/>
 
+<!-- content nudged left 10u so the three cards sit centred within the panel -->
+<g transform="translate(-10 0)">
+
 <!-- ===== AMM (left) ===== -->
 <rect x="40" y="150" width="230" height="360" rx="16" fill="#fdf6ea" stroke="#d9a86a" stroke-width="1.8"/>
 <text x="155" y="196" text-anchor="middle" font-size="26" font-weight="700">AMM</text>
@@ -161,4 +164,5 @@
 <rect class="hl hlAmm" x="40" y="150" width="230" height="360" rx="16" fill="none" stroke="#e0a24a" stroke-width="2.5" filter="url(#pglow)"/>
 <rect class="hl hlPub" x="440" y="150" width="290" height="360" rx="18" fill="none" stroke="#e0a24a" stroke-width="2.5" filter="url(#pglow)"/>
 <rect class="hl hlSolver" x="856" y="150" width="244" height="360" rx="18" fill="none" stroke="#e0a24a" stroke-width="2.5" filter="url(#pglow)"/>
+</g>
 </svg>

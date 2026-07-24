@@ -86,7 +86,7 @@
 .code-doc {
   width: min(1000px, 100%);
   min-width: 0;
-  background: #fff;
+  background: var(--code-doc-bg);
   border: 1px solid var(--code-border);
   border-radius: 10px;
   overflow: hidden;
@@ -141,7 +141,8 @@
 .code-doc-body .highlight,
 .code-doc-body pre {
   margin: 0;
-  background: #fff;
+  background: var(--code-doc-bg);
+  color: var(--code-text);
 }
 /* Set the metrics on <pre>, not <code>: <code> is inline, so the line boxes are
    sized by the block container's strut and inheriting body's 1.58/18px here
