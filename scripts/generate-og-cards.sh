@@ -127,7 +127,7 @@ make_card() {
 }
 
 # Neutral (default) palette — from :root in _sass/_variables.scss
-BG="#ffffff"; TEXT="#232323"; MUTED="#8f8f8f"; TINT="#efece6"
+BG="#ffffff"; TEXT="#232323"; MUTED="#8f8f8f"; TINT="#f7f5f1"
 # Autumn palette — from .theme-autumn
 A_BG="#fdf8f1"; A_TEXT="#2b2620"; A_MUTED="#8a765a"; A_TINT="#f3ebda"
 
