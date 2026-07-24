@@ -1,15 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="South Indian filter coffee">
-  <!-- tumbler -->
-  <path d="M21 16 L43 16 L39.5 40 L24.5 40 Z" fill="#c1922f"/>
-  <path d="M21 16 L27 16 L25.4 40 L24.5 40 Z" fill="#d9ad50"/>
-  <path d="M43 16 L39.5 40 L37.5 40 L41 16 Z" fill="#a67a24"/>
+  <!-- roast-brown square backdrop -->
+  <rect width="64" height="64" rx="10" fill="#2f2117"/>
 
-  <!-- froth -->
-  <path d="M19.5 16 Q19.5 10 32 9.2 Q44.5 10 44.5 16 Q44.5 18.6 32 18.6 Q19.5 18.6 19.5 16 Z" fill="#efe3c7"/>
-  <path d="M22.5 13.8 Q26.5 11 32 10.8 Q37.5 11 41.5 13.8 Q37 12.6 32 12.6 Q27 12.6 22.5 13.8 Z" fill="#faf3e0"/>
+  <g transform="translate(5.76 5.76) scale(0.82)">
+    <!-- davara: wide short cylinder, flat bottom -->
+    <path d="M8 41 L8 51.5 Q8 55.5 13 55.5 L51 55.5 Q56 55.5 56 51.5 L56 41 Q44 43 32 43 Q20 43 8 41 Z" fill="#c1922f"/>
+    <path d="M8 47 Q8 55.5 13 55.5 L51 55.5 Q56 55.5 56 47 Q56 52 50 52 L14 52 Q8 52 8 47 Z" fill="#a3781f" opacity="0.45"/>
 
-  <!-- davara (bowl) -->
-  <path d="M4 37 Q4 41 9.5 41 Q11.5 55.5 32 55.5 Q52.5 55.5 54.5 41 Q60 41 60 37 Z" fill="#c1922f"/>
-  <path d="M10.5 41 Q12.5 52.5 32 52.5 Q51.5 52.5 53.5 41 Q43 44 32 44 Q21 44 10.5 41 Z" fill="#a3781f" opacity="0.55"/>
-  <path d="M4 37 L60 37 Q60 39.7 54.5 39.7 L9.5 39.7 Q4 39.7 4 37 Z" fill="#e2bb5f"/>
+    <!-- tumbler: narrower cylinder rising from the davara -->
+    <path d="M22 21 L22.5 41 L41.5 41 L42 21 Z" fill="#c1922f"/>
+    <path d="M22 21 L26.5 21 L26 41 L25 41 Z" fill="#d9ad50"/>
+    <path d="M42 21 L41.5 41 L39.7 41 L40 21 Z" fill="#a67a24"/>
+
+    <!-- davara flared rim (drawn over the tumbler base so the cup sits inside) -->
+    <path d="M3 40 Q3 36.8 11 37.5 Q22 38.4 32 38.4 Q42 38.4 53 37.5 Q61 36.8 61 40 Q54 41.9 44 41.3 Q32 42 20 41.3 Q10 41.9 3 40 Z" fill="#c1922f"/>
+    <path d="M3 40 Q3 36.8 11 37.5 Q22 38.4 32 38.4 Q42 38.4 53 37.5 Q61 36.8 61 40 Q53 40.9 43 40.4 Q32 41 21 40.4 Q11 40.9 3 40 Z" fill="#e4bd61"/>
+
+    <!-- tumbler flared rim -->
+    <path d="M17 20 Q17 17.3 22 18 Q32 18.9 42 18 Q47 17.3 47 20 Q41 21.7 32 21.7 Q23 21.7 17 20 Z" fill="#c1922f"/>
+    <path d="M17 20 Q17 17.3 22 18 Q32 18.9 42 18 Q47 17.3 47 20 Q40 20.7 32 21.1 Q24 20.7 17 20 Z" fill="#e4bd61"/>
+
+    <!-- froth -->
+    <path d="M20.5 18.5 Q20.5 13.3 32 12.5 Q43.5 13.3 43.5 18.5 Q43.5 20.8 32 20.8 Q20.5 20.8 20.5 18.5 Z" fill="#efe3c7"/>
+    <path d="M24 16 Q28 13 32 12.8 Q36 13 40 16 Q36 14.8 32 14.8 Q28 14.8 24 16 Z" fill="#faf3e0"/>
+  </g>
 </svg>
