@@ -1,0 +1,49 @@
+// Smooth navigation and theme changes, via the View Transitions API.
+//
+// Cross-document transitions turn every same-origin navigation (post to post,
+// home to post, back/forward) into a short crossfade instead of a hard cut. The
+// theme toggle (footer.html) drives its own same-document transition: the whole
+// page cross-dissolves from one theme to the other.
+//
+// Both degrade gracefully — a browser without the API just navigates or flips
+// instantly — and both stand down under prefers-reduced-motion.
+
+@view-transition {
+  navigation: auto;
+}
+
+/* The page as a whole cross-dissolves. Nothing is named as a shared element: the
+   header and footer are identical across pages, so fading the whole viewport
+   already reads as the content changing while the chrome stays put — and naming
+   them would morph the header whenever two pages differ only by a scrollbar's
+   width (most visible on the full-bleed hero posts). */
+::view-transition-old(root) {
+  animation: vt-fade-out 260ms ease both;
+}
+::view-transition-new(root) {
+  animation: vt-fade-in 340ms ease both;
+}
+
+/* Theme toggle. footer.html adds `.theme-vt` to <html> for the length of the
+   flip; the page dissolves a touch slower so the colour shift reads. */
+html.theme-vt::view-transition-old(root) {
+  animation: vt-fade-out 350ms ease both;
+}
+html.theme-vt::view-transition-new(root) {
+  animation: vt-fade-in 350ms ease both;
+}
+
+@keyframes vt-fade-out {
+  to { opacity: 0; }
+}
+@keyframes vt-fade-in {
+  from { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

@@ -76,8 +76,9 @@
 
 <script>
   // Footer theme switch. The page defaults to light; the <head> script applies
-  // dark only when the reader has chosen it. This flips the choice on click and
-  // remembers it.
+  // dark only when the reader has chosen it. This flips the choice on click,
+  // remembers it, and — where the browser supports it — cross-dissolves the whole
+  // page between themes (see _transitions.scss).
   (function () {
     var root = document.documentElement;
     var sw = document.querySelector('.theme-switch');
@@ -91,13 +92,30 @@
       sw.setAttribute('aria-checked', theme === 'dark' ? 'true' : 'false');
     }
 
+    function persist(theme) {
+      try { localStorage.setItem('theme', theme); } catch (e) {}
+    }
+
     // Reflect the theme the <head> script already applied.
     apply(isDark() ? 'dark' : 'light');
 
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
     sw.addEventListener('click', function () {
       var next = isDark() ? 'light' : 'dark';
-      apply(next);
-      try { localStorage.setItem('theme', next); } catch (e) {}
+      persist(next);
+
+      // No View Transitions support, or the reader prefers less motion: flip.
+      if (!document.startViewTransition || reduce.matches) {
+        apply(next);
+        return;
+      }
+
+      // The dissolve lives in CSS (`.theme-vt` in _transitions.scss); the class
+      // just marks the flip so the whole page crossfades as one sheet.
+      root.classList.add('theme-vt');
+      var vt = document.startViewTransition(function () { apply(next); });
+      vt.finished.finally(function () { root.classList.remove('theme-vt'); });
     });
   })();
 </script>
