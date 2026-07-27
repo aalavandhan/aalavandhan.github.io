@@ -34,9 +34,9 @@ But scale and algorithms are good at exactly this kind of problem. Patterns that
 }
 .coloc-figure .hud-label { fill: #fff; font-weight: 800; letter-spacing: .08em; }
 </style>
-<svg id="viz" viewBox="0 0 600 376" role="img" aria-labelledby="colocTitle colocDesc">
+<svg id="viz" viewBox="0 0 600 546" role="img" aria-labelledby="colocTitle colocDesc">
 <title id="colocTitle">Moving user co-location map</title>
-<desc id="colocDesc">A red tracked user and 28 contacts move through a street network. Contacts turn red when they enter the tracked user's moving co-location radius, and each entry is counted.</desc>
+<desc id="colocDesc">A tracked user labelled T and 30 numbered contacts move through a street network. Between five and ten of the contacts, chosen when the page loads and not marked in any way, are the tracked user's actual friends: when one of them comes into range it heads over, the tracked user pauses until it arrives, and the two walk the same streets shoulder to shoulder for a few seconds before it goes on its way. A contact is red only while it is genuinely walking along. Everyone else simply passes close by, and every one of those passes is counted as a co-location too. The panel below the map plots only the real ties: a node per person who has walked with the tracked user, and a line that darkens and thickens the more often they do.</desc>
 <defs>
 <linearGradient id="mapWash" x1="0" y1="0" x2="0" y2="1">
 <stop offset="0" stop-color="#dcecef" />
@@ -53,23 +53,31 @@ But scale and algorithms are good at exactly this kind of problem. Patterns that
 </filter>
 <clipPath id="mapClip"><rect x="14" y="10" width="572" height="356" rx="1"/></clipPath>
 </defs>
-<rect width="600" height="376" fill="#eef4f4" />
+<rect width="600" height="546" fill="#eef4f4" />
 <rect x="8" y="7" width="584" height="362" fill="url(#mapWash)" filter="url(#paper)" />
 <g clip-path="url(#mapClip)">
 <g id="roads"></g>
 <g id="cellFills"></g>
 <g id="cells"></g>
 <g id="sites"></g>
-<g id="links"></g>
 <g id="contacts"></g>
 <g id="target"></g>
-<g id="entryBursts"></g>
 </g>
 <g id="hud" transform="translate(432 32)" pointer-events="none">
 <rect width="144" height="31" rx="4" fill="#18304c" opacity=".72" />
 <circle cx="13" cy="10" r="3.5" fill="#d94232" />
 <text id="hudCurrent" class="hud-label" x="23" y="13" font-size="9">0 IN RANGE</text>
-<text id="hudTotal" x="13" y="25" fill="#d9e5ea" font-size="8">0 co-location entries</text>
+<text id="hudTotal" x="13" y="25" fill="#d9e5ea" font-size="8">0 entries · 0 together</text>
+</g>
+<g id="network" pointer-events="none">
+<rect x="8" y="386" width="584" height="152" rx="4" fill="#e7eff1" stroke="#d5e2e6" stroke-width="1" />
+<text x="20" y="404" fill="#22414e" font-size="8" font-weight="800" letter-spacing=".08em">INFERRED SOCIAL NETWORK</text>
+<text x="580" y="404" fill="#5d7684" font-size="6.4" text-anchor="end">a tie darkens and thickens the more often the two walk together</text>
+<g id="netEdges"></g>
+<g id="netNodes"></g>
+<circle cx="300" cy="464" r="7.6" fill="#d94232" stroke="#f8d8d3" stroke-width="1.1" />
+<text x="300" y="466.4" fill="#fff" font-size="7" font-weight="700" text-anchor="middle">T</text>
+<text id="netSummary" x="20" y="530" fill="#5d7684" font-size="6.4">nobody has walked with T yet</text>
 </g>
 </svg>
 <script src="/assets/js/who-meets-whom/co_location.js"></script>
