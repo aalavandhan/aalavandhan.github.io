@@ -1,46 +1,47 @@
 {% raw %}
 ```javascript
-/// @title IAmm
-/// @notice The surface the publisher reads. Any AMM that can answer "what would
-///         you trade right now, and what's the worst price you'd accept?" can be
-///         published into CoW this way.
-/// @dev Deliberately small: the publisher never touches the pricing logic, only
-///      trusts that `quote` is a floor the AMM stands behind and `swap` honors.
-///      All amounts are raw token units.
-interface IAmm {
-  /// @notice The two tokens this AMM trades between.
-  function tokenA() external view returns (IERC20);
+/// @notice One swap, from the vault's side of the trade: it takes `tokenInAmt`
+///         of `tokenIn` and pays out `tokenOutAmt` of `tokenOut`.
+struct SwapParams {
+  // token the vault takes in
+  IERC20 tokenIn;
+  // token the vault pays out
+  IERC20 tokenOut;
+  // `tokenIn` handed to the vault (raw token units)
+  uint256 tokenInAmt;
+  // `tokenOut` it pays out for that (raw token units)
+  uint256 tokenOutAmt;
+}
 
-  function tokenB() external view returns (IERC20);
+/// @title ISwapVault
+/// @notice A vault that swaps between two tokens with a whitelisted
+///         counterparty: it quotes a size in each direction, judges a price,
+///         and settles at the price the caller names.
+interface ISwapVault {
+  /// @notice Returns the two tokens the vault swaps between, ascending by
+  ///         address.
+  /// @return token0 The lower-addressed of the pair.
+  /// @return token1 The higher-addressed one.
+  function swapTokens() external view returns (IERC20 token0, IERC20 token1);
 
-  /// @notice The swap the AMM wants right now — the read-side mirror of `swap`,
-  ///         and what the published order is built from.
-  /// @return sellingTokenA True when the AMM wants to sell `tokenA`.
-  /// @return sellAmount Sell-token amount; 0 means nothing to publish.
-  /// @return minBuyAmount Buy-token floor for `sellAmount`.
-  function previewSwap()
+  /// @notice Sizes the swap the vault would settle now in each direction — the
+  ///         read-side mirror of `swap`. Sides follow `swapTokens`.
+  /// @return token0In What the vault takes `token0` in for, paying `token1` out.
+  /// @return token1In The reverse: `token1` in, `token0` out.
+  function swapCapacity()
     external
     view
-    returns (bool sellingTokenA, uint256 sellAmount, uint256 minBuyAmount);
+    returns (SwapParams memory token0In, SwapParams memory token1In);
 
-  /// @notice Swaps `amountIn` of `tokenIn` at the AMM's own quote.
-  /// @dev Called in the settlement pre-hook with the flash-borrowed counter-leg.
-  ///      `minAmountOut` is the order's `sellAmount`, so a fill can never be
-  ///      sourced for less than it commits to deliver.
-  function swap(
-    IERC20 tokenIn,
-    uint256 amountIn,
-    uint256 minAmountOut
-  ) external returns (uint256 amountOut);
+  /// @notice Swaps `s.tokenInAmt` of `s.tokenIn` for exactly `s.tokenOutAmt` of
+  ///         `s.tokenOut`.
+  /// @param s The swap to settle, from the vault's side of the trade.
+  function swap(SwapParams calldata s) external;
 
-  /// @notice The AMM's floor value of `amountIn` of `tokenIn` in the other token
-  ///         — the unsized price reference the order is checked against.
-  /// @dev MUST scale with `amountIn`: the publisher uses it to bound an order
-  ///      whose size it did not choose.
-  function quote(
-    IERC20 tokenIn,
-    uint256 amountIn
-  ) external view returns (uint256 minOut);
+  /// @notice Whether the vault will part with `s.tokenOutAmt` of `s.tokenOut`
+  ///         for `s.tokenInAmt` of `s.tokenIn`, judged on rate alone.
+  /// @param s The swap to price, from the vault's side of the trade.
+  function isAcceptableSwap(SwapParams calldata s) external view returns (bool);
 }
 ```
 {% endraw %}

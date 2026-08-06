@@ -31,7 +31,7 @@ In 2024 we built a bespoke [AMM](https://chain.link/education-hub/what-is-an-aut
 
 **Aggregators don't let you list yourself.** Their engineers have to write the connector, and the group that owns the source list (Matcha's, for instance, runs through the [0x API](https://docs.0x.org/)) prioritizes venues that already carry volume. An unfamiliar AMM with no track record sits in a backlog they may never get to.
 
-**Searchers take their pound of flesh.** Their bot keeps your price aligned with the market, taking real risk to do it: unaudited code and a winner-take-all race. They're paid from the arbitrage spread, your value leaking to a mercenary. And their incentive runs against yours: the better your quote, the wider the spread, the more they take.
+**Searchers extract their pound of flesh.** Their bot keeps your price aligned with the market, taking real risk to do it: unaudited code and a winner-take-all race. They're paid from the arbitrage spread, your value leaking to a mercenary. And their incentive runs against yours: the better your quote, the wider the spread, the more they take.
 
 **Self-arbitrage needs liquidity you don't have.** Running the bot yourself keeps the spread in-house, but only works when the asset already trades deep elsewhere. Newer assets don't: the bot has nothing to arbitrage against until you've seeded liquidity on established AMMs.
 
@@ -41,28 +41,28 @@ In our [latest iteration](https://2factor.finance) we built an integration with 
 
 <blockquote class="callout">
   <p class="how-label">{% include icons/gear.svg %}How it works</p>
-  <p>Instead of waiting and praying for order flow, the AMM publishes its own intent to trade into CoW's batch auction for any solver to fill.</p>
+  <p>Instead of waiting for order flow, the AMM publishes its own intent to trade into CoW's batch auction for any solver to fill.</p>
   <p>Flash loans handle atomic, multi-party settlement between the AMM and counterparties from the CoW network.</p>
 </blockquote>
 
 <div class="pieces">
-  <button class="piece" data-figure="/assets/images/integrating-a-bespoke-amm-with-cowswap/fig_pool.svg" data-alt="The AMM: a pool exposing swap methods over a BTC/USD pair"><span class="piece-n">AMM</span></button>
-  <button class="piece" data-figure="/assets/images/integrating-a-bespoke-amm-with-cowswap/fig_swapper.svg" data-alt="The publisher: an on-chain swapper reading the AMM's price, and an off-chain keeper submitting the order to CoW's orderbook"><span class="piece-n">Publisher</span></button>
-  <button class="piece" data-figure="/assets/images/integrating-a-bespoke-amm-with-cowswap/fig_auction.svg" data-alt="Settlement: a solver flash-borrows USD, swaps on the AMM, settles against the CoW batch, and repays the loan atomically"><span class="piece-n">Settlement</span></button>
+  <button class="piece" data-figure="/assets/images/integrating-a-bespoke-amm-with-cowswap/fig_pool.svg" data-alt="The AMM: a pool exposing a swap method over a BTC/USD pair"><span class="piece-n">AMM</span></button>
+  <button class="piece" data-figure="/assets/images/integrating-a-bespoke-amm-with-cowswap/fig_swapper.svg" data-alt="The publisher: an on-chain broker reading the AMM's capacity, and an off-chain keeper submitting the order to CoW's orderbook"><span class="piece-n">Publisher</span></button>
+  <button class="piece" data-figure="/assets/images/integrating-a-bespoke-amm-with-cowswap/fig_auction.svg" data-alt="Settlement: the broker flash-borrows USD, swaps on the AMM, settles against the CoW batch, and repays the loan atomically"><span class="piece-n">Settlement</span></button>
 </div>
 <div class="piece-view"></div>
 
-**1) The AMM.** Your pool or trading strategy: it exposes swap methods over a pair, say BTC ↔ USD.
+**1) The AMM.** Your pool or trading strategy: it exposes a swap method over a pair, say BTC ↔ USD. It also exposes how much it can trade right now and at what price.
 
-**2) The publisher.** An on-chain swapper contract that reads the AMM's price and publishes a matching order, and an off-chain keeper that submits that order and its execution recipe to CoW's orderbook.
+**2) The publisher.** An on-chain broker contract that reads the AMM's capacity and publishes a matching order, and an off-chain keeper that submits that order and its execution recipe to CoW's orderbook.
 
-**3) Settlement.** The winning solver executes everything in one atomic transaction: flash-borrow USD (from an on-chain pool like Morpho, or one you run yourself), swap that USD for BTC on the AMM, settle the trade against the CoW batch, and repay the loan from the proceeds.
+**3) Settlement.** The winning solver executes everything in one atomic transaction: the broker flash-borrows USD (from an on-chain pool like Morpho, or one you run yourself), swaps that USD for BTC on the AMM, settles the trade against the CoW batch, and repays the loan from the proceeds.
 
 ## Benefits
 
 **Permissionless.** No connector, no listing, no approval. Your order goes straight into CoW's public orderbook, live the moment you deploy.
 
-**Surplus capture.** CoW settles in a batch auction where solvers compete to return the most surplus. Because your order is floored at the AMM's own quote and names your own contract as receiver, a solver wins only by beating that floor, and everything above it flows back to the pool. Incentives stay aligned: the solver takes its nominal batch fee, and the surplus goes to your LPs.
+**Surplus capture.** CoW settles in a batch auction where solvers compete to return the most surplus. Because every fill has to clear the AMM's own price test and the order names your own contract as receiver, a solver wins only by beating that floor, and everything above it flows back to the pool. Incentives stay aligned: the solver takes its nominal batch fee, and the surplus goes to your LPs.
 
 **No upfront capital.** Someone has to front the USD to buy the BTC the pool is selling. The flash loan supplies it just in time and is repaid from the swap proceeds within the same settlement, so no one (not the AMM, not the solver) has to lock up inventory to be the counterparty. CoW supports this natively via [CIP-66](https://forum.cow.fi/t/cip-66-flash-loan-router-integration/2939).
 
@@ -76,22 +76,16 @@ The approach clears all three dead ends: it's permissionless, the swap surplus s
      file="code/source-your-own-order-flow/amm-interface.md"
      label="The AMM interface"
      lang="Solidity"
-     meta="Solidity · what the publisher reads" %}
+     meta="Solidity · what the broker reads" %}
 
 {% include code-viewer.html
      file="code/source-your-own-order-flow/cow-swapper.md"
-     label="The publisher — on-chain"
+     label="The publisher — on-chain broker"
      lang="Solidity"
-     meta="Solidity · builds and signs the order" %}
+     meta="Solidity · signs the order and funds the fill" %}
 
 {% include code-viewer.html
      file="code/source-your-own-order-flow/keeper.md"
      label="The publisher — off-chain keeper"
      lang="TypeScript"
      meta="TypeScript · posts it to the orderbook" %}
-
-{% include code-viewer.html
-     file="code/source-your-own-order-flow/flash-loan-router.md"
-     label="The flash loan router"
-     lang="Solidity"
-     meta="Solidity · funds the settlement" %}

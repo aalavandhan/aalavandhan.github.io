@@ -1,102 +1,113 @@
 {% raw %}
 ```javascript
-/// @title AmmCowPublisher
-/// @notice Publishes an AMM's own intent to trade into CoW Protocol: signs
-///         fill-or-kill orders via ERC-1271, sources the sell inventory from the
-///         AMM against a flash-borrowed counter-leg, and returns what it captures.
-/// @dev Holds no working capital — the counter-leg is borrowed per settlement and
-///      the fill repays it in the same tx; an unrepayable draw reverts the batch.
-/// @dev The price floor (`_checkOrder`) only prevents a drain: it caps a
-///      solver-authored fill at the AMM's own `quote`. It never captures surplus
-///      — this contract reads the AMM, not the market, so routing surplus is the
-///      batch auction's job.
-contract AmmCowPublisher is IConditionalOrder, IERC1271, Ownable {
-  /// @notice ERC-1271 "signature valid" magic value.
+interface IMorpho {
+  function flashLoan(
+    address token,
+    uint256 assets,
+    bytes calldata data
+  ) external;
+}
+
+contract Broker is IConditionalOrder, IERC1271 {
+  using SafeERC20 for IERC20;
+
   bytes4 internal constant MAGIC_VALUE = IERC1271.isValidSignature.selector;
 
-  /// @notice Fixed salt for the one ComposableCoW registration.
-  bytes32 public constant SALT = keccak256('AmmCowPublisher');
+  bytes32 public constant SALT_TOKEN0_IN = keccak256('Broker.token0In');
+  bytes32 public constant SALT_TOKEN1_IN = keccak256('Broker.token1In');
 
-  /// @notice The AMM being published.
-  IAmm public amm;
+  uint32 public constant VALID_TO_BUFFER_SEC = 30 minutes;
 
-  /// @notice Borrower the pre-hook draws the counter-leg from, and the order's
-  ///         `receiver`. Must have allowlisted this contract via `setReceiver`,
-  ///         since that is where the lender pulls repayment from.
-  FlashLoanRouter public flashRouter;
+  ISwapVault public immutable vault;
+  IERC20 public immutable token0;
+  IERC20 public immutable token1;
 
-  // … remaining storage, errors and modifiers elided …
+  // … remaining immutables, errors and modifiers elided …
 
-  constructor(/* … */) Ownable(msg.sender) {
-    // … wiring and standing relayer approvals elided …
+  address private transient _loanToken;
+  uint256 private transient _loanAmount;
 
-    // Register the order once. From here it is discoverable by the orderbook —
-    // no listing, no connector, no approval.
+  constructor(/* … */) {
+    // … wiring and standing approvals to the vault and CoW's relayer elided …
+
     composableCow_.create(
       ConditionalOrderParams({
         handler: IConditionalOrder(address(this)),
-        salt: SALT,
-        staticInput: ''
+        salt: SALT_TOKEN0_IN,
+        staticInput: abi.encode(token0_)
+      }),
+      true
+    );
+    composableCow_.create(
+      ConditionalOrderParams({
+        handler: IConditionalOrder(address(this)),
+        salt: SALT_TOKEN1_IN,
+        staticInput: abi.encode(token1_)
       }),
       true
     );
   }
 
   // -------------------------------------------------------------------------
-  // ComposableCoW handler — discovery
+  // Pokes — permissionless
 
-  /// @inheritdoc IConditionalOrder
-  /// @dev Builds the order from `amm.previewSwap()`, stamping `appData` from
-  ///      `offchainInput`. Reverts `InvalidOrder` when no swap is warranted.
-  function getTradeableOrder(
-    address /* owner */,
-    address /* sender */,
-    bytes32 /* ctx */,
-    bytes calldata /* staticInput */,
-    bytes calldata offchainInput
-  ) external view returns (GPv2Order.Data memory order) {
-    bytes32 appData = offchainInput.length > 0
-      ? abi.decode(offchainInput, (bytes32))
-      : bytes32(0);
-
-    order = _buildOrder(appData);
-
-    if (order.sellAmount <= 0 || order.buyAmount <= 0) {
-      revert InvalidOrder('no capacity');
-    }
+  function settleToVault(IERC20 token) public {
+    uint256 bal = token.balanceOf(address(this));
+    if (bal > 0) token.safeTransfer(address(vault), bal);
   }
 
   // -------------------------------------------------------------------------
-  // Settlement participation — pre-hook
+  // Settlement — CoW borrower
 
-  /// @notice Pre-hook: draws the flash-borrowed counter-leg and sources the
-  ///         order's `sellAmount` of inventory from the AMM against it.
-  /// @dev Trampoline-only. Every arg is solver-supplied but bounded: the AMM swap
-  ///      gates `inputAmount` by direction, capacity and min-out, and the lender
-  ///      reverts a draw the fill can't repay.
-  /// @dev Returns prior settlements' surplus to the AMM first (`_settleToAmm`), so
-  ///      only this settlement's inventory is left to pull. MUST precede
-  ///      `takeLoan`, or the sweep would take the borrowed counter-leg.
+  function flashLoanAndCallBack(
+    address lender_,
+    IERC20 token,
+    uint256 amount,
+    bytes calldata callBackData
+  ) external onlyCowRouter onlyPinnedLender(lender_) whenNoLoanInFlight {
+    _loanToken = address(token);
+    _loanAmount = amount;
+
+    IMorpho(lender).flashLoan(address(token), amount, callBackData);
+    settleToVault(token0);
+    settleToVault(token1);
+
+    _loanToken = address(0);
+    _loanAmount = 0;
+  }
+
+  function onMorphoFlashLoan(
+    uint256 assets,
+    bytes calldata data
+  ) external onlyLender {
+    if (assets > _loanAmount) revert UnexpectedLoanAmount();
+
+    ICowFlashLoanRouter(cowRouter).borrowerCallBack(data);
+    IERC20(_loanToken).forceApprove(lender, _loanAmount);
+  }
+
+  // -------------------------------------------------------------------------
+  // Settlement — pre-hook
+
   function provideInventory(
-    uint256 inputAmount,
-    uint256 sellAmount,
-    bool sellingTokenA
-  ) external onlyTrampoline {
-    _settleToAmm();
-
-    flashRouter.takeLoan(inputAmount);
-
-    IERC20 tokenIn = sellingTokenA ? amm.tokenB() : amm.tokenA();
-    tokenIn.forceApprove(address(amm), inputAmount);
-    amm.swap(tokenIn, inputAmount, sellAmount);
+    IERC20 tokenIn,
+    IERC20 tokenOut,
+    uint256 tokenInAmt,
+    uint256 tokenOutAmt
+  ) external onlyTrampoline whenLoanInFlight {
+    vault.swap(
+      SwapParams({
+        tokenIn: tokenIn,
+        tokenOut: tokenOut,
+        tokenInAmt: tokenInAmt,
+        tokenOutAmt: tokenOutAmt
+      })
+    );
   }
 
   // -------------------------------------------------------------------------
   // ERC-1271 — authorize the fill
 
-  /// @inheritdoc IERC1271
-  /// @dev `signature` is the ABI-encoded order, bound to `hash` so no other order
-  ///      can be authorized, then gated by `_checkOrder`.
   function isValidSignature(
     bytes32 hash,
     bytes calldata signature
@@ -110,53 +121,97 @@ contract AmmCowPublisher is IConditionalOrder, IERC1271, Ownable {
   }
 
   // -------------------------------------------------------------------------
+  // ComposableCoW handler — discovery
+
+  function getTradeableOrder(
+    address /* owner */,
+    address /* sender */,
+    bytes32 /* ctx */,
+    bytes calldata staticInput,
+    bytes calldata offchainInput
+  ) external view returns (GPv2Order.Data memory order) {
+    bytes32 appData = offchainInput.length > 0
+      ? abi.decode(offchainInput, (bytes32))
+      : bytes32(0);
+
+    order = _buildOrder(appData, _decodeTokenIn(staticInput));
+
+    if (order.sellAmount <= 0 || order.buyAmount <= 0) {
+      revert InvalidOrder('no capacity');
+    }
+  }
+
+  function verify(
+    address /* owner */,
+    address /* sender */,
+    bytes32 /* hash */,
+    bytes32 /* domainSeparator */,
+    bytes32 /* ctx */,
+    bytes calldata staticInput,
+    bytes calldata /* offchainInput */,
+    GPv2Order.Data calldata order
+  ) external view {
+    if (order.buyToken != _decodeTokenIn(staticInput)) {
+      revert InvalidOrder('direction');
+    }
+
+    _checkOrder(order);
+  }
+
+  // -------------------------------------------------------------------------
   // Internal
 
-  /// @dev Pins every solver-variable order field. Structural: receiver, fill-or-
-  ///      kill sell, zero fee, unexpired, plain ERC20 balances, the AMM pair.
-  ///      Price: `buyAmount` at or above the AMM's `quote` for `sellAmount`.
-  /// @dev The floor is the only on-chain price gate. The signature isn't bound to
-  ///      what the keeper posted, so without it a solver could self-author a
-  ///      `buyAmount ≈ 0` order and drain the sourced inventory; `quote` scales
-  ///      the floor with `sellAmount`, capping the worst fill at the AMM's rate.
-  /// @dev Reads only the order and `block.timestamp`, never settlement state, so
-  ///      the orderbook's submission `eth_call` accepts a well-formed order and it
-  ///      stays acceptable until it expires.
   function _checkOrder(GPv2Order.Data memory order) internal view {
-    if (order.receiver != address(flashRouter)) revert InvalidOrder('receiver');
+    if (order.receiver != address(this)) revert InvalidOrder('receiver');
 
     if (order.kind != GPv2Order.KIND_SELL) revert InvalidOrder('kind');
     if (order.partiallyFillable) revert InvalidOrder('partial');
     if (order.feeAmount > 0) revert InvalidOrder('fee');
     if (order.validTo < block.timestamp) revert InvalidOrder('expired');
+    if (
+      order.sellTokenBalance != GPv2Order.BALANCE_ERC20 ||
+      order.buyTokenBalance != GPv2Order.BALANCE_ERC20
+    ) revert InvalidOrder('balance');
 
-    // … token-pair and balance-kind checks elided …
+    // … token-pair check elided …
 
-    if (order.buyAmount < amm.quote(order.sellToken, order.sellAmount)) {
+    if (
+      !vault.isAcceptableSwap(
+        SwapParams({
+          tokenIn: order.buyToken,
+          tokenOut: order.sellToken,
+          tokenInAmt: order.buyAmount,
+          tokenOutAmt: order.sellAmount
+        })
+      )
+    ) {
       revert InvalidOrder('price');
     }
   }
 
-  /// @dev Fill-or-kill sell, sized and floored by `amm.previewSwap()`. It enters
-  ///      the batch as a market order with the AMM's quote as its floor: a solver
-  ///      may fill it better, never worse.
-  function _buildOrder(
-    bytes32 appData
-  ) internal view returns (GPv2Order.Data memory order) {
-    (bool sellingTokenA, uint256 sellAmount, uint256 buyAmount) = amm
-      .previewSwap();
+  function _decodeTokenIn(
+    bytes calldata staticInput
+  ) internal view returns (IERC20 takes) {
+    if (staticInput.length != 32) revert InvalidOrder('direction');
+    takes = IERC20(abi.decode(staticInput, (address)));
+    if (takes != token0 && takes != token1) revert InvalidOrder('direction');
+  }
 
-    (IERC20 sellToken, IERC20 buyToken) = sellingTokenA
-      ? (amm.tokenA(), amm.tokenB())
-      : (amm.tokenB(), amm.tokenA());
+  function _buildOrder(
+    bytes32 appData,
+    IERC20 takes
+  ) internal view returns (GPv2Order.Data memory order) {
+    (SwapParams memory token0In, SwapParams memory token1In) = vault
+      .swapCapacity();
+    SwapParams memory s = takes == token0 ? token0In : token1In;
 
     order = GPv2Order.Data({
-      sellToken: sellToken,
-      buyToken: buyToken,
-      receiver: address(flashRouter),
-      sellAmount: sellAmount,
-      buyAmount: buyAmount,
-      validTo: uint32(block.timestamp + validToBufferSec),
+      sellToken: s.tokenOut,
+      buyToken: s.tokenIn,
+      receiver: address(this),
+      sellAmount: s.tokenOutAmt,
+      buyAmount: s.tokenInAmt,
+      validTo: uint32(block.timestamp + VALID_TO_BUFFER_SEC),
       appData: appData,
       feeAmount: 0,
       kind: GPv2Order.KIND_SELL,
