@@ -60,5 +60,7 @@ make_card "programs-run-on-physical-machines" \
   "$IMG/programs-run-on-physical-machines/fig_landscape.svg"
 make_card "source-your-own-order-flow" \
   "$IMG/integrating-a-bespoke-amm-with-cowswap/fig_pool.svg"
+make_card "borrow-short-bet-long" \
+  "$IMG/borrow-short-bet-long/fig_margin_call.jpg"
 
 echo "Done."

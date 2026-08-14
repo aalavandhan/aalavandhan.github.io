@@ -159,6 +159,10 @@ make_card "source-your-own-order-flow" 5 \
   "$IMG/integrating-a-bespoke-amm-with-cowswap/fig_pool.svg" \
   "$BG" "$TEXT" "$MUTED" "$TINT"
 
+make_card "borrow-short-bet-long" 6 \
+  "$IMG/borrow-short-bet-long/fig_margin_call.jpg" \
+  "$BG" "$TEXT" "$MUTED" "$TINT"
+
 # Site default — used for the home page and any page without its own image.
 make_brand_card "default" \
   "$BG" "$TEXT" "$MUTED" "$TINT" \
