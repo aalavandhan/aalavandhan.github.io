@@ -163,6 +163,10 @@ make_card "borrow-short-bet-long" 6 \
   "$IMG/borrow-short-bet-long/fig_margin_call.jpg" \
   "$BG" "$TEXT" "$MUTED" "$TINT"
 
+make_card "the-way-of-the-index" 7 \
+  "$IMG/the-way-of-the-index/hero.png" \
+  "$BG" "$TEXT" "$MUTED" "$TINT"
+
 # Site default — used for the home page and any page without its own image.
 make_brand_card "default" \
   "$BG" "$TEXT" "$MUTED" "$TINT" \

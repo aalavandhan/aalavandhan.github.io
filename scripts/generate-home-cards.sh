@@ -48,6 +48,16 @@ make_card() {
   echo "  wrote $OUT_DIR/$slug.png"
 }
 
+# make_cover_card <slug> <image> — full-bleed: the image scaled to cover the card
+# and centre-cropped. For scenes (like a hero) that fill their frame, where
+# floating them on white would look like a photo pasted on a page.
+make_cover_card() {
+  local slug="$1" src="$2"
+  magick "$src" -filter point -resize "${W}x${H}^" -gravity center -extent "${W}x${H}" \
+    -type TrueColor -define png:color-type=2 "$OUT_DIR/$slug.png"
+  echo "  wrote $OUT_DIR/$slug.png"
+}
+
 echo "Generating home cards…"
 
 make_card "who-meets-whom" \
@@ -62,5 +72,7 @@ make_card "source-your-own-order-flow" \
   "$IMG/integrating-a-bespoke-amm-with-cowswap/fig_pool.svg"
 make_card "borrow-short-bet-long" \
   "$IMG/borrow-short-bet-long/fig_margin_call.jpg"
+make_cover_card "the-way-of-the-index" \
+  "$IMG/the-way-of-the-index/hero.png"
 
 echo "Done."
