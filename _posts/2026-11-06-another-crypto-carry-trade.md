@@ -12,14 +12,8 @@ description: "Perps overcharge for leverage, and the basis trade collects the pr
 <script defer src="/assets/js/another-crypto-carry-trade/data.js"></script>
 <script defer src="/assets/js/another-crypto-carry-trade/shared.js"></script>
 
-<blockquote class="callout">
-  <p class="how-label">TL;DR</p>
-  <ol>
-    <li>Perps charge a persistent premium for leverage, and the basis trade collects it.</li>
-    <li>2factor’s Jr is cheaper leverage, sourced from yield seekers rather than shorts.</li>
-    <li>The Jr carry (hold Jr, short the perp) is a second version of the trade. Our prototype vault on Base earns about 9.5% a year.</li>
-  </ol>
-</blockquote>
+> **TL;DR:** Perps charge a persistent premium for leverage, and the basis trade harvests it. 2factor creates cheaper leverage, sourced from yield seekers rather than shorts. The Jr carry is a second version of the basis trade, viable today and good for both perps and 2factor.
+{: .tldr}
 
 [Perpetual futures](https://en.wikipedia.org/wiki/Perpetual_futures) (perps) have become a [widely used tool for speculation](https://arxiv.org/abs/2212.06888), offering high leverage multiples up to 100×.[^perp-history]
 
@@ -71,7 +65,7 @@ Executing the trade, however, takes some sophistication. One has to actively man
 
 Crypto premia were high early on, when markets were nascent. In 2021, bitcoin funding's 30-day average peaked above 35%.
 
-[Ethena](https://ethena.fi/) automated this trade and opened it to anyone through a simple staking vault, basically the trade in a box. They handle [off-exchange custody](https://docs.ethena.fi/overview/off-exchange-custody), hedging across exchanges, deep entry and exit liquidity, and a [reserve fund](https://docs.ethena.fi/solution-design/reserve-fund) for when funding temporarily turns negative.
+[Ethena](https://ethena.fi/) automated this trade and opened it to anyone through a simple staking vault, basically the basis trade in a box. They handle [off-exchange custody](https://docs.ethena.fi/overview/off-exchange-custody), hedging across exchanges, deep entry and exit liquidity, and a [reserve fund](https://docs.ethena.fi/solution-design/reserve-fund) for when funding temporarily turns negative.
 
 Ethena quickly scaled to $14.7 billion and helped bring premiums down. The yield offered by their system fell to about 5% in 2025, a point above T-bills.
 
