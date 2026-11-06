@@ -5,14 +5,14 @@ subtitle: "Allies, not rivals."
 date: 2026-11-06
 categories: defi
 image: /assets/images/og/another-crypto-carry-trade.png
-description: "Perps overcharge for leverage, and the basis trade collects the premium. 2factor's Jr is cheaper leverage, which makes for a second version of it."
+description: "Perps charge a persistent premium for leverage, and the basis trade harvests it. 2factor's Jr is cheaper leverage, which opens a second way to collect it. Allies, not rivals."
 ---
 
 <script defer src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script defer src="/assets/js/another-crypto-carry-trade/data.js"></script>
 <script defer src="/assets/js/another-crypto-carry-trade/shared.js"></script>
 
-> **TL;DR:** Perps charge a persistent premium for leverage, and the basis trade harvests it. 2factor creates cheaper leverage, sourced from yield seekers rather than shorts. The "Jr carry" is a second way to harvest perp permia, viable today and mutually beneficial.
+> **TL;DR:** Perps charge a persistent premium for leverage, and the basis trade harvests it. 2factor creates cheaper leverage, sourced from yield seekers rather than shorts. The "Jr carry" is a second way to harvest perp premia, viable today and mutually beneficial.
 {: .tldr}
 
 [Perpetual futures](https://en.wikipedia.org/wiki/Perpetual_futures) (perps) have become a [widely used tool for speculation](https://arxiv.org/abs/2212.06888), offering high leverage multiples up to 100×.[^perp-history]
@@ -65,7 +65,7 @@ Executing it, however, takes some sophistication. One has to actively manage the
 
 Crypto premia were high early on, when markets were nascent. In 2021, bitcoin funding's 30-day average peaked above 35%.
 
-[Ethena](https://ethena.fi/) automated all of this and opened it to anyone through a simple staking vault, basically the basis trade in a box. They handle [off-exchange custody](https://docs.ethena.fi/overview/off-exchange-custody), hedging across exchanges, deep entry and exit liquidity, and a [reserve fund](https://docs.ethena.fi/solution-design/reserve-fund) for when funding temporarily turns negative.
+[Ethena](https://ethena.fi/) automated execution and opened it to anyone through a simple staking vault, basically the basis trade in a box. They handle [off-exchange custody](https://docs.ethena.fi/overview/off-exchange-custody), hedging across exchanges, deep entry and exit liquidity, and a [reserve fund](https://docs.ethena.fi/solution-design/reserve-fund) for when funding temporarily turns negative.
 
 Ethena quickly scaled to $14.7 billion and helped bring premiums down. The yield offered by their system fell to about 5% in 2025, a point above T-bills.
 
@@ -101,7 +101,7 @@ Bob buys $200 of bitcoin with his $100 and a $100 margin loan at the same 10%, a
 
 Shorts carry real risks (exchange and custody risk, capital split across venues, negative funding and auto-deleveraging in a crash) and need to be paid to hold them.
 
-I expect bitcoin's arc to repeat as [tokenized assets open up](https://cointelegraph.com/news/sec-approves-nasdaq-tokenized-trading-pilot). The premium will start wide and compress as markets mature, but it won't go away. Speculative demand for long leverage [keeps growing](https://cryptobriefing.com/on-chain-perp-futures-volume-market-share/), and for any asset that tends to rise, contango is the natural state.
+I expect bitcoin's arc to repeat as [tokenized assets open up](https://cointelegraph.com/news/sec-approves-nasdaq-tokenized-trading-pilot). The premium will start wide and compress as markets mature, but it won't go away. Speculative demand for long leverage [keeps growing](https://cryptobriefing.com/on-chain-perp-futures-volume-market-share/), and for any asset that tends to rise, [contango](https://en.wikipedia.org/wiki/Contango) is the natural state.
 
 The basis trade will only grow.
 
@@ -118,13 +118,13 @@ The 2factor capital structure, and where it sources leverage from, make leverage
 
 [^sr-risk]: Why is 2factor cheaper?
 
-    **Settled in the underlying.** Both tranches are claims on the same pool of bitcoin and are paid out in bitcoin, so there's no cash leg, no outside counterparty and nothing to liquidate.
+    **Moderate leverage.** Jr targets modest multiples like 1.33×, so Sr funds only about a third of a dollar for every Jr dollar. Sr's capital stays a small slice of the pool, behind a thick layer of Jr.
 
     **The capital split.** Jr's capital takes price moves first. With three Jr dollars for every Sr dollar, bitcoin would have to fall about 75% before Sr lost anything, which the [white paper](https://chat.2factor.finance/durable-leverage.pdf) puts at roughly a 4-sigma move within a single 28-day period.
 
-    **No duration mismatch.** Long-term leverage is funded by long-term yield.
+    **Settled in the underlying.** Both tranches are claims on the same pool of bitcoin and are paid out in bitcoin, so there's no cash leg, no outside counterparty and nothing to liquidate.
 
-    **Moderate leverage.** Jr targets modest multiples like 1.33×, so it borrows only a fraction of a dollar per dollar. Sr's capital stays a small slice of the pool, behind a thick layer of Jr.
+    **No duration mismatch.** Long-term leverage is funded by long-term yield.
 
 <div id="jpc-jrcost" class="jpc-viz"></div>
 <script defer src="/assets/js/another-crypto-carry-trade/jrcost.js"></script>
@@ -151,7 +151,7 @@ The [Jr carry](#modal-jrcarry) works like the basis trade.
   <ol>
     <li>Hold Jr on 2factor and short the same notional exposure on a perp exchange.</li>
     <li>The two positions cancel each other out, so price moves don’t matter.</li>
-    <li>In aggregate the yield is positive: the short leg collects funding on the perp, and Jr pays Sr’s yield on what it borrows.</li>
+    <li>In aggregate the yield is positive: the short leg collects funding on the perp, and Jr pays Sr’s yield on the Sr capital backing it.</li>
   </ol>
 </blockquote>
 
@@ -164,7 +164,7 @@ At today's rates, the [yield is competitive](#modal-crossover), and it's a viabl
 | Yield | ~8.3% | ~8.5%[^yield] |
 {: .highlight-last}
 
-[^yield]: At 10% funding, before rebalancing costs. The basis trade earns funding on its $83 short. The Jr carry earns funding on its $105 short and pays Sr's yield, about 8% in October, on the $26 Jr borrows.
+[^yield]: At 10% funding, before rebalancing costs. The basis trade earns funding on its $83 short. The Jr carry earns funding on its $105 short and pays Sr's yield, about 8% in October, on the $26 of Sr capital backing Jr.
 
 <dialog id="modal-crossover" class="modal">
 <div id="jpc-vs-carry" class="jpc-viz"></div>
@@ -172,23 +172,23 @@ At today's rates, the [yield is competitive](#modal-crossover), and it's a viabl
 </dialog>
 <script defer src="/assets/js/another-crypto-carry-trade/vs_carry.js"></script>
 
-However, it doesn't replace the original. It provides a second source of demand. Its risks are largely the same.[^risks]
+However, it doesn't replace the basis trade. It provides a second source of demand. Its risks are largely the same.[^risks]
 
-Insofar as leverage through Jr is cheaper than perps, the cost differential can be arbitraged. For the reasons above, (1) the perp funding premium won't go away, and (2) perps will stay more expensive than Jr. So the Jr carry should keep producing a competitive yield.
+Insofar as leverage through Jr is cheaper than perps, the cost differential can be arbitraged. For the reasons above, (1) the perp funding premium won't go away, and (2) perps will stay more expensive than Jr. So the Jr carry should continue producing a competitive yield.
 
-That's a win for perp exchanges, much as Ethena was. Capital flowing into the Jr carry adds to the short side, which brings funding down for the short-term speculators who make up the vast majority of perp users. And it adds demand for Jr, which grows 2factor.
+That's a win for perp exchanges, much as Ethena was. Capital flowing into the Jr carry adds to the short side. More shorts bring funding down for the short-term speculators, who make up the vast majority of perp users. The Jr carry also adds demand for Jr, which grows 2factor.
 
 [^risks]: **Shared with the basis trade.** Funding can turn negative. The short can be liquidated in a fast rally.
 
     **Specific to the Jr carry.** Smart contract risk, and exits that depend on Jr's liquidity.
 
-We have a working prototype vault that harvests the Jr carry, running fully on-chain on [Base](https://base.org) with no custodian and earning about 9.5% a year.[^vault]
+Btw, we have a working prototype vault that harvests the Jr carry, running fully on-chain on [Base](https://base.org) with no custodian and earning about 9.5% a year.[^vault]
 
 [^vault]: The vault takes deposits in USDC and splits them in two: it holds BTC-Jr, and takes a 5× bitcoin short on [Veranta](https://veranta.xyz), a perp DEX on Base. Its net exposure is zero, so it's delta neutral.
 
     It rebalances when its exposure drifts too far from neutral.
 
-    It earns a positive return by collecting funding on Veranta and paying Sr’s yield on what the Jr position borrows.
+    It earns a positive return by collecting funding on Veranta and paying Sr’s yield on the Sr capital backing the Jr position.
 
     As of November 4, it was earning around 9.5% a year in dollar terms.
 
