@@ -55,7 +55,7 @@ This is the classic [cash-and-carry](https://www.investopedia.com/terms/c/cash-a
   </ol>
 </blockquote>
 
-Executing it, however, takes some sophistication. One has to actively manage the short position so it doesn't get liquidated, [constantly rebalancing](#modal-rebalance) in and out of the market.
+Executing it, however, takes some sophistication. One has to actively manage the short position so it doesn't get liquidated, [constantly rebalancing](#modal-rebalance) spot positions.
 
 <dialog id="modal-rebalance" class="modal">
 <div id="jpc-rebalance" class="jpc-viz"></div>
