@@ -5,21 +5,21 @@ subtitle: "Allies, not rivals."
 date: 2026-11-06
 categories: defi
 image: /assets/images/og/another-crypto-carry-trade.png
-description: "Perps overcharge for leverage, and the basis trade collects the premium. 2factor's Jr is cheaper leverage, which makes for a second version of the trade."
+description: "Perps overcharge for leverage, and the basis trade collects the premium. 2factor's Jr is cheaper leverage, which makes for a second version of it."
 ---
 
 <script defer src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script defer src="/assets/js/another-crypto-carry-trade/data.js"></script>
 <script defer src="/assets/js/another-crypto-carry-trade/shared.js"></script>
 
-> **TL;DR:** Perps charge a persistent premium for leverage, and the basis trade harvests it. 2factor creates cheaper leverage, sourced from yield seekers rather than shorts. The Jr carry is a second version of the basis trade, viable today and good for both perps and 2factor.
+> **TL;DR:** Perps charge a persistent premium for leverage, and the basis trade harvests it. 2factor creates cheaper leverage, sourced from yield seekers rather than shorts. The "Jr carry" is a second way to harvest perp permia, viable today and mutually beneficial.
 {: .tldr}
 
 [Perpetual futures](https://en.wikipedia.org/wiki/Perpetual_futures) (perps) have become a [widely used tool for speculation](https://arxiv.org/abs/2212.06888), offering high leverage multiples up to 100×.[^perp-history]
 
-In 2025, they accounted for [68% of all bitcoin trading volume](https://blockchain.news/news/crypto-perpetual-trading-dex-cex-2026), more than twice the volume traded on underlying spot markets. They've since spread beyond cryptocurrencies to traditional assets like [commodities and equities](https://hyperliquid.gitbook.io/hyperliquid-docs/hyperliquid-improvement-proposals-hips/hip-3-builder-deployed-perpetuals).
+In 2025, they accounted for [68% of all bitcoin trading volume](https://blockchain.news/news/crypto-perpetual-trading-dex-cex-2026), more than twice the volume on underlying spot markets. They've since spread beyond cryptocurrencies to traditional assets like [commodities and equities](https://hyperliquid.gitbook.io/hyperliquid-docs/hyperliquid-improvement-proposals-hips/hip-3-builder-deployed-perpetuals).
 
-[^perp-history]: Fixed-term futures contracts, [in various forms](https://en.wikipedia.org/wiki/Confusion_of_Confusions), have traded alongside spot markets for about 400 years.
+[^perp-history]: Fixed-term futures contracts, [in various forms](https://en.wikipedia.org/wiki/Confusion_of_Confusions), have existed alongside spot markets for about 400 years.
 
     Perpetual futures, contracts that never expire and settle in cash against an index, are very recent.
 
@@ -40,9 +40,9 @@ Crypto markets have, in aggregate, been long. On Binance, the largest perp excha
 
 Funding is roughly the risk-free rate plus a [premium](https://www.bis.org/publ/work1087.htm). When the premium is persistent, market makers harvest it by taking the short side while hedging.
 
-This is the classic [cash-and-carry](https://www.investopedia.com/terms/c/cash-and-carry-arbitrage.asp) trade, aka the basis trade.[^reverse]
+This is the classic [cash-and-carry](https://www.investopedia.com/terms/c/cash-and-carry-arbitrage.asp), aka the basis trade.[^reverse]
 
-[^reverse]: When funding direction flips, the trade runs in reverse: market makers go long the perp, collect funding from the shorts, and hedge by shorting spot.
+[^reverse]: When funding direction flips, it runs in reverse: market makers go long the perp, collect funding from the shorts, and hedge by shorting spot.
 
     This [reverse cash and carry](https://www.investopedia.com/terms/r/reverse-cash-and-carry-arbitrage.asp) is less common and arguably even harder to execute. Negative funding rarely lasts, and shorting spot requires borrowing the underlying asset.
 
@@ -55,7 +55,7 @@ This is the classic [cash-and-carry](https://www.investopedia.com/terms/c/cash-a
   </ol>
 </blockquote>
 
-Executing the trade, however, takes some sophistication. One has to actively manage the short position so it doesn't get liquidated, [constantly rebalancing](#modal-rebalance) by trading in and out of the market.
+Executing it, however, takes some sophistication. One has to actively manage the short position so it doesn't get liquidated, [constantly rebalancing](#modal-rebalance) in and out of the market.
 
 <dialog id="modal-rebalance" class="modal">
 <div id="jpc-rebalance" class="jpc-viz"></div>
@@ -65,7 +65,7 @@ Executing the trade, however, takes some sophistication. One has to actively man
 
 Crypto premia were high early on, when markets were nascent. In 2021, bitcoin funding's 30-day average peaked above 35%.
 
-[Ethena](https://ethena.fi/) automated this trade and opened it to anyone through a simple staking vault, basically the basis trade in a box. They handle [off-exchange custody](https://docs.ethena.fi/overview/off-exchange-custody), hedging across exchanges, deep entry and exit liquidity, and a [reserve fund](https://docs.ethena.fi/solution-design/reserve-fund) for when funding temporarily turns negative.
+[Ethena](https://ethena.fi/) automated all of this and opened it to anyone through a simple staking vault, basically the basis trade in a box. They handle [off-exchange custody](https://docs.ethena.fi/overview/off-exchange-custody), hedging across exchanges, deep entry and exit liquidity, and a [reserve fund](https://docs.ethena.fi/solution-design/reserve-fund) for when funding temporarily turns negative.
 
 Ethena quickly scaled to $14.7 billion and helped bring premiums down. The yield offered by their system fell to about 5% in 2025, a point above T-bills.
 
@@ -135,11 +135,11 @@ But perps and 2factor aren't adversaries.
 
 Perps serve short-term, high-leverage speculation, while Jr excels at long-duration, moderate leverage: cheap and passive.
 
-They serve different parts of the market. They have a mutually beneficial relationship through carry arbitrage.
+They cover different parts of the market. They have a mutually beneficial relationship through carry arbitrage.
 
 ## Junior carry
 
-The [Jr carry trade](#modal-jrcarry) works like the basis trade.
+The [Jr carry](#modal-jrcarry) works like the basis trade.
 
 <dialog id="modal-jrcarry" class="modal">
 <div id="jpc-jrcarry" class="jpc-viz"></div>
@@ -172,11 +172,11 @@ At today's rates, the [yield is competitive](#modal-crossover), and it's a viabl
 </dialog>
 <script defer src="/assets/js/another-crypto-carry-trade/vs_carry.js"></script>
 
-However, it doesn't replace the original basis trade. It provides a second source of demand. Its risks are largely the same.[^risks]
+However, it doesn't replace the original. It provides a second source of demand. Its risks are largely the same.[^risks]
 
 Insofar as leverage through Jr is cheaper than perps, the cost differential can be arbitraged. For the reasons above, (1) the perp funding premium won't go away, and (2) perps will stay more expensive than Jr. So the Jr carry should keep producing a competitive yield.
 
-That's a win for perp exchanges, much as Ethena was. Capital flowing into the Jr carry adds to the short side, which brings funding down for the short-term speculators who make up the vast majority of perp traders. And it adds demand for Jr, which grows 2factor.
+That's a win for perp exchanges, much as Ethena was. Capital flowing into the Jr carry adds to the short side, which brings funding down for the short-term speculators who make up the vast majority of perp users. And it adds demand for Jr, which grows 2factor.
 
 [^risks]: **Shared with the basis trade.** Funding can turn negative. The short can be liquidated in a fast rally.
 
