@@ -43,7 +43,7 @@
 .post-content aside.sidenote {
   display: grid;
   grid-template-rows: 0fr;
-  margin: -20px 0 0;
+  margin: 0;                     /* closed: takes no space, so the paragraphs around it keep their gap */
   opacity: 0;
   transition: grid-template-rows .25s ease, opacity .2s ease, margin .25s ease;
 }

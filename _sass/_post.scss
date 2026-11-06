@@ -195,6 +195,15 @@
 
 .post-content strong { font-weight: 700; }
 
+/* A TL;DR at the top of a post: the blockquote rule, italic body font, a size smaller and a shade softer than the body.
+   Add {: .tldr} on the line after the > quote. */
+.post-content blockquote.tldr {
+  font-size: 0.8em;
+  line-height: 1.6;
+  font-style: italic;
+  color: var(--page-subtle);
+}
+
 /* Tables */
 
 .post-content table {
