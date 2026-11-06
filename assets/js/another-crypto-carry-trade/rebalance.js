@@ -76,7 +76,7 @@
 
   // The Jr carry: Jr holds Q bitcoin against a dollar debt D to Sr; equity E = Q·p − D. The short is Q too.
   var JC = {
-    LO: 3.5, HI: 7.5, TARGET: JRL / (1 - JRW) * JRW, longName: 'Jr', longColor: 'jr',
+    LO: 3.5, HI: 7.5, TARGET: JRL / (1 - JRW) * JRW, longName: 'Jr, 1.33\u00d7',   // the leverage the post quotes (3:1); the sim uses the measured 1.337 longColor: 'jr',
     toMargin: 'Redeeming Jr to top up margin', toLong: 'Minting Jr with spare margin',
     init: function(p) { var e = 100 * JRW, q = JRL * e / p; return { q: q, d: q * p - e, m: 100 - e }; },
     long: function(st, p) { return st.q * p - st.d; },

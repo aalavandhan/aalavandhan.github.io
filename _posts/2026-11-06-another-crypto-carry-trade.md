@@ -17,7 +17,7 @@ description: "Perps overcharge for leverage, and the basis trade collects the pr
 
 [Perpetual futures](https://en.wikipedia.org/wiki/Perpetual_futures) (perps) have become a [widely used tool for speculation](https://arxiv.org/abs/2212.06888), offering high leverage multiples up to 100×.[^perp-history]
 
-In 2025, they accounted for [68% of all Bitcoin trading volume](https://blockchain.news/news/crypto-perpetual-trading-dex-cex-2026), more than twice the volume traded on underlying spot markets. They've since spread beyond cryptocurrencies to traditional assets like [commodities and equities](https://hyperliquid.gitbook.io/hyperliquid-docs/hyperliquid-improvement-proposals-hips/hip-3-builder-deployed-perpetuals).
+In 2025, they accounted for [68% of all bitcoin trading volume](https://blockchain.news/news/crypto-perpetual-trading-dex-cex-2026), more than twice the volume traded on underlying spot markets. They've since spread beyond cryptocurrencies to traditional assets like [commodities and equities](https://hyperliquid.gitbook.io/hyperliquid-docs/hyperliquid-improvement-proposals-hips/hip-3-builder-deployed-perpetuals).
 
 [^perp-history]: Fixed-term futures contracts, [in various forms](https://en.wikipedia.org/wiki/Confusion_of_Confusions), have traded alongside spot markets for about 400 years.
 
@@ -112,7 +112,7 @@ We recently launched [2factor](https://2factor.finance/), a novel instrument bas
 <div id="jpc-tranche" class="jpc-viz"></div>
 <script defer src="/assets/js/another-crypto-carry-trade/tranche.js"></script>
 
-Perps source leverage from shorts, unlike 2factor, which sources directly from yield seekers. The basis trade taps into demand for stable yield, but warehouses the risk of holding a short position, which inevitably demands a premium.
+Perps source leverage from shorts, unlike 2factor, which sources directly from yield seekers. The basis trade in a box taps into demand for stable yield, but still warehouses the risk of holding a short position, which inevitably demands a premium.
 
 The 2factor capital structure, and where it sources leverage from, make leverage *significantly* cheaper than perps.[^sr-risk]
 
@@ -164,7 +164,7 @@ At today's rates, the [yield is competitive](#modal-crossover), and it's a viabl
 | Yield | ~8.3% | ~8.5%[^yield] |
 {: .highlight-last}
 
-[^yield]: At 10% funding, before rebalancing costs. The basis trade earns funding on its $83 short. The Jr carry earns funding on its $105 short and pays Sr's yield, about 8% this month, on the $26 Jr borrows.
+[^yield]: At 10% funding, before rebalancing costs. The basis trade earns funding on its $83 short. The Jr carry earns funding on its $105 short and pays Sr's yield, about 8% in October, on the $26 Jr borrows.
 
 <dialog id="modal-crossover" class="modal">
 <div id="jpc-vs-carry" class="jpc-viz"></div>
@@ -174,7 +174,7 @@ At today's rates, the [yield is competitive](#modal-crossover), and it's a viabl
 
 However, it doesn't replace the original basis trade. It provides a second source of demand. Its risks are largely the same.[^risks]
 
-Insofar as leverage through Jr is cheaper than perps, the cost differential can be arbitraged. For the reasons above, (1) the perp premium won't go away, and (2) perps will stay more expensive than Jr. So the Jr carry should keep producing a competitive yield.
+Insofar as leverage through Jr is cheaper than perps, the cost differential can be arbitraged. For the reasons above, (1) the perp funding premium won't go away, and (2) perps will stay more expensive than Jr. So the Jr carry should keep producing a competitive yield.
 
 That's a win for perp exchanges, much as Ethena was. Capital flowing into the Jr carry adds to the short side, which brings funding down for the short-term speculators who make up the vast majority of perp traders. And it adds demand for Jr, which grows 2factor.
 
