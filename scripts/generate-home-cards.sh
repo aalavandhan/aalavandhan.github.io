@@ -74,5 +74,7 @@ make_card "borrow-short-bet-long" \
   "$IMG/borrow-short-bet-long/fig_margin_call.jpg"
 make_cover_card "the-way-of-the-index" \
   "$IMG/the-way-of-the-index/hero.png"
+make_card "another-crypto-carry-trade" \
+  "$IMG/another-crypto-carry-trade/og_figure.png"
 
 echo "Done."

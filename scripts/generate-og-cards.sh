@@ -167,6 +167,12 @@ make_card "the-way-of-the-index" 7 \
   "$IMG/the-way-of-the-index/hero.png" \
   "$BG" "$TEXT" "$MUTED" "$TINT"
 
+# og_figure.png is a static frame of the post's d3 tranching diagram (the river splitting into
+# rapids and a canal), captured with headless Chrome at 2x and trimmed.
+make_card "another-crypto-carry-trade" 8 \
+  "$IMG/another-crypto-carry-trade/og_figure.png" \
+  "$BG" "$TEXT" "$MUTED" "$TINT"
+
 # Site default — used for the home page and any page without its own image.
 make_brand_card "default" \
   "$BG" "$TEXT" "$MUTED" "$TINT" \
