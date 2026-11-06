@@ -225,6 +225,13 @@
   font-weight: 600;
 }
 
+/* A table can highlight its last row (a total, or the line the table is about): add
+   {: .highlight-last} on the line after the table. Notes that open as rows don't count. */
+.post-content table.highlight-last tr:nth-last-child(1 of :not(.sidenote-row)) td {
+  background: var(--ui-surface-active);
+  font-weight: 600;
+}
+
 /* Horizontal rules — Medium-style three dots */
 
 .post-content hr {

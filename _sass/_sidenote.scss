@@ -1,0 +1,99 @@
+// Sidenotes: markdown footnotes ([^name]) that open where they're referenced instead of at the
+// end of the post. Wired in _layouts/post.html. Click the marker to open a note, click again (or
+// Esc, or open another) to collapse it. On wide screens a note opens in the right margin beside
+// its line; otherwise it unfolds below the paragraph. Use them for asides that matter but would
+// break the flow: a mechanism, a caveat, a derivation, a source's detail.
+
+.post-content.has-sidenotes { position: relative; }
+.post-content.has-sidenotes > .footnotes { display: none; }
+
+/* The marker: a small + tag in the same marker tint as modal links (yellow means "opens something
+   here"). It turns to − while its note is open. No number: each note opens beside its marker. */
+.post-content a.sidenote-ref {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5em;
+  height: 1.5em;
+  margin-left: 0.18em;
+  border-radius: 4px;
+  background: var(--modal-link-mark);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 0.62em;
+  font-weight: 500;
+  line-height: 1;
+  vertical-align: 0.5em;
+  color: var(--page-text);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color .15s ease;
+}
+.post-content a.sidenote-ref::after {
+  content: "+";
+  opacity: 0.75;
+}
+.post-content a.sidenote-ref:hover,
+.post-content a.sidenote-ref[aria-expanded="true"] { background: var(--modal-link-mark-hover); }
+.post-content a.sidenote-ref[aria-expanded="true"]::after { content: "\2212"; }
+.post-content a.sidenote-ref:focus { outline: none; }
+.post-content a.sidenote-ref:focus-visible { outline: 2px solid var(--modal-link-mark-hover); outline-offset: 2px; }
+.post-content sup:has(> a.sidenote-ref) { vertical-align: baseline; font-size: inherit; line-height: 0; }
+
+/* The note, inline: unfolds below its paragraph. */
+.post-content aside.sidenote {
+  display: grid;
+  grid-template-rows: 0fr;
+  margin: -20px 0 0;
+  opacity: 0;
+  transition: grid-template-rows .25s ease, opacity .2s ease, margin .25s ease;
+}
+.post-content aside.sidenote > div {
+  overflow: hidden;
+  min-height: 0;
+}
+.post-content aside.sidenote .sidenote-body {
+  padding: 14px 18px 14px 16px;
+  border-left: 3px solid var(--modal-link-mark-hover);
+  background: var(--ui-surface);
+  border-radius: 0 8px 8px 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--page-text);
+}
+.post-content aside.sidenote .sidenote-body p { margin: 0 0 10px; font-size: inherit; line-height: inherit; letter-spacing: 0; }
+.post-content aside.sidenote .sidenote-body p:last-child { margin-bottom: 0; }
+.post-content aside.sidenote .sidenote-body strong { font-weight: 600; }
+.post-content aside.sidenote.open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  margin: -12px 0 28px;
+}
+
+/* In a table cell, the marker sits on the text's line rather than raised like a superscript. */
+.post-content td a.sidenote-ref { vertical-align: 0.12em; margin-left: 0.35em; }
+
+/* In a table, the note sits in its own full-width row under the marker's row. */
+.post-content table tr.sidenote-row > td { padding: 0; border-bottom: 0; }
+.post-content tr.sidenote-row aside.sidenote { margin: 0; }
+.post-content tr.sidenote-row aside.sidenote.open { margin: 2px 0 10px; }
+
+/* The note, in the margin: beside its line on screens wide enough for a column of notes. */
+@media screen and (min-width: 1280px) {
+  .post-content aside.sidenote {
+    position: absolute;
+    left: calc(100% + 40px);
+    width: 240px;
+    margin: 0;
+    grid-template-rows: 1fr;
+    transform: translateX(-6px);
+    transition: opacity .2s ease, transform .2s ease;
+    pointer-events: none;
+  }
+  .post-content aside.sidenote.open { margin: 0; transform: none; pointer-events: auto; }
+  .post-content aside.sidenote .sidenote-body { background: none; padding: 2px 0 2px 14px; border-radius: 0; font-size: 13.5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .post-content aside.sidenote { transition: none; }
+}

@@ -7,6 +7,7 @@ Nithin's blog — [nithink.dev](https://nithink.dev). A [Jekyll](https://jekyllr
 ```sh
 make install     # bundle install
 make serve       # dev server at http://localhost:4000 (watches for changes)
+make drafts      # same, with _drafts/ included
 make help        # list every target
 ```
 

@@ -19,6 +19,22 @@
 .post-content blockquote.callout p:last-child {
   margin-bottom: 0;
 }
+/* A numbered list of steps inside a callout. */
+.post-content blockquote.callout ol {
+  margin: 0;
+  padding-left: 1.4em;
+}
+.post-content blockquote.callout ol li {
+  margin: 0 0 10px;
+  padding-left: 0.2em;
+}
+.post-content blockquote.callout ol li:last-child {
+  margin-bottom: 0;
+}
+.post-content blockquote.callout ol li::marker {
+  font-weight: 600;
+  color: var(--page-muted);
+}
 /* Eyebrow label with inline icon */
 .post-content blockquote.callout .how-label {
   display: flex;

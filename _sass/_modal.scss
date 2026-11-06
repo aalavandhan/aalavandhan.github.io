@@ -1,0 +1,85 @@
+// Modal links and dialogs. A link to #modal-<name> opens <dialog id="modal-<name>" class="modal">
+// on the same page (wired in _layouts/post.html). Use it for anything too big or too optional
+// for the column: an interactive explainer, a long table, a derivation.
+//
+//   One has to [rebalance constantly](#modal-rebalance) ...
+//   <dialog id="modal-rebalance" class="modal"> ... <p class="modal-caption">...</p> </dialog>
+
+/* The link: a marker tint under the words and a small expand mark after them, so it reads as
+   "opens something here", not "goes somewhere else". */
+.post-content a[href^="#modal-"] {
+  text-decoration: none;
+  background-image: linear-gradient(transparent 58%, var(--modal-link-mark) 58%);
+  background-repeat: no-repeat;
+  padding: 0 1px;
+  cursor: pointer;
+  transition: background-image .15s ease;
+}
+.post-content a[href^="#modal-"]::after {
+  content: "";
+  display: inline-block;
+  width: 0.62em;
+  height: 0.62em;
+  margin-left: 0.22em;
+  vertical-align: 0.12em;
+  background-color: currentColor;
+  opacity: 0.55;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 1h4v4M5 11H1V7M11 1 7 5M1 11l4-4'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 1h4v4M5 11H1V7M11 1 7 5M1 11l4-4'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.post-content a[href^="#modal-"]:hover {
+  background-image: linear-gradient(transparent 0%, var(--modal-link-mark-hover) 0%);
+}
+.post-content a[href^="#modal-"]:hover::after { opacity: 0.9; }
+.post-content a[href^="#modal-"]:focus { outline: none; }
+.post-content a[href^="#modal-"]:focus-visible {
+  outline: 2px solid var(--modal-link-mark-hover);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* The dialog. */
+dialog.modal {
+  /* The page reset zeroes margins; a modal dialog centers itself with auto margins. */
+  margin: auto;
+  width: min(880px, 94vw);
+  max-height: 94vh;
+  padding: 28px 24px 14px;
+  border: 1px solid var(--ui-border);
+  border-radius: 12px;
+  background: var(--page-bg);
+  color: var(--page-text);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
+}
+dialog.modal::backdrop { background: rgba(0, 0, 0, 0.45); }
+dialog.modal:focus { outline: none; }
+/* Content sits flush in the dialog: no page-flow spacing above or below. */
+dialog.modal > * { margin-top: 0; margin-bottom: 0; }
+dialog.modal[open] { animation: modal-in .18s ease-out; }
+@keyframes modal-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+dialog.modal .modal-caption {
+  margin-top: 12px;
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: var(--page-muted);
+}
+dialog.modal .modal-close {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  padding: 4px 8px;
+  border: 0;
+  background: none;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--page-muted);
+  cursor: pointer;
+}
+dialog.modal .modal-close:hover { color: var(--page-text); }
+dialog.modal .modal-close:focus:not(:focus-visible) { outline: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  dialog.modal[open] { animation: none; }
+}

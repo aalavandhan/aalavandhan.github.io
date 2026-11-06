@@ -4,7 +4,7 @@ export PATH := /usr/local/opt/ruby/bin:/usr/local/lib/ruby/gems/4.0.0/bin:$(PATH
 export CXX := /usr/local/opt/llvm/bin/clang++
 export CC := /usr/local/opt/llvm/bin/clang
 
-.PHONY: install serve build clean new deploy status lint
+.PHONY: install serve drafts build clean new deploy status lint
 
 ## install: Install Ruby dependencies
 install:
@@ -13,6 +13,10 @@ install:
 ## serve: Start local dev server at http://localhost:4000
 serve:
 	bundle exec jekyll serve --watch
+
+## drafts: Start the dev server with _drafts/ included
+drafts:
+	bundle exec jekyll serve --watch --drafts
 
 ## build: Build the site into _site/
 build:

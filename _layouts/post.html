@@ -5,8 +5,11 @@ layout: default
   Read time counts prose only. The code viewer parks its listing in a <template>,
   which strip_html would otherwise count as words — four source files is enough
   to double the estimate. Drop every <template>…</template> span first.
+  Footnotes (sidenotes) are optional reading, so they don't count either. Kramdown puts them
+  all in one <div class="footnotes"> at the end of the content: drop it and what follows.
 {%- endcomment -%}
-{%- assign chunks = content | split: '<template' -%}
+{%- assign body = content | split: '<div class="footnotes"' | first -%}
+{%- assign chunks = body | split: '<template' -%}
 {%- capture prose -%}
   {{- chunks[0] -}}
   {%- for chunk in chunks offset: 1 -%}{{ chunk | split: '</template>' | last }}{%- endfor -%}
@@ -40,6 +43,134 @@ layout: default
 </div>
 
 <script>
+// Sidenotes: turn markdown footnotes into notes that open where they're referenced (see _sass/_sidenote.scss).
+(function() {
+  var post = document.querySelector('.post-content');
+  if (!post) return;
+  var refs = post.querySelectorAll('a.footnote[href^="#fn:"]');
+  if (!refs.length) return;
+  post.classList.add('has-sidenotes');
+  var wide = window.matchMedia('(min-width: 1280px)');
+  var notes = [];
+
+  refs.forEach(function(ref, i) {
+    var li = document.getElementById(ref.getAttribute('href').slice(1));
+    if (!li) return;
+    var body = li.cloneNode(true);
+    body.querySelectorAll('.reversefootnote').forEach(function(b) { b.remove(); });
+    var aside = document.createElement('aside');
+    aside.className = 'sidenote';
+    aside.id = 'sidenote-' + (i + 1);
+    aside.innerHTML = '<div><div class="sidenote-body">' + body.innerHTML + '</div></div>';
+    // In a table, the note unfolds as a full-width row under the marker's row. Elsewhere it
+    // unfolds below the block the marker sits in.
+    var tr = ref.closest('tr');
+    if (tr && post.contains(tr)) {
+      var row = document.createElement('tr'), cell = document.createElement('td');
+      row.className = 'sidenote-row';
+      cell.colSpan = tr.cells.length;
+      cell.appendChild(aside);
+      row.appendChild(cell);
+      tr.parentNode.insertBefore(row, tr.nextSibling);
+    } else {
+      var block = ref.closest('p, li, blockquote') || ref.parentNode;
+      while (block.parentNode !== post && block.parentNode) block = block.parentNode;
+      block.parentNode.insertBefore(aside, block.nextSibling);
+    }
+
+    // Keep the marker on the same line as the word before it.
+    var sup = ref.parentNode.tagName === 'SUP' ? ref.parentNode : ref, prev = sup.previousSibling;
+    if (prev && prev.nodeType === 3) {
+      var m = prev.data.match(/\S+$/);
+      if (m) {
+        var glue = document.createElement('span');
+        glue.style.whiteSpace = 'nowrap';
+        prev.data = prev.data.slice(0, m.index);
+        sup.parentNode.insertBefore(glue, sup);
+        glue.appendChild(document.createTextNode(m[0]));
+        glue.appendChild(sup);
+      }
+    }
+    // Notes open beside their markers, so the marker needs no number: it's a + that turns to − (CSS).
+    ref.textContent = '';
+    ref.setAttribute('aria-label', 'Note');
+    ref.classList.add('sidenote-ref');
+    ref.setAttribute('role', 'button');
+    ref.setAttribute('aria-expanded', 'false');
+    ref.setAttribute('aria-controls', aside.id);
+    notes.push({ ref: ref, aside: aside });
+    ref.addEventListener('click', function(e) {
+      e.preventDefault();
+      var open = aside.classList.contains('open');
+      closeAll();
+      if (!open) show(ref, aside);
+    });
+  });
+
+  function place(ref, aside) {
+    // In the margin, line the note up with its marker.
+    aside.style.top = wide.matches ? (ref.getBoundingClientRect().top - post.getBoundingClientRect().top - 4) + 'px' : '';
+  }
+  function show(ref, aside) {
+    place(ref, aside);
+    aside.classList.add('open');
+    ref.setAttribute('aria-expanded', 'true');
+  }
+  function closeAll() {
+    notes.forEach(function(n) { n.aside.classList.remove('open'); n.ref.setAttribute('aria-expanded', 'false'); });
+  }
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeAll(); });
+  // A URL ending in #fn:<name> opens that note.
+  if (location.hash.indexOf('#fn:') === 0) {
+    notes.forEach(function(n) {
+      if (n.ref.getAttribute('href') !== location.hash) return;
+      n.ref.scrollIntoView({ block: 'center' });
+      show(n.ref, n.aside);
+    });
+  }
+  window.addEventListener('resize', function() {
+    notes.forEach(function(n) { if (n.aside.classList.contains('open')) place(n.ref, n.aside); });
+  });
+})();
+
+// Modal links: a link to #modal-<name> opens <dialog id="modal-<name>" class="modal"> (see _sass/_modal.scss).
+// Opening fires a resize, so charts inside that skipped drawing while hidden draw at the dialog's width.
+(function() {
+  document.querySelectorAll('dialog.modal').forEach(function(dlg) {
+    var close = document.createElement('button');
+    close.type = 'button';
+    close.className = 'modal-close';
+    close.setAttribute('aria-label', 'Close');
+    close.textContent = '\u00d7';
+    close.addEventListener('click', function() { dlg.close(); });
+    dlg.insertBefore(close, dlg.firstChild);
+    // A click on the backdrop lands on the dialog itself.
+    dlg.addEventListener('click', function(e) { if (e.target === dlg) dlg.close(); });
+  });
+  function open(id, opener) {
+    var dlg = document.getElementById(id);
+    if (!dlg || !dlg.showModal) return false;
+    dlg.showModal();
+    // Focus the dialog itself rather than its close button, so no focus ring shows on open.
+    dlg.setAttribute('tabindex', '-1');
+    dlg.focus();
+    // Charts inside draw now, at the dialog's width, so the modal opens with its content in
+    // place instead of growing after the open animation. The resize is a fallback for others.
+    dlg.dispatchEvent(new Event('modal:open'));
+    window.dispatchEvent(new Event('resize'));
+    // Closing returns focus to the link; after a mouse click, drop it so no focus ring lingers.
+    if (opener) dlg.addEventListener('close', function() { opener.blur(); }, { once: true });
+    return true;
+  }
+  document.addEventListener('click', function(e) {
+    var a = e.target.closest && e.target.closest('a[href^="#modal-"]');
+    // e.detail is 0 for a keyboard "click", so keyboard users keep their focus ring.
+    if (a && open(a.getAttribute('href').slice(1), e.detail ? a : null)) e.preventDefault();
+  });
+  // A URL ending in #modal-<name> opens that modal on load, so a modal can be linked to.
+  if (location.hash.indexOf('#modal-') === 0) window.addEventListener('load', function() { open(location.hash.slice(1)); });
+})();
+
 // Animate content SVGs only when scrolled into view (the hero SVG animates immediately)
 (function() {
   var svgs = document.querySelectorAll('.post-content img[src$=".svg"]');
