@@ -15,7 +15,7 @@ description: "Perps charge a persistent premium for leverage, and the basis trad
 > **TL;DR:** Perps charge a persistent premium for leverage, and the basis trade harvests it. 2factor creates cheaper leverage, sourced from yield seekers rather than shorts. The "Jr carry" is a second way to harvest perp premia, viable today and mutually beneficial.
 {: .tldr}
 
-[Perpetual futures](https://en.wikipedia.org/wiki/Perpetual_futures) (perps) have become a [widely used tool for speculation](https://arxiv.org/abs/2212.06888), offering high leverage multiples up to 100×.[^perp-history]
+[Perpetual futures](https://en.wikipedia.org/wiki/Perpetual_futures) (perps) have become a [widely used tool for speculation](https://arxiv.org/abs/2212.06888), offering high leverage multiples beyond 100×.[^perp-history]
 
 In 2025, they accounted for [68% of all bitcoin trading volume](https://blockchain.news/news/crypto-perpetual-trading-dex-cex-2026), more than twice the volume on underlying spot markets. They've since spread beyond cryptocurrencies to traditional assets like [commodities and equities](https://hyperliquid.gitbook.io/hyperliquid-docs/hyperliquid-improvement-proposals-hips/hip-3-builder-deployed-perpetuals).
 
@@ -87,7 +87,7 @@ This is likely to stay true for the foreseeable future, for structural reasons a
 
 **The structural reason** is that funding is charged on the full notional value of the position.
 
-Say Alice and Bob each have $100 and want $200 of bitcoin. Alice opens a 2× perp long and pays funding on all $200, or $20 a year at a 10% funding rate.
+Say Alice and Bob each have $100 and want $200 of bitcoin exposure. Alice opens a 2× perp long and pays funding on all $200, or $20 a year at a 10% funding rate.
 
 Bob buys $200 of bitcoin with his $100 and a $100 margin loan at the same 10%, and pays interest only on the $100 he borrowed, or $10 a year. On his $200 of bitcoin, Bob pays an effective rate of just 5%.[^low-lev]
 
