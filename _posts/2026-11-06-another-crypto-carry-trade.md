@@ -118,11 +118,11 @@ The 2factor capital structure, and where it sources leverage from, make leverage
 
 [^sr-risk]: Why is 2factor cheaper?
 
-    **Moderate leverage.** Jr targets modest multiples like 1.33×, so Sr funds only about a third of a dollar for every Jr dollar. Sr's capital stays a small slice of the pool, behind a thick layer of Jr.
+    **Moderate leverage.** Like Bob's margin loan, Jr pays only on the Sr capital backing it, not on its full exposure. At 1.33×, that's a third of a dollar per Jr dollar.
 
-    **The capital split.** Jr's capital takes price moves first. With three Jr dollars for every Sr dollar, bitcoin would have to fall about 75% before Sr lost anything, which the [white paper](https://chat.2factor.finance/durable-leverage.pdf) puts at roughly a 4-sigma move within a single 28-day period.
+    **The capital split.** Jr's capital takes price moves first. With three Jr dollars for every Sr dollar, the underlying would have to fall about 75% before Sr lost anything. Jr–Sr ratios are tuned per asset so that Sr only takes a loss on a 4-sigma drawdown within a single maturity period.
 
-    **Settled in the underlying.** Both tranches are claims on the same pool of bitcoin and are paid out in bitcoin, so there's no cash leg, no outside counterparty and nothing to liquidate.
+    **Settled in the underlying.** Both tranches are claims on the same pool of the underlying asset and are paid out in it, so there's no cash leg, no outside counterparty and nothing to liquidate.
 
     **No duration mismatch.** Long-term leverage is funded by long-term yield.
 
@@ -164,7 +164,11 @@ At today's rates, the [yield is competitive](#modal-crossover), and it's a viabl
 | Yield | ~8.3% | ~8.5%[^yield] |
 {: .highlight-last}
 
-[^yield]: At 10% funding, before rebalancing costs. The basis trade earns funding on its $83 short. The Jr carry earns funding on its $105 short and pays Sr's yield, about 8% in October, on the $26 of Sr capital backing Jr.
+[^yield]: At 10% funding, before rebalancing costs. The basis trade earns funding on its $83 short.
+
+    The Jr carry earns funding on its $105 short and pays Sr's yield, about 8% in October, on the $26 of Sr capital backing Jr.
+
+    Jr carry has a small edge.
 
 <dialog id="modal-crossover" class="modal">
 <div id="jpc-vs-carry" class="jpc-viz"></div>
@@ -176,7 +180,11 @@ However, it doesn't replace the basis trade. It provides a second source of dema
 
 Insofar as leverage through Jr is cheaper than perps, the cost differential can be arbitraged. For the reasons above, (1) the perp funding premium won't go away, and (2) perps will stay more expensive than Jr. So the Jr carry should continue producing a competitive yield.
 
-That's a win for perp exchanges, much as Ethena was. Capital flowing into the Jr carry adds to the short side. More shorts bring funding down for the short-term speculators, who make up the vast majority of perp users. The Jr carry also adds demand for Jr, which grows 2factor.
+That's a win for perp exchanges, much as Ethena was. Capital flowing into the Jr carry adds to the short side. More shorts bring funding down for the short-term speculators, who make up the vast majority of perp users. And the Jr carry is more capital efficient than the basis trade at bootstrapping short open interest.[^oi] 
+
+It also adds demand for Jr, which grows 2factor.
+
+[^oi]: $1 million in the Jr carry adds about $1.05 million of short open interest, against $830,000 from the basis trade. That's over 25% more per dollar.
 
 [^risks]: **Shared with the basis trade.** Funding can turn negative. The short can be liquidated in a fast rally.
 
