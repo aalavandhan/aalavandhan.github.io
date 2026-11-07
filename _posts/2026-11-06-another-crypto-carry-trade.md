@@ -184,7 +184,11 @@ That's a win for perp exchanges, much as Ethena was. Capital flowing into the Jr
 
 It also adds demand for Jr, which grows 2factor.
 
-[^oi]: $1 million in the Jr carry adds about $1.05 million of short open interest, against $830,000 from the basis trade. That's over 25% more per dollar.
+[^oi]: Take $1 million. The basis trade buys about $830,000 of spot and posts the other $170,000 as margin on the perp exchange, enough for an $830,000 short at 5×.
+
+    The Jr carry puts $790,000 into Jr, which at 1.33× is $1.05 million of exposure. The other $210,000 goes to the perp exchange as margin for a matching $1.05 million short.
+
+    Jr carry give you over 25% more short open interest with the same capital.
 
 [^risks]: **Shared with the basis trade.** Funding can turn negative. The short can be liquidated in a fast rally.
 
