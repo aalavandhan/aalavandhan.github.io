@@ -98,13 +98,20 @@ We have the benefit of hindsight. To Buffett's credit, he has been doing this fo
 
     This is another version of [Kelly](https://en.wikipedia.org/wiki/Kelly_criterion)'s principle from 1956: maximize the long-run growth rate of wealth. Latané (1959), Breiman (1961) and Thorp (1971) extended it from gambling to investing, and Thorp formalized the connection.
 
-Today, the average investor's options for leverage are limited. Embedded leverage, through leveraged ETFs and options, is expensive.[^embedded] Margin is cheaper, but it carries liquidation risk and needs active management.
+Today, the average investor's menu for leverage is limited. Embedded leverage, through leveraged ETFs and options, is expensive.[^embedded] Margin is cheaper, but it carries liquidation risk and needs active management.
 
 [^embedded]: Embedded leverage products come with [volatility drag]({% post_url 2026-03-15-hidden-costs-leveraged-etfs %}). The multiples the market offers are too high, and the drag grows with the square of the multiple.
 
 We built [2factor](https://2factor.finance/) to offer long-term leverage that is relatively cheap and bears no risk of liquidation.
 
 Leverage is a double-edged sword. Even without margin calls, leverage magnifies drawdowns, and not everyone can stomach the volatility. Buffett's [warnings](#modal-letters-warnings) hold for good reason.
+
+---
+
+**Further reading:**
+
+- [Buffett's Alpha](https://www.nber.org/papers/w19681) — an empirical analysis of Buffett's returns.
+- [The Leverage Constraint](https://capitalgains.thediff.co/p/leverageconstraint) — how distortions in the pricing of risk can be traced back to leverage constraints.
 
 {% include buffetts-leverage/letters-leverage.html %}
 {% include buffetts-leverage/letters-nuance.html %}
