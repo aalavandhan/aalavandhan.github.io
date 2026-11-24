@@ -26,7 +26,7 @@ So is Buffett simply this lucky winner?
 <script defer src="/assets/js/buffetts-leverage/knockout.js"></script>
 <div id="blv-knockout" class="blv-viz"></div>
 
-[Empirical analysis](https://www.nber.org/papers/w19681) suggests that his success was not random. Rather the result of measured, deliberate action.
+[Empirical analysis](https://www.nber.org/papers/w19681) suggests that his success was not random. Rather, it was the result of measured, deliberate action.
 
 His returns are largely explained by two complementary factors.
 
