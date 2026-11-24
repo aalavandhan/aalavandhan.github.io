@@ -3,3 +3,9 @@ _site
 .jekyll-cache
 .jekyll-metadata
 vendor
+
+# Buffett's leverage: downloaded market data and the bulk outputs built from it.
+# The scripts that fetch and rebuild them are kept.
+scripts/buffetts-leverage/replication/data/
+scripts/buffetts-leverage/screeners/*/data/
+scripts/buffetts-leverage/screeners/*/out/

@@ -173,6 +173,13 @@ make_card "another-crypto-carry-trade" 8 \
   "$IMG/another-crypto-carry-trade/og_figure.png" \
   "$BG" "$TEXT" "$MUTED" "$TINT"
 
+# og_figure.png is a static frame of the post's opening illustration (the bell curve of Sharpe
+# ratios with Berkshire at the far right). The source SVG takes its colours from CSS variables,
+# so it is captured with headless Chrome at 2x and trimmed instead of rasterized directly.
+make_card "buffetts-leverage" 9 \
+  "$IMG/buffetts-leverage/og_figure.png" \
+  "$BG" "$TEXT" "$MUTED" "$TINT"
+
 # Site default — used for the home page and any page without its own image.
 make_brand_card "default" \
   "$BG" "$TEXT" "$MUTED" "$TINT" \

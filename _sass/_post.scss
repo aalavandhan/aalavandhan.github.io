@@ -255,3 +255,12 @@
   letter-spacing: 0;
   color: var(--rule-color);
 }
+
+/* A milder break: a short hairline, for a pause inside a section. Write <hr class="soft"> in the post. */
+.post-content hr.soft {
+  width: 56px;
+  margin: 34px auto;
+  border-top: 1px solid var(--rule-color);
+  opacity: 0.45;
+}
+.post-content hr.soft::before { content: none; }
