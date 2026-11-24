@@ -78,11 +78,11 @@ To illustrate, we built a rudimentary synthetic index[^synthetic] of public stoc
 
     **Cheap** is book-to-market: net worth on the balance sheet divided by value on the stock market.
 
-    **Safe** is beta: how much the stock has moved with the market over the past five years.
+    **Safe** is low beta: how little the stock has moved with the market over the past five years.
 
     **Profitable** is operating profit divided by net worth.
 
-    We construct three market-weighted portfolios from the top 20% of each group.
+    We construct three market-weighted portfolios from the top 20% on each filter: the cheapest, the safest (lowest beta) and the most profitable.
     Then we simply invest a third of the money in each portfolio.
 
     For the leveraged index, we assume monthly resets, financing at the T-bill rate, and no trading costs or forced liquidations.
