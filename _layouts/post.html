@@ -7,12 +7,19 @@ layout: default
   to double the estimate. Drop every <template>…</template> span first.
   Footnotes (sidenotes) are optional reading, so they don't count either. Kramdown puts them
   all in one <div class="footnotes"> at the end of the content: drop it and what follows.
+  Modals are optional reading too (a book of quotes can hold more words than the post), so every
+  <dialog>…</dialog> span is dropped the same way as the templates.
 {%- endcomment -%}
 {%- assign body = content | split: '<div class="footnotes"' | first -%}
 {%- assign chunks = body | split: '<template' -%}
 {%- capture prose -%}
   {{- chunks[0] -}}
   {%- for chunk in chunks offset: 1 -%}{{ chunk | split: '</template>' | last }}{%- endfor -%}
+{%- endcapture -%}
+{%- assign chunks = prose | split: '<dialog' -%}
+{%- capture prose -%}
+  {{- chunks[0] -}}
+  {%- for chunk in chunks offset: 1 -%}{{ chunk | split: '</dialog>' | last }}{%- endfor -%}
 {%- endcapture -%}
 {% assign words = prose | strip_html | number_of_words %}{% assign minutes = words | divided_by: 265 %}{% if minutes < 1 %}{% assign minutes = 1 %}{% endif %}
 <div class="post">
