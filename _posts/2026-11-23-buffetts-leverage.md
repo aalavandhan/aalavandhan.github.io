@@ -5,7 +5,7 @@ subtitle: "Moderate, cheap and non-callable"
 date: 2026-11-23
 categories: finance
 image: /assets/images/og/buffetts-leverage.png
-description: "Berkshire's edge is pairing good assets with cheap money that can't be called. The picks can be copied. The funding is the hard part."
+description: "Berkshire's edge comes from its innovative capital structure. This lets the company borrow hundreds of billions at rates often lower than the risk-free rate."
 ---
 
 <script defer src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
