@@ -10,6 +10,9 @@ window.JPC = (function() {
     ':root[data-theme=dark]{--jpc-jr:#3987e5;--jpc-perp:#e0682e;--jpc-margin:#199e70;--jpc-other:#9a9a9a;',
     '--jpc-grid:#26272b;--jpc-axis:#3a3b40;--jpc-fill:rgba(57,135,229,0.16);--jpc-fill-perp:rgba(224,104,46,0.16);}',
     '.jpc-viz{position:relative;width:100%;margin:36px 0 40px;font-family:' + FONT + ';color:var(--page-text);}',
+    // These charts take their colours from the theme, so on the dark page they sit on the page itself,
+    // not on the light panel the site gives charts drawn only for light (_sass/_post.scss).
+    ':root[data-theme=dark] .post-content > div.jpc-viz[id]:has(svg){background:transparent;}',
     '.jpc-viz svg{display:block;overflow:visible;}',
     '.jpc-viz text{font-family:' + FONT + ';}',
     '.jpc-controls{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;margin:0 0 10px;font-size:13px;color:var(--page-muted);}',
