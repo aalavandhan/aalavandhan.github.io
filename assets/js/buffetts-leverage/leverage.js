@@ -4,7 +4,7 @@
 (function() {
   var J = window.BLV;
   var rows = J.data.leverage.map(function(r) { return { y: r[0], lev: r[1], cost: r[2], tb: r[3] }; });
-  var avg = d3.mean(rows.filter(function(d) { return d.y >= 1996; }), function(d) { return d.lev; });
+  var avg = d3.mean(rows, function(d) { return d.lev; });   // 1976-2025; years before 1995 are estimates (build_post_data.py)
   // yearly change, %: share price and assets per share. Before 1996 the asset figure is an estimate (build_post_data.py).
   var stock = J.data.stock.map(function(r) { return { y: r[0], pc: r[1], ac: r[2], est: !!r[3] }; });
   var mode = 'lev';   // kept outside the draw so a resize redraws the tab that was open
@@ -30,7 +30,7 @@
     var data = stock;
     var f = J.frame(root, 260, { top: 16, right: 16, bottom: 30, left: 44 });
     var x = d3.scaleLinear().domain(d3.extent(data, function(d) { return d.y; })).range([0, f.iw]);
-    var y = d3.scaleLinear().domain([-40, 120]).range([f.ih, 0]);
+    var y = d3.scaleLinear().domain([-40, 140]).range([f.ih, 0]);
     J.gridY(f, y, 8);
     J.xAxis(f, x, f.iw < 420 ? 5 : 10, d3.format('d')).select('.domain').remove();
     J.yAxis(f, y, 8, function(d) { return (d > 0 ? '+' : '') + d + '%'; });
@@ -77,10 +77,10 @@
   function drawLeverage(root) {
     var f = J.frame(root, 260, { top: 16, right: 84, bottom: 30, left: 40 });
     var x = d3.scaleLinear().domain(d3.extent(rows, function(d) { return d.y; })).range([0, f.iw]);
-    var y = d3.scaleLinear().domain([1, 2.2]).range([f.ih, 0]);
-    J.gridY(f, y, 5);
-    J.xAxis(f, x, f.iw < 420 ? 4 : 7, d3.format('d')).select('.domain').remove();
-    J.yAxis(f, y, 5, function(d) { return d.toFixed(1) + '×'; });
+    var y = d3.scaleLinear().domain([1, 2.8]).range([f.ih, 0]);
+    J.gridY(f, y, 6);
+    J.xAxis(f, x, f.iw < 420 ? 5 : 10, d3.format('d')).select('.domain').remove();
+    J.yAxis(f, y, 6, function(d) { return d.toFixed(1) + '×'; });
 
     f.g.append('line').attr('x1', 0).attr('x2', f.iw).attr('y1', y(avg)).attr('y2', y(avg))
       .style('stroke', J.C.text).attr('stroke-width', 1).attr('stroke-dasharray', '4,3');

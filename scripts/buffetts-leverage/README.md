@@ -25,7 +25,7 @@ Everything here backs the post `_posts/2026-11-23-buffetts-leverage.md`. The pos
 
 | File | What it does |
 |---|---|
-| `build_post_data.py` | Builds `assets/js/buffetts-leverage/data.js` from the CSVs and `screeners/series.csv`. Also holds the two illustrative estimates (cost of borrowing and asset returns before 1996) and the 2.2x synthetic series. |
+| `build_post_data.py` | Builds `assets/js/buffetts-leverage/data.js` from the CSVs and `screeners/series.csv`. Also holds the illustrative estimates for the years before our balance-sheet data begins (leverage for 1976-1994, cost of borrowing and asset returns before 1996) and the 2.2x synthetic series. |
 | `sharpe_chart.py` | Draws the opening illustration into `_includes/buffetts-leverage/sharpe-distribution.svg`. |
 | `sharpe.py`, `fetch.py` | Sharpe ratios for long-lived S&P 1500 members, 1976-2025 (`sharpes.json`). |
 | `lev.py`, `bt.py` | First-pass leverage and backtest scripts. Superseded by `replication/` and `screeners/`; they still read some inputs from a temporary folder and will not rerun as they stand. |

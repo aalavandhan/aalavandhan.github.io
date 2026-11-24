@@ -1,8 +1,8 @@
 """Build assets/js/buffetts-leverage/data.js from the CSVs in this folder.
 
-leverage: [year, leverage_mv, blended_cost_pct, tbill_pct]         1995-2025
-cost:     [year, blended_cost_pct, tbill_pct, estimated(0/1)]       1977-2025
-stock:    [year, share_price_change_pct, assets_per_share_change_pct, estimated(0/1)] 1977-2025
+leverage: [year, leverage_mv, blended_cost_pct, tbill_pct, estimated(0/1)] 1976-2025
+cost:     [year, blended_cost_pct, tbill_pct, estimated(0/1)]       1976-2025
+stock:    [year, share_price_change_pct, assets_per_share_change_pct, estimated(0/1)] 1976-2025
 race:     [month, then one value per name in race_cols]: growth of $1 from the end of 1975, from screeners/series.csv
 metrics:  [name, colour key, return % a year, $1 becomes, volatility %, Sharpe, worst drawdown %, worst month %]
 """
@@ -38,7 +38,7 @@ for r in csv.DictReader(open(HERE / "leverage_cost.csv")):
 frow = {int(r["year"]): r for r in csv.DictReader(open(HERE / "float.csv"))}
 lrow = {int(r["year"]): r for r in csv.DictReader(open(HERE / "leverage_cost.csv"))}
 cost = []
-for y in range(1977, 2026):
+for y in range(1976, 2026):
     b = lrow.get(y, {}).get("blend_pct")
     if b and y not in (1999, 2000, 2001):
         cost.append([y, round(float(b), 2), tb[y], 0])
@@ -48,18 +48,18 @@ for y in range(1977, 2026):
         cost.append([y, round(100 * (-float(r["uw"]) + 0.054 * D) / (F + D + T), 2), tb[y], 1])
     else:
         r = frow[y]
-        est = (float(r["cost_of_float_pct"]) + 0.35 * float(r["letter_lt_govt_bond_yield_pct"])) / (1 + 0.35 + 0.5)
+        # 1976: the letters print only "profit" for underwriting, with no amount. Assume a cost of float of -2%,
+        # in line with 1977-79 (-4.2%, -1.6%, -1.7%).
+        fc = float(r["cost_of_float_pct"]) if r["cost_of_float_pct"] else -2.0
+        est = (fc + 0.35 * float(r["letter_lt_govt_bond_yield_pct"])) / (1 + 0.35 + 0.5)
         cost.append([y, round(est, 2), tb[y], 1])
 
 # Yearly change in Berkshire's share price and in the market value of its assets per Class A share, 1977-2025.
 # Asset value = market cap + liabilities (total assets - book equity + market cap), the paper's definition.
 # It is built from the share price, so it is not an independent measure of what the holdings are worth.
 # 1996-2025: measured from the annual reports (leverage_cost.csv, share counts in debt.csv).
-# 1977-1995: share price change is from the letters (screeners/series.csv). The asset change is an ILLUSTRATIVE
-#   ESTIMATE: stock return / 1.4 + (1 - 1/1.4) x growth in average float. That is, assets are 1.4x equity
-#   (leverage was 1.26 at the end of 1995 and 1.44 at the end of 1996) and liabilities grow in line with float.
-#   Run over 1997-2011, the same formula with actual leverage lands within about 10 points of the measured
-#   figure in most years (1999 is the worst miss).
+# 1976-1995: share price change is from the letters (screeners/series.csv). The asset change is an ILLUSTRATIVE
+#   ESTIMATE: assets per share = estimated leverage x share price (see the leverage estimate below).
 shares = {int(r["year"]): float(r["value_usd_m"]) for r in csv.DictReader(open(HERE / "debt.csv"))
           if r["item"] == "class_a_equivalent_shares"}
 wealth = {1975: 1.0}
@@ -71,15 +71,48 @@ def per_share(y, assets):
     r = lrow[y]
     A, E, mc = float(r["A"]), float(r["E"]), float(r["mc"])
     return (A - E + mc if assets else mc) / shares[y]
+# Leverage for 1975-1994, before the balance sheets we collected begin. ILLUSTRATIVE ESTIMATE.
+#   leverage = 1 + c x float / market value
+# Float is from the letters (year-end taken as the mean of the two adjoining yearly averages). Market value
+# is the year-end share price, worked back from the 1995 price with the yearly changes in the letters
+# (it reproduces the known prices: $94 in 1976, $425 in 1980, $2,470 in 1985, $20,400 in 1994), times an
+# assumed share count (0.987m to 1982, 1.147m from the 1983 Blue Chip Stamps merger).
+# c is "other liabilities net of cash, per dollar of float". It is 2.57 at the end of 1995 on the actual
+# balance sheet and is assumed to rise to that in a straight line from a 1976 value chosen so that
+# leverage averages 1.62 over 1976-1995. That target comes from the paper: it reports 1.64 for 1976-2011,
+# and we measure 1.66 for 1996-2011, which leaves about 1.62 for the first twenty years.
+EST_SHARES = lambda y: 0.987e6 if y <= 1982 else 1.147e6
+price95 = float(lrow[1995]["mc"]) * 1e6 / shares[1995]
+price = {y: price95 * wealth[y] / wealth[1995] for y in range(1975, 1996)}
+price[1975] = price[1976] / wealth[1976]
+ye_float = {y: (avg_float[y] + avg_float[y + 1]) / 2 for y in range(1975, 1995)}
+ratio = {y: ye_float[y] * 1e6 / (price[y] * EST_SHARES(y)) for y in range(1975, 1995)}
+lev95, C_END, TARGET = float(lrow[1995]["lev_mv"]), 2.57, 1.62
+def lev_path(c0):
+    return {y: 1 + (c0 + (C_END - c0) * max(0, y - 1976) / 19) * ratio[y] for y in range(1975, 1995)}
+lo, hi = 0.0, C_END
+for _ in range(60):   # bisection on the 1976 value of c
+    mid = (lo + hi) / 2
+    path = lev_path(mid)
+    mean = (sum(path[y] for y in range(1976, 1995)) + lev95) / 20
+    lo, hi = (mid, hi) if mean < TARGET else (lo, mid)
+lev_est = lev_path((lo + hi) / 2)
+cost_by_year = {c[0]: c[1] for c in cost}
+# [year, leverage, cost of borrowing %, T-bill %, estimated(0/1)]: the cost column now comes from the cost series
+lev = [[y, round(lev_est[y], 2), cost_by_year.get(y), tb[y], 1] for y in range(1976, 1995)] + \
+      [[r[0], r[1], cost_by_year.get(r[0]), r[3], 0] for r in lev]
+
 stock = []
-for y in range(1977, 2026):
+for y in range(1976, 2026):
     if y >= 1996:
         pc = per_share(y, False) / per_share(y - 1, False) - 1
         ac = per_share(y, True) / per_share(y - 1, True) - 1
         stock.append([y, round(100 * pc, 1), round(100 * ac, 1), 0])
     else:
+        # assets per share = leverage x share price, with the estimated leverage above (actual for 1995)
+        L1 = lev95 if y == 1995 else lev_est[y]
         pc = wealth[y] / wealth[y - 1] - 1
-        ac = pc / 1.4 + (1 - 1 / 1.4) * (avg_float[y] / avg_float[y - 1] - 1)
+        ac = (L1 * price[y]) / (lev_est[y - 1] * price[y - 1]) - 1
         stock.append([y, round(100 * pc, 1), round(100 * ac, 1), 1])
 
 data = {"leverage": lev, "cost": cost, "stock": stock}

@@ -34,12 +34,12 @@ His returns are largely explained by two complementary factors.
 
 2) Using leverage, to magnify returns. Popular belief is that Buffett despises leverage. On many occasions, he has vehemently [warned against it](#modal-letters-leverage). His actual views, though, are [nuanced](#modal-letters-nuance). He strictly differentiates between [callable](https://en.wikipedia.org/wiki/Margin_(finance)) and [non-callable](https://capitalgains.thediff.co/p/leverageconstraint) forms.
 
-Berkshire runs moderate leverage (1–2x), averaging about 1.6x over 50 years.
+Berkshire runs moderate leverage (1–3x), averaging about 1.6x over 50 years.
 
 <div id="blv-leverage" class="blv-viz"></div>
 <script defer src="/assets/js/buffetts-leverage/leverage.js"></script>
 
-*Berkshire's reconstructed leverage multiple over time.*
+*Berkshire's estimated leverage multiple over time.*
 
 <hr class="soft">
 
@@ -92,7 +92,11 @@ To illustrate, we built a rudimentary synthetic index[^synthetic] of public stoc
 
 *Value of $1 invested from 1975 to 2025, on a log scale.*
 
-We have the benefit of hindsight. To Buffett's credit, he has been doing this for over 50 years, long before any of it was documented.
+We have the benefit of hindsight. To Buffett's credit, he has been doing this for over 50 years, long before the theory behind it was widely understood.[^kelly]
+
+[^kelly]: [Merton](https://en.wikipedia.org/wiki/Merton%27s_portfolio_problem) (1969) found that the optimal portfolio weight can be greater than one, meaning the optimal allocation is a levered one.
+
+    This is another version of [Kelly](https://en.wikipedia.org/wiki/Kelly_criterion)'s principle from 1956: maximize the long-run growth rate of wealth. Latané (1959), Breiman (1961) and Thorp (1971) extended it from gambling to investing, and Thorp formalized the connection.
 
 Today, the average investor's options for leverage are limited. Embedded leverage, through leveraged ETFs and options, is expensive.[^embedded] Margin is cheaper, but it carries liquidation risk and needs active management.
 
