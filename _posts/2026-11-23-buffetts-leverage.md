@@ -19,7 +19,7 @@ You can look at the distribution of [risk-adjusted returns](https://en.wikipedia
 
 {% include buffetts-leverage/sharpe-distribution.svg %}
 
-In [*Fooled by Randomness*](https://en.wikipedia.org/wiki/Fooled_by_Randomness), Nassim Taleb describes a thought experiment. Say there were 1,024 fund managers. Everyone flips a coin. Heads, they stay in the game; tails, they get wiped out. After ten rounds there is one person standing. He wins a large pot of money.
+Here is a version of a thought experiment from Nassim Taleb's [*Fooled by Randomness*](https://en.wikipedia.org/wiki/Fooled_by_Randomness). Say there were 1,024 fund managers. Everyone flips a coin. Heads, they stay in the game; tails, they get wiped out. After ten rounds there is one person standing. He wins a large pot of money.
 
 So is Buffett simply this lucky winner?
 
@@ -92,13 +92,13 @@ To illustrate, we built a rudimentary synthetic index[^synthetic] of public stoc
 
 *Value of $1 invested from 1975 to 2025, on a log scale.*
 
-The example above is only illustrative. We have the benefit of hindsight. To Buffett's credit, he has been doing this for over 50 years, long before any of it was documented.
+We have the benefit of hindsight. To Buffett's credit, he has been doing this for over 50 years, long before any of it was documented.
 
 Today, the average investor's options for leverage are limited. Embedded leverage, through leveraged ETFs and options, is expensive.[^embedded] Margin is cheaper, but it carries liquidation risk and needs active management.
 
 [^embedded]: Embedded leverage products come with [volatility drag]({% post_url 2026-03-15-hidden-costs-leveraged-etfs %}). The multiples the market offers are too high, and the drag grows with the square of the multiple.
 
-We built [2factor](https://2factor.finance/) to close that gap and offer durable long-term leverage that is relatively cheap and bears no risk of liquidation.
+We built [2factor](https://2factor.finance/) to offer long-term leverage that is relatively cheap and bears no risk of liquidation.
 
 Leverage is a double-edged sword. Even without margin calls, leverage magnifies drawdowns, and not everyone can stomach the volatility. Buffett's [warnings](#modal-letters-warnings) hold for good reason.
 
